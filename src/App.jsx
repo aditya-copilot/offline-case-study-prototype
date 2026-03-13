@@ -27,7 +27,6 @@ function App() {
             <Route path="/disbursed" element={<DisbursedPage />} />
             <Route path="/*" element={<AIChatWidget />} />
           </Routes>
-          <AIChatWidget />
         </div>
       </Router>
     </OfferProvider>
