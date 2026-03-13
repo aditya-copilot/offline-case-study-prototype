@@ -1532,3 +1532,43 @@
     background: color-mix(in srgb, var(--offer-color) 25%, #0f172a);
   }
 }
+
+/* ===== Visual Search Results ===== */
+.ai-visual-results {
+  margin: 16px 0;
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-visual-results .visual-response-card {
+  margin-bottom: 16px;
+}
+
+.ai-visual-results .product-visual-grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .ai-visual-results .product-visual-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-visual-results .product-visual-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+}

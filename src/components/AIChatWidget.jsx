@@ -2,8 +2,10 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import './AIChatWidget.css'
 import InstantEMIForm from './InstantEMIForm'
-
-// Backend API endpoint - configure this to your backend URL
+import ProductGrid from './ProductGrid'
+import ProductGallery from './ProductGallery'
+import VisualResponse from './VisualResponse'
+import { products, searchProducts, getProductByName, getSearchMeta } from '../data/products'
 
 // Categories data
 const categories = [
@@ -17,10 +19,10 @@ const categories = [
     ),
     color: '#f59e0b',
     items: [
-      { name: 'Wireless Earbuds', price: '$49.99', image: 'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=300&h=300&fit=crop', offer: '20% OFF' },
-      { name: 'Smart Watch', price: '$199.99', image: 'https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=300&h=300&fit=crop', offer: 'Bestseller' },
-      { name: 'Laptop Stand', price: '$34.99', image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=300&fit=crop', offer: 'Buy 2 Get 1' },
-      { name: 'USB-C Hub', price: '$29.99', image: 'https://images.unsplash.com/photo-1625842268584-8f3296236761?w=300&h=300&fit=crop', offer: 'Limited' }
+      { name: 'Apple iPhone 15', price: '₹54,900', image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300&h=300&fit=crop', offer: '20% OFF' },
+      { name: 'Samsung Galaxy S23', price: '₹64,999', image: 'https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=300&h=300&fit=crop', offer: 'Bestseller' },
+      { name: 'Apple Watch Series 9', price: '₹41,999', image: 'https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=300&h=300&fit=crop', offer: 'Buy 2 Get 1' },
+      { name: 'Sony PlayStation 5', price: '₹54,990', image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=300&h=300&fit=crop', offer: 'Limited' }
     ]
   },
   {
@@ -34,10 +36,10 @@ const categories = [
     ),
     color: '#10b981',
     items: [
-      { name: 'AI Speaker', price: '$129.99', image: 'https://images.unsplash.com/photo-1589492477829-5e65395b66cc?w=300&h=300&fit=crop', offer: 'New' },
-      { name: 'Smart Home Kit', price: '$89.99', image: 'https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=300&h=300&fit=crop', offer: 'Hot' },
-      { name: 'Fitness Tracker', price: '$59.99', image: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=300&h=300&fit=crop', offer: '-30%' },
-      { name: 'LED Strip Lights', price: '$19.99', image: 'https://images.unsplash.com/photo-1550985543-49bee3167284?w=300&h=300&fit=crop', offer: 'Sale' }
+      { name: 'Apple AirPods Pro 2', price: '₹22,999', image: 'https://images.unsplash.com/photo-1603351154351-5cfb3d04ef32?w=300&h=300&fit=crop', offer: 'New' },
+      { name: 'Samsung 55 inch TV', price: '₹42,490', image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=300&fit=crop', offer: 'Hot' },
+      { name: 'MacBook Air M2', price: '₹99,990', image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=300&h=300&fit=crop', offer: '-30%' },
+      { name: 'JBL Flip 6', price: '₹10,999', image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=300&fit=crop', offer: 'Sale' }
     ]
   },
   {
@@ -58,10 +60,10 @@ const categories = [
     ),
     color: '#ec4899',
     items: [
-      { name: 'Air Purifier', price: '$149.99', image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=300&h=300&fit=crop', offer: 'Sale' },
-      { name: 'Humidifier', price: '$39.99', image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&h=300&fit=crop', offer: '-25%' },
-      { name: 'Cozy Blanket', price: '$24.99', image: 'https://images.unsplash.com/photo-1580301762395-21ce6d555b43?w=300&h=300&fit=crop', offer: 'Deal' },
-      { name: 'Hot Drink Maker', price: '$69.99', image: 'https://images.unsplash.com/photo-1517256673644-36ad11246d21?w=300&h=300&fit=crop', offer: 'Hot' }
+      { name: 'LG 1.5 Ton AC', price: '₹45,999', image: 'https://images.unsplash.com/photo-1617103893393-277579601d36?w=300&h=300&fit=crop', offer: 'Sale' },
+      { name: 'Samsung Refrigerator', price: '₹26,999', image: 'https://images.unsplash.com/photo-1571175443880-49e1d58b794a?w=300&h=300&fit=crop', offer: '-25%' },
+      { name: 'Samsung Washing Machine', price: '₹32,999', image: 'https://images.unsplash.com/photo-1626806775351-538068a21838?w=300&h=300&fit=crop', offer: 'Deal' },
+      { name: 'Sony Bravia TV', price: '₹67,999', image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=300&h=300&fit=crop', offer: 'Hot' }
     ]
   },
   {
@@ -75,10 +77,10 @@ const categories = [
     ),
     color: '#ef4444',
     items: [
-      { name: 'Headphones 50% Off', price: '$39.99', originalPrice: '$79.99', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop', offer: '-50%' },
-      { name: 'Tablet Sale', price: '$249.99', originalPrice: '$399.99', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=300&h=300&fit=crop', offer: 'Sale' },
-      { name: 'Keyboard Bundle', price: '$59.99', originalPrice: '$99.99', image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=300&h=300&fit=crop', offer: '-40%' },
-      { name: 'Monitor Deal', price: '$299.99', originalPrice: '$499.99', image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=300&h=300&fit=crop', offer: 'Deal' }
+      { name: 'Xiaomi 13 Pro', price: '₹69,999', originalPrice: '₹79,999', image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff23?w=300&h=300&fit=crop', offer: '-50%' },
+      { name: 'iPad 10th Gen', price: '₹44,900', originalPrice: '₹49,900', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=300&h=300&fit=crop', offer: 'Sale' },
+      { name: 'Xbox Series X', price: '₹52,990', originalPrice: '₹55,990', image: 'https://images.unsplash.com/photo-1605901309584-818e25960a8f?w=300&h=300&fit=crop', offer: '-40%' },
+      { name: 'Marshall Speaker', price: '₹14,999', originalPrice: '₹17,999', image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=300&fit=crop', offer: 'Deal' }
     ]
   }
 ]
@@ -93,6 +95,9 @@ function AIChatWidget() {
   const [speechSupported, setSpeechSupported] = useState(true)
   const [uploadedImage, setUploadedImage] = useState(null)
   const [activeCategory, setActiveCategory] = useState(0)
+  const [searchResults, setSearchResults] = useState([])
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [currentSearch, setCurrentSearch] = useState(null)
 
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
@@ -117,7 +122,6 @@ function AIChatWidget() {
     }
   }, [messages])
 
-
   // Auto-scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -125,7 +129,7 @@ function AIChatWidget() {
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, searchResults])
 
   // Auto-swipe carousel every 3 seconds
   useEffect(() => {
@@ -176,17 +180,69 @@ function AIChatWidget() {
     }
   }, [])
 
+  // Search products using AI
+  const searchWithAI = async (query) => {
+    const searchPrompt = `You are a product search assistant. I have a catalog of ${products.length} electronics products. 
+
+The user is looking for: "${query}"
+
+Based on the search query, identify which products from our catalog might be relevant. Return a JSON array of product IDs that match the user's intent. If no products match well, return an empty array.
+
+Product catalog includes: smartphones, laptops, TVs, earbuds, smartwatches, refrigerators, washing machines, tablets, speakers, printers, gaming consoles, accessories, and air conditioners from brands like Apple, Samsung, Sony, OnePlus, Xiaomi, HP, Dell, LG, etc.
+
+Only return the JSON array of product IDs, nothing else.`
+
+    try {
+      const response = await fetch("https://grid.ai.juspay.net/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "kimi-latest",
+          max_tokens: 4096,
+          messages: [
+            {
+              role: "user",
+              content: searchPrompt
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const content = data.choices?.[0]?.message?.content
+
+      if (content) {
+        try {
+          const jsonMatch = content.match(/\[[\s\S]*\]/)
+          const productIds = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(content)
+          return productIds.filter(id => products.some(p => p.id === id))
+        } catch (parseError) {
+          console.error('Failed to parse AI response:', parseError)
+          return []
+        }
+      }
+      return []
+    } catch (error) {
+      console.error('AI search error:', error)
+      return []
+    }
+  }
+
   // Call backend API
   const callBackend = async (userMessage, conversationHistory, imageData = null) => {
     try {
-      const payload = {
-        message: userMessage,
-        history: conversationHistory.slice(-10).map(msg => ({
-          role: msg.type === 'user' ? 'user' : 'assistant',
-          content: msg.text
-        })),
-        image: imageData
-      }
+      const contextMessage = `You are a helpful shopping assistant. You have access to a product catalog with ${products.length} electronics products.
+
+When users ask about products, help them find what they're looking for. If they mention specific products, brands, or categories, acknowledge their interest and let them know they can click on product cards to see more details.
+
+User message: ${userMessage}`
 
       const response = await fetch("https://grid.ai.juspay.net/v1/chat/completions", {
         method: "POST",
@@ -200,7 +256,10 @@ function AIChatWidget() {
           messages: [
             {
               role: "user",
-              content: userMessage
+              content: imageData ? [
+                { type: "text", text: contextMessage },
+                { type: "image_url", image_url: { url: imageData } }
+              ] : contextMessage
             }
           ]
         })
@@ -212,7 +271,6 @@ function AIChatWidget() {
 
       const data = await response.json()
 
-      // Handle OpenAI-compatible response format
       if (data.choices && data.choices[0] && data.choices[0].message) {
         return data.choices[0].message.content
       } else if (data.response) {
@@ -253,16 +311,41 @@ function AIChatWidget() {
     setUploadedImage(null)
     setIsTyping(true)
 
-    const response = await callBackend(text, messages, imageData)
-
-    const botMessage = {
-      id: Date.now() + 1,
-      type: 'bot',
-      text: response,
-      timestamp: new Date()
+    // Search for products
+    const aiProductIds = await searchWithAI(text)
+    let foundProducts = []
+    
+    if (aiProductIds.length > 0) {
+      foundProducts = aiProductIds.map(id => products.find(p => p.id === id))
+    } else {
+      // Fallback to basic search
+      foundProducts = searchProducts(text)
     }
+    
+    setSearchResults(foundProducts)
 
-    setMessages(prev => [...prev, botMessage])
+    // Get search metadata with price constraints
+    const searchMeta = getSearchMeta(text)
+    
+    setCurrentSearch({
+      query: text,
+      brand: searchMeta.brand,
+      category: searchMeta.category,
+      priceConstraint: searchMeta.priceConstraint
+    })
+
+    // Only call AI if no products found - otherwise skip text response
+    if (foundProducts.length === 0) {
+      const response = await callBackend(text, messages, imageData)
+      const botMessage = {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: response,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, botMessage])
+    }
+    
     setIsTyping(false)
   }, [messages])
 
@@ -310,7 +393,20 @@ function AIChatWidget() {
   }
 
   const handleItemClick = (item) => {
-    sendMessage(`Tell me more about ${item}`)
+    const product = getProductByName(item.name)
+    if (product) {
+      setSelectedProduct(product)
+    } else {
+      sendMessage(`Tell me more about ${item.name}`)
+    }
+  }
+
+  const handleProductCardClick = (product) => {
+    setSelectedProduct(product)
+  }
+
+  const handleCloseProductDetail = () => {
+    setSelectedProduct(null)
   }
 
   // Handle offers scroll to update active center card
@@ -388,7 +484,7 @@ function AIChatWidget() {
                     <button
                       key={index}
                       className="ai-product-card"
-                      onClick={() => handleItemClick(item.name)}
+                      onClick={() => handleItemClick(item)}
                       style={{ '--accent-color': categories[activeCategory].color }}
                     >
                       <div className="ai-product-image">
@@ -407,6 +503,7 @@ function AIChatWidget() {
                       </div>
                       <div className="ai-product-info">
                         <span className="ai-product-name">{item.name}</span>
+                        <span className="ai-product-price">{item.price}</span>
                       </div>
                     </button>
                   ))}
@@ -504,6 +601,22 @@ function AIChatWidget() {
                 </div>
               </div>
             ))}
+
+            {/* Display visual response with search results */}
+            {searchResults.length > 0 && currentSearch && (
+              <div className="ai-visual-results">
+                <VisualResponse 
+                  query={currentSearch.query}
+                  count={searchResults.length}
+                  brand={currentSearch.brand}
+                  category={currentSearch.category}
+                />
+                <ProductGrid 
+                  products={searchResults} 
+                  onProductClick={handleProductCardClick}
+                />
+              </div>
+            )}
 
             {/* Typing indicator */}
             {isTyping && (
@@ -689,6 +802,14 @@ function AIChatWidget() {
           )}
         </div>
       </div>
+
+      {/* Product Gallery Modal */}
+      {selectedProduct && (
+        <ProductGallery 
+          product={selectedProduct} 
+          onBack={handleCloseProductDetail}
+        />
+      )}
     </div>
   )
 }
