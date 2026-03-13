@@ -1,10 +1,55 @@
 .app-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-nav {
+  display: flex;
+  gap: 8px;
+  padding: 12px 24px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav-link {
+  padding: 8px 16px;
+  text-decoration: none;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
 }
 
 @media (prefers-color-scheme: dark) {
   .app-container {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+
+  .app-nav {
+    background: #1e293b;
+    border-color: #334155;
+  }
+
+  .nav-link {
+    color: #94a3b8;
+  }
+
+  .nav-link:hover {
+    background: #334155;
+    color: #e2e8f0;
   }
 }
