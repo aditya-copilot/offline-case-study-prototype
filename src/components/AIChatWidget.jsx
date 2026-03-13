@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import './AIChatWidget.css'
 
-// Default endpoint - can be configured in settings
-const DEFAULT_ENDPOINT = '/api/chat'
+// Backend API endpoint - configure this to your backend URL
+const API_ENDPOINT = '/api/chat'
 
 function AIChatWidget() {
-  const [isOpen, setIsOpen] = useState(false)
   const [inputMode, setInputMode] = useState('text')
   const [message, setMessage] = useState('')
   const [isListening, setIsListening] = useState(false)
@@ -13,20 +12,10 @@ function AIChatWidget() {
   const [isTyping, setIsTyping] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(true)
   const [uploadedImage, setUploadedImage] = useState(null)
-  const [endpoint, setEndpoint] = useState(DEFAULT_ENDPOINT)
-  const [showSettings, setShowSettings] = useState(false)
 
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
   const fileInputRef = useRef(null)
-
-  // Load endpoint from localStorage
-  useEffect(() => {
-    const savedEndpoint = localStorage.getItem('ai_endpoint')
-    if (savedEndpoint) {
-      setEndpoint(savedEndpoint)
-    }
-  }, [])
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
@@ -76,10 +65,10 @@ function AIChatWidget() {
         recognitionRef.current.stop()
       }
     }
-  }, [endpoint])
+  }, [])
 
-  // Call custom endpoint
-  const callEndpoint = async (userMessage, conversationHistory, imageData = null) => {
+  // Call backend API
+  const callBackend = async (userMessage, conversationHistory, imageData = null) => {
     try {
       const payload = {
         message: userMessage,
@@ -90,7 +79,7 @@ function AIChatWidget() {
         image: imageData
       }
 
-      const response = await fetch(endpoint, {
+      const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +88,7 @@ function AIChatWidget() {
       })
 
       if (!response.ok) {
-        throw new Error(`Endpoint error: ${response.status}`)
+        throw new Error(`Server error: ${response.status}`)
       }
 
       const data = await response.json()
@@ -120,11 +109,10 @@ function AIChatWidget() {
       }
 
     } catch (error) {
-      console.error('Endpoint error:', error)
+      console.error('API error:', error)
 
-      // Check if it's a network error (endpoint not available)
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        return "I'm unable to connect to the AI endpoint. Please check that your server is running at: " + endpoint
+        return "Unable to connect to the server. Please check your connection and try again."
       }
 
       return `Sorry, I encountered an error: ${error.message}`
@@ -148,8 +136,8 @@ function AIChatWidget() {
     setUploadedImage(null)
     setIsTyping(true)
 
-    // Get AI response from endpoint
-    const response = await callEndpoint(text, messages, imageData)
+    // Get AI response from backend
+    const response = await callBackend(text, messages, imageData)
 
     const botMessage = {
       id: Date.now() + 1,
@@ -160,7 +148,7 @@ function AIChatWidget() {
 
     setMessages(prev => [...prev, botMessage])
     setIsTyping(false)
-  }, [endpoint, messages])
+  }, [messages])
 
   const handleSend = () => {
     if (message.trim() || uploadedImage) {
@@ -205,45 +193,15 @@ function AIChatWidget() {
     }
   }
 
-  const saveEndpoint = () => {
-    if (endpoint.trim()) {
-      localStorage.setItem('ai_endpoint', endpoint.trim())
-      setShowSettings(false)
-    }
-  }
-
-  const resetEndpoint = () => {
-    localStorage.removeItem('ai_endpoint')
-    setEndpoint(DEFAULT_ENDPOINT)
-  }
-
   const formatTime = (date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
   }
 
   return (
-    <div className="ai-widget-container">
-      {/* Floating Button */}
-      <button
-        className={`ai-floating-btn ${isOpen ? 'open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle AI Chat"
-      >
-        {isOpen ? (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 6L6 18M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-          </svg>
-        )}
-      </button>
-
-      {/* Chat Panel */}
-      <div className={`ai-chat-panel ${isOpen ? 'open' : ''}`}>
-        {/* Header */}
-        <div className="ai-chat-header">
+    <div className="ai-fullscreen-container">
+      {/* Header */}
+      <div className="ai-fullscreen-header">
+        <div className="ai-header-left">
           <div className="ai-bot-avatar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="8" r="5" />
@@ -251,67 +209,29 @@ function AIChatWidget() {
             </svg>
           </div>
           <div className="ai-header-info">
-            <h3>AI Assistant</h3>
+            <h1>AI Assistant</h1>
             <span className={`ai-status ${isTyping ? 'typing' : ''}`}>
               {isTyping ? 'Typing...' : 'Online'}
             </span>
           </div>
-          <button
-            className="ai-settings-btn"
-            onClick={() => setShowSettings(!showSettings)}
-            title="Settings"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-          </button>
-          <button className="ai-minimize-btn" onClick={() => setIsOpen(false)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M5 12h14" />
-            </svg>
-          </button>
         </div>
+      </div>
 
-        {/* Settings Panel */}
-        {showSettings && (
-          <div className="ai-api-key-panel">
-            <label htmlFor="endpoint">AI Endpoint URL</label>
-            <div className="ai-api-key-input-row">
-              <input
-                id="endpoint"
-                type="text"
-                placeholder="http://localhost:3000/api/chat"
-                value={endpoint}
-                onChange={(e) => setEndpoint(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && saveEndpoint()}
-              />
-              <button onClick={saveEndpoint}>Save</button>
+      {/* Messages Area */}
+      <div className="ai-fullscreen-messages">
+        {messages.length === 0 ? (
+          <div className="ai-welcome-fullscreen">
+            <div className="ai-welcome-icon-large">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09z" />
+              </svg>
             </div>
-            <p className="ai-api-hint">
-              Current: {endpoint}
-              <button className="ai-reset-endpoint-btn" onClick={resetEndpoint}>Reset to default</button>
-            </p>
-            <p className="ai-api-hint">
-              Expected payload: {`{ message, history, image }`}
-            </p>
+            <h2>Hello! I'm your AI Assistant.</h2>
+            <p>Choose an input method below to get started.</p>
           </div>
-        )}
-
-        {/* Messages Area */}
-        <div className="ai-messages-area">
-          {messages.length === 0 ? (
-            <div className="ai-welcome">
-              <div className="ai-welcome-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09z" />
-                </svg>
-              </div>
-              <p>Hello! I'm your AI Assistant.</p>
-              <p className="ai-welcome-sub">Choose an input method below to get started.</p>
-            </div>
-          ) : (
-            messages.map((msg) => (
+        ) : (
+          <div className="ai-messages-list">
+            {messages.map((msg) => (
               <div key={msg.id} className={`ai-message ${msg.type}`}>
                 {msg.type === 'bot' && (
                   <div className="ai-bot-msg-avatar">
@@ -331,30 +251,33 @@ function AIChatWidget() {
                   <span className="ai-message-time">{formatTime(msg.timestamp)}</span>
                 </div>
               </div>
-            ))
-          )}
+            ))}
 
-          {/* Typing indicator */}
-          {isTyping && (
-            <div className="ai-message bot">
-              <div className="ai-bot-msg-avatar">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="8" r="5" />
-                  <path d="M20 21a8 8 0 1 0-16 0" />
-                </svg>
-              </div>
-              <div className="ai-message-content">
-                <div className="ai-typing-indicator">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+            {/* Typing indicator */}
+            {isTyping && (
+              <div className="ai-message bot">
+                <div className="ai-bot-msg-avatar">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="8" r="5" />
+                    <path d="M20 21a8 8 0 1 0-16 0" />
+                  </svg>
+                </div>
+                <div className="ai-message-content">
+                  <div className="ai-typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
 
+      {/* Bottom Input Section */}
+      <div className="ai-fullscreen-input-section">
         {/* Input Mode Selector */}
         <div className="ai-mode-selector">
           <button
@@ -396,7 +319,7 @@ function AIChatWidget() {
         </div>
 
         {/* Input Area */}
-        <div className="ai-input-area">
+        <div className="ai-fullscreen-input-area">
           {inputMode === 'text' && (
             <div className="ai-text-input">
               {uploadedImage && (
