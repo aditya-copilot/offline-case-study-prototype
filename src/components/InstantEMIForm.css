@@ -119,6 +119,135 @@
   flex-shrink: 0;
 }
 
+/* ===== OCR Button ===== */
+.emi-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.emi-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.emi-ocr-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.35);
+}
+
+.emi-ocr-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+.emi-ocr-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Scanned Image Preview ===== */
+.emi-scanned-preview {
+  margin-bottom: 20px;
+}
+
+.emi-scanned-image {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f1f5f9;
+  border: 2px dashed #cbd5e1;
+}
+
+.emi-scanned-image img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  display: block;
+}
+
+.emi-clear-scan {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.emi-clear-scan:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.emi-clear-scan svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ===== Scanning Overlay ===== */
+.emi-scanning-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: white;
+  backdrop-filter: blur(2px);
+}
+
+.emi-scan-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: emi-spin 0.8s linear infinite;
+}
+
+.emi-scanning-overlay span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.emi-progress-bar {
+  width: 120px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.emi-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 2px;
+  transition: width 0.2s ease;
+}
+
 /* ===== Row Layout ===== */
 .emi-row {
   display: grid;

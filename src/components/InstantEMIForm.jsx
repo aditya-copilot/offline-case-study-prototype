@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './InstantEMIForm.css'
 
 const JusPayLogo = () => (
@@ -57,6 +57,20 @@ const LockIcon = () => (
   </svg>
 )
 
+const CameraIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+    <circle cx="12" cy="13" r="4" />
+  </svg>
+)
+
+const CloseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+)
+
 function validatePAN(pan) {
   return /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)
 }
@@ -87,6 +101,10 @@ export default function InstantEMIForm() {
   const [touched, setTouched] = useState({})
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [scanning, setScanning] = useState(false)
+  const [scannedImage, setScannedImage] = useState(null)
+  const [ocrProgress, setOcrProgress] = useState(0)
+  const fileInputRef = useRef(null)
 
   const validate = (fields = form) => {
     const e = {}
@@ -155,6 +173,123 @@ export default function InstantEMIForm() {
     return d.toISOString().split('T')[0]
   })()
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setScannedImage(event.target.result)
+        performOCR(event.target.result)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const performOCR = async (imageData) => {
+    setScanning(true)
+    setOcrProgress(0)
+
+    const progressInterval = setInterval(() => {
+      setOcrProgress(prev => {
+        if (prev >= 90) return prev
+        return prev + 10
+      })
+    }, 200)
+
+    try {
+      const response = await fetch("https://grid.ai.juspay.net/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "kimi-latest",
+          max_tokens: 4096,
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: "Extract the following information from this document image and return it as a JSON object with these exact keys: name, pan, dob, address, phone. Format dob as YYYY-MM-DD. If any field is not found, use empty string. Only return the JSON object, nothing else."
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: imageData
+                  }
+                }
+              ]
+            }
+          ]
+        })
+      })
+
+      clearInterval(progressInterval)
+      setOcrProgress(100)
+
+      if (!response.ok) {
+        throw new Error(`OCR failed: ${response.status}`)
+      }
+
+      const data = await response.json()
+      const content = data.choices?.[0]?.message?.content
+
+      if (content) {
+        try {
+          const jsonMatch = content.match(/\{[\s\S]*\}/)
+          const extractedData = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(content)
+          
+          setForm(prev => ({
+            name: extractedData.name || prev.name,
+            pan: extractedData.pan || prev.pan,
+            dob: extractedData.dob || prev.dob,
+            address: extractedData.address || prev.address,
+            phone: extractedData.phone || prev.phone,
+          }))
+
+          setTouched({
+            name: true,
+            pan: true,
+            dob: true,
+            address: true,
+            phone: true,
+          })
+
+          const errs = validate({
+            name: extractedData.name || form.name,
+            pan: extractedData.pan || form.pan,
+            dob: extractedData.dob || form.dob,
+            address: extractedData.address || form.address,
+            phone: extractedData.phone || form.phone,
+          })
+          setErrors(errs)
+        } catch (parseError) {
+          console.error('Failed to parse OCR response:', parseError)
+        }
+      }
+
+      setTimeout(() => {
+        setScanning(false)
+      }, 500)
+    } catch (error) {
+      clearInterval(progressInterval)
+      console.error('OCR error:', error)
+      setScanning(false)
+      setOcrProgress(0)
+    }
+  }
+
+  const clearScannedImage = () => {
+    setScannedImage(null)
+    setScanning(false)
+    setOcrProgress(0)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   if (submitted) {
     return (
       <div className="emi-page">
@@ -222,10 +357,43 @@ export default function InstantEMIForm() {
 
         <div className="emi-layout">
           <form className="emi-form-card" onSubmit={handleSubmit} noValidate>
-            <div className="emi-section-label">
-              <UserIcon />
-              Personal Details
+            <div className="emi-section-label emi-section-header">
+              <div className="emi-section-title">
+                <UserIcon />
+                Personal Details
+              </div>
+              <label className="emi-ocr-btn" title="Scan ID document">
+                <CameraIcon />
+                <span>Scan ID</span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  hidden
+                />
+              </label>
             </div>
+
+            {scannedImage && (
+              <div className="emi-scanned-preview">
+                <div className="emi-scanned-image">
+                  <img src={scannedImage} alt="Scanned document" />
+                  <button type="button" className="emi-clear-scan" onClick={clearScannedImage}>
+                    <CloseIcon />
+                  </button>
+                  {scanning && (
+                    <div className="emi-scanning-overlay">
+                      <div className="emi-scan-spinner" />
+                      <span>Extracting data...</span>
+                      <div className="emi-progress-bar">
+                        <div className="emi-progress-fill" style={{ width: `${ocrProgress}%` }} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Name */}
             <div className={`emi-field ${touched.name && errors.name ? 'emi-field--error' : touched.name && !errors.name ? 'emi-field--valid' : ''}`}>
