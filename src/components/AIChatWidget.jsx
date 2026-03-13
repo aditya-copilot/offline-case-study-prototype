@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import './AIChatWidget.css'
 
+// Default endpoint - can be configured in settings
+const DEFAULT_ENDPOINT = '/api/chat'
+
 function AIChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [inputMode, setInputMode] = useState('text')
@@ -10,19 +13,18 @@ function AIChatWidget() {
   const [isTyping, setIsTyping] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(true)
   const [uploadedImage, setUploadedImage] = useState(null)
-  const [apiKey, setApiKey] = useState('')
-  const [showApiKeyInput, setShowApiKeyInput] = useState(false)
-  const [apiKeyError, setApiKeyError] = useState('')
+  const [endpoint, setEndpoint] = useState(DEFAULT_ENDPOINT)
+  const [showSettings, setShowSettings] = useState(false)
 
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
   const fileInputRef = useRef(null)
 
-  // Load API key from localStorage
+  // Load endpoint from localStorage
   useEffect(() => {
-    const savedKey = localStorage.getItem('openai_api_key')
-    if (savedKey) {
-      setApiKey(savedKey)
+    const savedEndpoint = localStorage.getItem('ai_endpoint')
+    if (savedEndpoint) {
+      setEndpoint(savedEndpoint)
     }
   }, [])
 
@@ -74,59 +76,58 @@ function AIChatWidget() {
         recognitionRef.current.stop()
       }
     }
-  }, [apiKey])
+  }, [endpoint])
 
-  // Call OpenAI API
-  const callOpenAI = async (userMessage, conversationHistory) => {
-    if (!apiKey) {
-      return "Please set your OpenAI API key by clicking the settings icon in the header."
-    }
-
+  // Call custom endpoint
+  const callEndpoint = async (userMessage, conversationHistory, imageData = null) => {
     try {
-      const messages = [
-        {
-          role: 'system',
-          content: 'You are a helpful AI assistant. Be concise and friendly in your responses.'
-        },
-        ...conversationHistory.slice(-10).map(msg => ({
+      const payload = {
+        message: userMessage,
+        history: conversationHistory.slice(-10).map(msg => ({
           role: msg.type === 'user' ? 'user' : 'assistant',
           content: msg.text
         })),
-        {
-          role: 'user',
-          content: userMessage
-        }
-      ]
+        image: imageData
+      }
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
         },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: messages,
-          max_tokens: 500,
-          temperature: 0.7
-        })
+        body: JSON.stringify(payload)
       })
 
       if (!response.ok) {
-        if (response.status === 401) {
-          setApiKeyError('Invalid API key. Please check and try again.')
-          setShowApiKeyInput(true)
-          return "Invalid API key. Please update your API key in settings."
-        }
-        throw new Error(`API error: ${response.status}`)
+        throw new Error(`Endpoint error: ${response.status}`)
       }
 
       const data = await response.json()
-      return data.choices[0].message.content
+
+      // Handle different response formats
+      if (data.response) {
+        return data.response
+      } else if (data.message) {
+        return data.message
+      } else if (data.answer) {
+        return data.answer
+      } else if (data.text) {
+        return data.text
+      } else if (typeof data === 'string') {
+        return data
+      } else {
+        return JSON.stringify(data)
+      }
 
     } catch (error) {
-      console.error('OpenAI API error:', error)
-      return `Sorry, I encountered an error: ${error.message}. Please try again.`
+      console.error('Endpoint error:', error)
+
+      // Check if it's a network error (endpoint not available)
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        return "I'm unable to connect to the AI endpoint. Please check that your server is running at: " + endpoint
+      }
+
+      return `Sorry, I encountered an error: ${error.message}`
     }
   }
 
@@ -147,8 +148,8 @@ function AIChatWidget() {
     setUploadedImage(null)
     setIsTyping(true)
 
-    // Get AI response
-    const response = await callOpenAI(text, messages)
+    // Get AI response from endpoint
+    const response = await callEndpoint(text, messages, imageData)
 
     const botMessage = {
       id: Date.now() + 1,
@@ -159,7 +160,7 @@ function AIChatWidget() {
 
     setMessages(prev => [...prev, botMessage])
     setIsTyping(false)
-  }, [apiKey, messages])
+  }, [endpoint, messages])
 
   const handleSend = () => {
     if (message.trim() || uploadedImage) {
@@ -204,18 +205,16 @@ function AIChatWidget() {
     }
   }
 
-  const saveApiKey = () => {
-    if (apiKey.trim()) {
-      localStorage.setItem('openai_api_key', apiKey.trim())
-      setShowApiKeyInput(false)
-      setApiKeyError('')
+  const saveEndpoint = () => {
+    if (endpoint.trim()) {
+      localStorage.setItem('ai_endpoint', endpoint.trim())
+      setShowSettings(false)
     }
   }
 
-  const clearApiKey = () => {
-    localStorage.removeItem('openai_api_key')
-    setApiKey('')
-    setShowApiKeyInput(false)
+  const resetEndpoint = () => {
+    localStorage.removeItem('ai_endpoint')
+    setEndpoint(DEFAULT_ENDPOINT)
   }
 
   const formatTime = (date) => {
@@ -253,13 +252,13 @@ function AIChatWidget() {
           </div>
           <div className="ai-header-info">
             <h3>AI Assistant</h3>
-            <span className={`ai-status ${isTyping ? 'typing' : ''} ${!apiKey ? 'no-key' : ''}`}>
-              {!apiKey ? 'Set API Key' : isTyping ? 'Typing...' : 'Online'}
+            <span className={`ai-status ${isTyping ? 'typing' : ''}`}>
+              {isTyping ? 'Typing...' : 'Online'}
             </span>
           </div>
           <button
             className="ai-settings-btn"
-            onClick={() => setShowApiKeyInput(!showApiKeyInput)}
+            onClick={() => setShowSettings(!showSettings)}
             title="Settings"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -274,26 +273,28 @@ function AIChatWidget() {
           </button>
         </div>
 
-        {/* API Key Input */}
-        {showApiKeyInput && (
+        {/* Settings Panel */}
+        {showSettings && (
           <div className="ai-api-key-panel">
-            <label htmlFor="api-key">OpenAI API Key</label>
+            <label htmlFor="endpoint">AI Endpoint URL</label>
             <div className="ai-api-key-input-row">
               <input
-                id="api-key"
-                type="password"
-                placeholder="sk-..."
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && saveApiKey()}
+                id="endpoint"
+                type="text"
+                placeholder="http://localhost:3000/api/chat"
+                value={endpoint}
+                onChange={(e) => setEndpoint(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && saveEndpoint()}
               />
-              <button onClick={saveApiKey}>Save</button>
-              {apiKey && (
-                <button onClick={clearApiKey} className="ai-clear-key-btn">Clear</button>
-              )}
+              <button onClick={saveEndpoint}>Save</button>
             </div>
-            {apiKeyError && <p className="ai-api-error">{apiKeyError}</p>}
-            <p className="ai-api-hint">Your API key is stored locally in your browser.</p>
+            <p className="ai-api-hint">
+              Current: {endpoint}
+              <button className="ai-reset-endpoint-btn" onClick={resetEndpoint}>Reset to default</button>
+            </p>
+            <p className="ai-api-hint">
+              Expected payload: {`{ message, history, image }`}
+            </p>
           </div>
         )}
 
@@ -307,11 +308,7 @@ function AIChatWidget() {
                 </svg>
               </div>
               <p>Hello! I'm your AI Assistant.</p>
-              <p className="ai-welcome-sub">
-                {!apiKey
-                  ? 'Click the settings icon to add your OpenAI API key.'
-                  : 'Choose an input method below to get started.'}
-              </p>
+              <p className="ai-welcome-sub">Choose an input method below to get started.</p>
             </div>
           ) : (
             messages.map((msg) => (
@@ -481,7 +478,7 @@ function AIChatWidget() {
                   <div className="ai-ocr-actions">
                     <button
                       className="ai-ocr-send-btn"
-                      onClick={() => sendMessage('Please describe what you see in this image and extract any text from it.', uploadedImage)}
+                      onClick={() => sendMessage('Please analyze this image and extract any text from it.', uploadedImage)}
                     >
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
