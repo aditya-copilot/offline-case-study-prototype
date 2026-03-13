@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import './ProductDetail.css'
+import InstantEMIForm from './InstantEMIForm'
 
 const StarIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -40,7 +41,7 @@ const ShareIcon = () => (
 )
 
 export default function ProductDetail({ product, onBack }) {
-  const navigate = useNavigate()
+  const [showEMIForm, setShowEMIForm] = useState(false)
   
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)
   
@@ -53,7 +54,11 @@ export default function ProductDetail({ product, onBack }) {
   }
 
   const handleBuyNow = () => {
-    navigate('/checkout')
+    setShowEMIForm(true)
+  }
+
+  const handleCloseEMIForm = () => {
+    setShowEMIForm(false)
   }
 
   return (
@@ -168,6 +173,15 @@ export default function ProductDetail({ product, onBack }) {
           </div>
         </div>
       </div>
+
+      {/* Instant EMI Form Modal */}
+      {showEMIForm && (
+        <div className="emi-modal-overlay" onClick={handleCloseEMIForm}>
+          <div className="emi-modal-content" onClick={(e) => e.stopPropagation()}>
+            <InstantEMIForm onClose={handleCloseEMIForm} />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

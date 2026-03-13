@@ -403,3 +403,59 @@
     height: 60px;
   }
 }
+
+/* Instant EMI Form Modal */
+.emi-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.emi-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease-out;
+}
+
+.emi-modal-content .emi-page {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .emi-modal-overlay {
+    padding: 0;
+  }
+  
+  .emi-modal-content {
+    border-radius: 0;
+    max-height: 100vh;
+    max-width: 100%;
+  }
+  
+  .emi-modal-content .emi-page {
+    max-height: 100vh;
+  }
+}
