@@ -104,6 +104,35 @@ function AIChatWidget() {
   const fileInputRef = useRef(null)
   const offersScrollRef = useRef(null)
   const [activeOfferIndex, setActiveOfferIndex] = useState(0)
+  const [userInput, setUserInput] = useState({});
+
+  // Extract JSON from AI response (handles markdown code blocks and extra text)
+  function extractJSON(text) {
+    const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+    if (!match) return null;
+
+    try {
+      return JSON.parse(match[0]);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function speakText(text) {
+    if (!("speechSynthesis" in window)) {
+      console.error("TTS not supported in this browser");
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "en-US";
+    utterance.rate = 1;      // speed (0.1 - 10)
+    utterance.pitch = 1;     // tone (0 - 2)
+    utterance.volume = 1;    // volume (0 - 1)
+
+    window.speechSynthesis.speak(utterance);
+  }
 
   // Offers data for carousel
   const offers = [
@@ -141,6 +170,53 @@ function AIChatWidget() {
   }, [messages.length])
 
   // Initialize speech recognition
+  // useEffect(() => {
+  //   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  //   if (!SpeechRecognition) return;
+
+  //   const recognition = new SpeechRecognition();
+
+  //   // 1. Keep the session alive even during pauses
+  //   recognition.continuous = true;
+  //   recognition.interimResults = true;
+  //   recognition.lang = "en-US";
+
+  //   let silenceTimer;
+
+  //   recognition.onresult = (event) => {
+  //     // 2. Clear the timer every time the user speaks
+  //     clearTimeout(silenceTimer);
+
+  //     const current = event.resultIndex;
+  //     const transcriptText = event.results[current][0].transcript;
+
+  //     if (event.results[current].isFinal) {
+  //       if (transcriptText.length > 0) sendMessage(transcriptText);
+
+  //       // 3. Start a 4-second countdown after a final result
+  //       silenceTimer = setTimeout(() => {
+  //         console.log("4 seconds of silence detected. Stopping...");
+  //         recognition.stop();
+  //         setIsListening(false);
+  //       }, 4000);
+  //     }
+  //   };
+
+  //   recognition.onend = () => {
+  //     // Only restart here if it closed due to a network error or 
+  //     // browser timeout, NOT if we manually stopped it.
+  //     if (isListening) {
+  //       try { recognition.start(); } catch (e) { }
+  //     }
+  //   };
+
+  //   recognitionRef.current = recognition;
+  //   return () => {
+  //     clearTimeout(silenceTimer);
+  //     recognition.stop();
+  //   };
+  // }, [isListening]); // Added isListening to dependencies to track state
+
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     if (SpeechRecognition) {
@@ -251,7 +327,7 @@ User message: ${userMessage}`
           "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
         },
         body: JSON.stringify({
-          model: "kimi-latest",
+          model: "claude-sonnet-4-5",
           max_tokens: 4096,
           messages: [
             {
@@ -298,6 +374,29 @@ User message: ${userMessage}`
   const sendMessage = useCallback(async (text, imageData = null) => {
     if (!text.trim() && !imageData) return
 
+    let nText = text;
+
+    if (location.pathname === '/checkout/user-input') {
+      nText =
+        `${text}
+      Your task is below:
+      If you think user is telling personal information, then do as stated below:
+      If above text is not about personal information response accordingly in simple text.
+      
+      Else do below:
+      Return structured response in below json format, don't insert random text, only send what's available in description of personal info.
+      { 
+        "fullName": "my full name",
+        "panNumber": "example: LLWPK2329C",
+        "dob": "my dob in yyyy-mm-dd",
+        "address": "my current address"
+      }
+
+      Make sure to strict to this json format and  only send this json, nothing else if it's personal info.
+
+      `
+    }
+
     const userMessage = {
       id: Date.now(),
       type: 'user',
@@ -312,41 +411,74 @@ User message: ${userMessage}`
     setIsTyping(true)
 
     // Search for products
-    const aiProductIds = await searchWithAI(text)
-    let foundProducts = []
-    
-    if (aiProductIds.length > 0) {
-      foundProducts = aiProductIds.map(id => products.find(p => p.id === id))
-    } else {
-      // Fallback to basic search
-      foundProducts = searchProducts(text)
-    }
-    
-    setSearchResults(foundProducts)
+    if (!location.pathname.includes("checkout")) {
+      const aiProductIds = await searchWithAI(text)
+      let foundProducts = []
 
-    // Get search metadata with price constraints
-    const searchMeta = getSearchMeta(text)
-    
-    setCurrentSearch({
-      query: text,
-      brand: searchMeta.brand,
-      category: searchMeta.category,
-      priceConstraint: searchMeta.priceConstraint
-    })
-
-    // Only call AI if no products found - otherwise skip text response
-    if (foundProducts.length === 0) {
-      const response = await callBackend(text, messages, imageData)
-      const botMessage = {
-        id: Date.now() + 1,
-        type: 'bot',
-        text: response,
-        timestamp: new Date()
+      if (aiProductIds.length > 0) {
+        foundProducts = aiProductIds.map(id => products.find(p => p.id === id))
+      } else {
+        // Fallback to basic search
+        foundProducts = searchProducts(text)
       }
-      setMessages(prev => [...prev, botMessage])
+
+      setSearchResults(foundProducts)
+
+      // Get search metadata with price constraints
+      const searchMeta = getSearchMeta(text)
+
+      setCurrentSearch({
+        query: text,
+        brand: searchMeta.brand,
+        category: searchMeta.category,
+        priceConstraint: searchMeta.priceConstraint
+      })
+
+      // Only call AI if no products found - otherwise skip text response
+      if (foundProducts.length === 0) {
+        const response = await callBackend(text, messages, imageData)
+        const botMessage = {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: response,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, botMessage])
+      }
     }
-    
+
+    const response = await callBackend(nText, messages, imageData);
+
+    if (location.pathname === '/checkout/user-input') {
+      let output = extractJSON(response)
+      setUserInput(output);
+      if (output) {
+        let res = "Alright, received your input, trying to autofill for you."
+        const botMessage = {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: res,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, botMessage])
+        if (inputMode === 'speech') speakText(res)
+      }
+      else {
+        const botMessage = {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: response,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, botMessage])
+        if (inputMode === 'speech') {
+          speakText(response)
+        }
+
+      }
+    }
     setIsTyping(false)
+
   }, [messages])
 
   const handleSend = () => {
@@ -455,7 +587,7 @@ User message: ${userMessage}`
 
       {/* Messages Area */}
       <div className="ai-fullscreen-messages">
-        {location.pathname === '/checkout/user-input' && <InstantEMIForm />}
+        {location.pathname === '/checkout/user-input' && <InstantEMIForm userInput={userInput} />}
         {messages.length === 0 ? (
           <div className="ai-welcome-container">
             {/* Single Carousel Space */}
@@ -605,14 +737,14 @@ User message: ${userMessage}`
             {/* Display visual response with search results */}
             {searchResults.length > 0 && currentSearch && (
               <div className="ai-visual-results">
-                <VisualResponse 
+                <VisualResponse
                   query={currentSearch.query}
                   count={searchResults.length}
                   brand={currentSearch.brand}
                   category={currentSearch.category}
                 />
-                <ProductGrid 
-                  products={searchResults} 
+                <ProductGrid
+                  products={searchResults}
                   onProductClick={handleProductCardClick}
                 />
               </div>
@@ -805,8 +937,8 @@ User message: ${userMessage}`
 
       {/* Product Gallery Modal */}
       {selectedProduct && (
-        <ProductGallery 
-          product={selectedProduct} 
+        <ProductGallery
+          product={selectedProduct}
           onBack={handleCloseProductDetail}
         />
       )}

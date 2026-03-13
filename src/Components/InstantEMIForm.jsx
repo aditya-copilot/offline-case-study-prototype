@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef , useEffect } from 'react'
 import './InstantEMIForm.css'
 
 const JusPayLogo = () => (
@@ -96,13 +96,13 @@ function validateDOB(dob) {
   return actualAge >= 18 && actualAge <= 75
 }
 
-export default function InstantEMIForm({ onClose }) {
+export default function InstantEMIForm({ onClose , userInput}) {
   const [form, setForm] = useState({
     name: '',
     pan: '',
     dob: '',
     address: '',
-    phone: '',
+    phone: '9608724257',
   })
   const [errors, setErrors] = useState({})
   const [touched, setTouched] = useState({})
@@ -112,6 +112,20 @@ export default function InstantEMIForm({ onClose }) {
   const [scannedImage, setScannedImage] = useState(null)
   const [ocrProgress, setOcrProgress] = useState(0)
   const fileInputRef = useRef(null)
+
+  useEffect(() => {
+    if (!userInput) return;
+
+    const hasValue = (v) => v !== undefined && v !== null && v !== "";
+
+    setForm((prev) => ({
+      ...prev,
+      ...(hasValue(userInput.fullName) && { name: userInput.fullName }),
+      ...(hasValue(userInput.panNumber) && { pan: userInput.panNumber }),
+      ...(hasValue(userInput.dob) && { dob: userInput.dob }),
+      ...(hasValue(userInput.address) && { address: userInput.address }),
+    }));
+  }, [userInput]);
 
   const validate = (fields = form) => {
     const e = {}
@@ -525,7 +539,9 @@ export default function InstantEMIForm({ onClose }) {
                   Verifying with JusPay...
                 </span>
               ) : (
-                <span className="emi-btn-row">
+                <span onClick={() => {
+                    window.location.href = "/offer"
+                }} className="emi-btn-row">
                   <LockIcon />
                   Apply for Instant EMI
                 </span>

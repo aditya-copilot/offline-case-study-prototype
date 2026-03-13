@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './ProductGallery.css'
 import InstantEMIForm from './InstantEMIForm'
 
@@ -46,6 +46,13 @@ export default function ProductGallery({ product, onBack }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [liked, setLiked] = useState(false)
   const [showEMIForm, setShowEMIForm] = useState(false)
+
+  useEffect(() => {
+    if(showEMIForm){
+      window.location.href = "/checkout/user-input"
+      return;
+    }
+  }, [showEMIForm])
 
   const getProductImages = (product) => {
     const baseImage = product.image
