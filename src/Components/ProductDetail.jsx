@@ -61,6 +61,13 @@ export default function ProductDetail({ product, onBack }) {
     setShowEMIForm(false)
   }
 
+    useEffect(() => {
+      if(showEMIForm){
+        window.location.href = "/checkout/user-input"
+        return;
+      }
+    }, [showEMIForm])
+
   return (
     <div className="product-detail-overlay">
       <div className="product-detail-container">
