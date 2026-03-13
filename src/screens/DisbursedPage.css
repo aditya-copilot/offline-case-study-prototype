@@ -1,0 +1,360 @@
+.disbursed-page {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.disbursed-card {
+  background: white;
+  border-radius: 28px;
+  padding: 36px;
+  width: 100%;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.success-badge {
+  margin-bottom: 20px;
+}
+
+.money-rain {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.disbursed-card h1 {
+  font-size: 24px;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.amount {
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 8px 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0 0 24px 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.info-box {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-box .label {
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-box .value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+}
+
+.schedule-popup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #667eea15, #764ba215);
+  border: 1px solid #667eea30;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.schedule-popup-btn:hover {
+  background: linear-gradient(135deg, #667eea25, #764ba225);
+  border-color: #667eea50;
+  transform: translateY(-1px);
+}
+
+.schedule-popup-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.schedule-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.schedule-modal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 360px;
+  max-height: 70vh;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+  animation: slideUpModal 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.schedule-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.schedule-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #e8e8e8;
+}
+
+.close-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #666;
+}
+
+.schedule-modal-content {
+  max-height: calc(70vh - 60px);
+  overflow-y: auto;
+}
+
+.schedule-header {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 60px;
+  gap: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+
+.schedule-body {
+  padding: 0;
+}
+
+.schedule-row {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 60px;
+  gap: 8px;
+  padding: 12px 16px;
+  font-size: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.schedule-row:last-child {
+  border-bottom: none;
+}
+
+.schedule-row .month {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.schedule-row .emi {
+  font-weight: 600;
+  color: #333;
+}
+
+.schedule-row .principal {
+  color: #666;
+}
+
+.schedule-row .status {
+  font-size: 14px;
+}
+
+.schedule-row .status.paid {
+  color: #4caf50;
+}
+
+.schedule-row .status.pending {
+  color: #ccc;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.primary-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.primary-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.secondary-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea30;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background: #667eea10;
+  border-color: #667eea50;
+  transform: translateY(-2px);
+}
+
+.secondary-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 480px) {
+  .disbursed-card {
+    padding: 28px 20px;
+  }
+  
+  .info-grid {
+    gap: 8px;
+  }
+  
+  .info-box {
+    padding: 12px 6px;
+  }
+  
+  .info-box .value {
+    font-size: 12px;
+  }
+  
+  .schedule-modal {
+    max-width: 100%;
+    margin: 0 10px;
+  }
+  
+  .action-buttons {
+    gap: 10px;
+  }
+  
+  .primary-btn,
+  .secondary-btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,246 @@
+.invoice-page {
+  min-height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.invoice-card, .verify-card {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  width: 100%;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+}
+
+.invoice-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.invoice-header h1 {
+  font-size: 24px;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.invoice-header p {
+  color: #888;
+  font-size: 14px;
+  margin: 0;
+}
+
+.upload-zone {
+  border: 2px dashed #667eea40;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #667eea05, #764ba205);
+}
+
+.upload-zone:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea10, #764ba210);
+}
+
+.upload-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-icon svg {
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+.upload-text {
+  font-size: 15px;
+  color: #555;
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: #999;
+}
+
+.loan-preview {
+  margin-top: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.preview-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.preview-row:first-child {
+  border-bottom: 1px dashed #ddd;
+}
+
+.preview-row span:first-child {
+  color: #666;
+}
+
+.preview-row span:last-child {
+  font-weight: 700;
+  color: #333;
+}
+
+.verify-card {
+  text-align: center;
+  padding: 48px 32px;
+}
+
+.verify-card h2 {
+  font-size: 22px;
+  color: #333;
+  margin: 24px 0 8px 0;
+}
+
+.verify-card p {
+  color: #888;
+  font-size: 14px;
+  margin: 0;
+}
+
+.scan-animation {
+  position: relative;
+  height: 120px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #667eea, transparent);
+  animation: scan 1.5s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: 0; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.doc-preview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.doc-icon {
+  font-size: 40px;
+}
+
+.doc-name {
+  font-size: 12px;
+  color: #666;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.progress-dots span {
+  width: 10px;
+  height: 10px;
+  background: #667eea;
+  border-radius: 50%;
+  animation: bounce 0.6s ease infinite;
+}
+
+.progress-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.progress-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.verify-card.success {
+  padding: 48px;
+}
+
+.success-ring {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+}
+
+.success-ring svg {
+  width: 100%;
+  height: 100%;
+}
+
+.success-ring circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  animation: drawCircle 0.6s ease forwards;
+}
+
+.success-ring path {
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: drawCheck 0.3s ease 0.6s forwards;
+}
+
+@keyframes drawCircle {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes drawCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (max-width: 480px) {
+  .invoice-card, .verify-card {
+    padding: 24px;
+  }
+  
+  .upload-zone {
+    padding: 32px 16px;
+  }
+}

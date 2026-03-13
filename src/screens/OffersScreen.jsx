@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useOffer } from '../context/OfferContext'
 import './OffersScreen.css'
 
 const product = {
@@ -14,9 +16,19 @@ const lenderOffers = [
     lenderName: 'ICICI Bank',
     lenderLogo: '🏦',
     amount: '₹1,20,000',
+    amountValue: 120000,
     interestRate: '0%',
-    term: '3 Years',
+    interestRateValue: 0,
+    term: '36 Months',
+    termMonths: 36,
+    termDisplay: '3 Years',
     monthlyPayment: '₹3,333',
+    monthlyPaymentValue: 3333,
+    downpayment: 2000,
+    processingFee: 1200,
+    processingFeePercent: 1,
+    totalInterest: 0,
+    totalPayable: 121200,
     features: ['Instant approval', 'Zero foreclosure charges', 'Flexible EMI'],
     expiresIn: '5 days',
     isRecommended: true,
@@ -27,9 +39,19 @@ const lenderOffers = [
     lenderName: 'HDB Financial',
     lenderLogo: '🏛️',
     amount: '₹1,20,000',
+    amountValue: 120000,
     interestRate: '12.99%',
-    term: '2 Years',
+    interestRateValue: 12.99,
+    term: '24 Months',
+    termMonths: 24,
+    termDisplay: '2 Years',
     monthlyPayment: '₹5,600',
+    monthlyPaymentValue: 5600,
+    downpayment: 2000,
+    processingFee: 1200,
+    processingFeePercent: 1,
+    totalInterest: 15480,
+    totalPayable: 136680,
     features: ['Quick disbursement', 'Minimal documentation'],
     expiresIn: '12 days',
     isRecommended: false,
@@ -40,9 +62,19 @@ const lenderOffers = [
     lenderName: 'TVS Credit',
     lenderLogo: '🏍️',
     amount: '₹1,20,000',
+    amountValue: 120000,
     interestRate: '0%',
-    term: '2 Years',
+    interestRateValue: 0,
+    term: '24 Months',
+    termMonths: 24,
+    termDisplay: '2 Years',
     monthlyPayment: '₹5,000',
+    monthlyPaymentValue: 5000,
+    downpayment: 2000,
+    processingFee: 1200,
+    processingFeePercent: 1,
+    totalInterest: 0,
+    totalPayable: 122000,
     features: ['Low interest', 'Easy EMIs', 'Fast processing'],
     expiresIn: '8 days',
     isRecommended: false,
@@ -53,9 +85,19 @@ const lenderOffers = [
     lenderName: 'Fibe',
     lenderLogo: '💰',
     amount: '₹1,20,000',
+    amountValue: 120000,
     interestRate: '14.99%',
-    term: '1 Year',
+    interestRateValue: 14.99,
+    term: '12 Months',
+    termMonths: 12,
+    termDisplay: '1 Year',
     monthlyPayment: '₹10,400',
+    monthlyPaymentValue: 10400,
+    downpayment: 2000,
+    processingFee: 1200,
+    processingFeePercent: 1,
+    totalInterest: 17988,
+    totalPayable: 138988,
     features: ['100% digital', 'Money in 10 mins', 'No collateral'],
     expiresIn: '15 days',
     isRecommended: false,
@@ -66,9 +108,19 @@ const lenderOffers = [
     lenderName: 'Bajaj Finserv',
     lenderLogo: '🏢',
     amount: '₹1,20,000',
+    amountValue: 120000,
     interestRate: '0%',
-    term: '3 Years',
+    interestRateValue: 0,
+    term: '36 Months',
+    termMonths: 36,
+    termDisplay: '3 Years',
     monthlyPayment: '₹3,333',
+    monthlyPaymentValue: 3333,
+    downpayment: 2000,
+    processingFee: 1200,
+    processingFeePercent: 1,
+    totalInterest: 0,
+    totalPayable: 121200,
     features: ['Flexible tenure', 'Pre-approved'],
     expiresIn: '20 days',
     isRecommended: false,
@@ -77,14 +129,21 @@ const lenderOffers = [
 ]
 
 function OffersScreen() {
-  const [selectedOffer, setSelectedOffer] = useState(null)
+  const navigate = useNavigate()
+  const { setSelectedOffer } = useOffer()
+  const [modalOffer, setModalOffer] = useState(null)
 
   const handleSelectOffer = (offer) => {
-    setSelectedOffer(offer)
+    setModalOffer(offer)
   }
 
   const handleCloseModal = () => {
-    setSelectedOffer(null)
+    setModalOffer(null)
+  }
+
+  const handleApplyNow = (offer) => {
+    setSelectedOffer(offer)
+    navigate('/cykc')
   }
 
   return (
@@ -207,15 +266,15 @@ function OffersScreen() {
       </div>
 
       {/* Offer Detail Modal */}
-      {selectedOffer && (
+      {modalOffer && (
         <div className="offer-modal-overlay" onClick={handleCloseModal}>
           <div className="offer-modal" onClick={(e) => e.stopPropagation()}>
             <div className="offer-modal-header">
               <div className="modal-bank-info">
-                <span className="modal-bank-logo">{selectedOffer.lenderLogo}</span>
+                <span className="modal-bank-logo">{modalOffer.lenderLogo}</span>
                 <div>
-                  <h2>{selectedOffer.lenderName}</h2>
-                  <span className="modal-loan-type">{selectedOffer.offerType}</span>
+                  <h2>{modalOffer.lenderName}</h2>
+                  <span className="modal-loan-type">{modalOffer.offerType}</span>
                 </div>
               </div>
               <button className="offer-modal-close" onClick={handleCloseModal}>
@@ -227,29 +286,29 @@ function OffersScreen() {
             <div className="offer-modal-content">
               <div className="modal-amount-section">
                 <span className="modal-amount-label">Loan Amount</span>
-                <span className="modal-amount-value">{selectedOffer.amount}</span>
+                <span className="modal-amount-value">{modalOffer.amount}</span>
               </div>
               <div className="modal-details-grid">
                 <div className="modal-detail-box">
                   <span className="modal-detail-icon">📅</span>
                   <span className="modal-detail-label">Tenure</span>
-                  <span className="modal-detail-value">{selectedOffer.term}</span>
+                  <span className="modal-detail-value">{modalOffer.term}</span>
                 </div>
                 <div className="modal-detail-box">
                   <span className="modal-detail-icon">📈</span>
                   <span className="modal-detail-label">Interest Rate</span>
-                  <span className="modal-detail-value">{selectedOffer.interestRate}</span>
+                  <span className="modal-detail-value">{modalOffer.interestRate}</span>
                 </div>
                 <div className="modal-detail-box">
                   <span className="modal-detail-icon">💳</span>
                   <span className="modal-detail-label">Monthly EMI</span>
-                  <span className="modal-detail-value">{selectedOffer.monthlyPayment}</span>
+                  <span className="modal-detail-value">{modalOffer.monthlyPayment}</span>
                 </div>
               </div>
               <div className="modal-features">
                 <h4>Key Benefits</h4>
                 <div className="modal-features-list">
-                  {selectedOffer.features.map((feature, index) => (
+                  {modalOffer.features.map((feature, index) => (
                     <div key={index} className="modal-feature-item">
                       <span className="check-icon">✓</span>
                       <span>{feature}</span>
@@ -259,7 +318,10 @@ function OffersScreen() {
               </div>
             </div>
             <div className="offer-modal-actions">
-              <button className="offer-modal-btn primary">
+              <button 
+                className="offer-modal-btn primary"
+                onClick={() => handleApplyNow(modalOffer)}
+              >
                 Apply Now
               </button>
             </div>

@@ -225,7 +225,7 @@ export default function InstantEMIForm({ onClose , userInput}) {
           "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
         },
         body: JSON.stringify({
-          model: "kimi-latest",
+          model: "claude-sonnet-4-5",
           max_tokens: 4096,
           messages: [
             {
