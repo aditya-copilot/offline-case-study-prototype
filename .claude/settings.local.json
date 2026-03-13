@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build)",
+      "Bash(npm install react-router-dom)",
+      "Bash(npm ls react-router-dom)",
+      "Bash(node -e \"const rrd = require(''./node_modules/react-router-dom''); console.log(Object.keys(rrd).filter(k => k.includes(''Router'')))\")",
+      "Bash(pkill -f \"vite\")"
+    ]
+  }
+}

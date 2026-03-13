@@ -1,0 +1,726 @@
+/* ===== Base / Page ===== */
+.emi-page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #f5f7fa 0%, #e8edf5 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  color: #334155;
+}
+
+/* ===== Header ===== */
+.emi-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.emi-header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emi-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.emi-secure-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 5px 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== Main ===== */
+.emi-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 36px 24px 60px;
+}
+
+/* ===== Hero ===== */
+.emi-hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.emi-hero-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+}
+
+.emi-hero-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.emi-hero-sub {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ===== Layout ===== */
+.emi-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ===== Form Card ===== */
+.emi-form-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.emi-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 20px;
+}
+
+.emi-section-label svg {
+  flex-shrink: 0;
+}
+
+/* ===== Row Layout ===== */
+.emi-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ===== Field ===== */
+.emi-field {
+  margin-bottom: 20px;
+}
+
+.emi-field label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.emi-label-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.emi-label-hint svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ===== Input Wrapper ===== */
+.emi-input-wrap {
+  position: relative;
+}
+
+.emi-input-wrap input,
+.emi-input-wrap textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: #1e293b;
+  background: #f8fafc;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.emi-input-wrap textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.emi-input-wrap input::placeholder,
+.emi-input-wrap textarea::placeholder {
+  color: #94a3b8;
+}
+
+.emi-input-wrap input:focus,
+.emi-input-wrap textarea:focus {
+  border-color: #667eea;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+/* ===== Phone Prefix ===== */
+.emi-phone-wrap {
+  display: flex;
+  align-items: stretch;
+}
+
+.emi-phone-prefix {
+  display: flex;
+  align-items: center;
+  padding: 12px 12px;
+  background: #f1f5f9;
+  border: 2px solid #e2e8f0;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  transition: border-color 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.emi-phone-wrap input {
+  border-radius: 0 12px 12px 0;
+}
+
+.emi-phone-wrap:focus-within .emi-phone-prefix {
+  border-color: #667eea;
+}
+
+/* ===== Validation States ===== */
+.emi-field--error .emi-input-wrap input,
+.emi-field--error .emi-input-wrap textarea {
+  border-color: #ef4444;
+  background: #fff5f5;
+}
+
+.emi-field--error .emi-input-wrap input:focus,
+.emi-field--error .emi-input-wrap textarea:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.emi-field--error .emi-phone-prefix {
+  border-color: #ef4444;
+  background: #fff5f5;
+}
+
+.emi-field--valid .emi-input-wrap input,
+.emi-field--valid .emi-input-wrap textarea {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.emi-field--valid .emi-phone-prefix {
+  border-color: #22c55e;
+  background: #f0fdf4;
+}
+
+.emi-error-msg {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* ===== Submit Button ===== */
+.emi-submit-btn {
+  width: 100%;
+  padding: 15px 24px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.45);
+  letter-spacing: 0.01em;
+}
+
+.emi-submit-btn:hover:not(:disabled) {
+  opacity: 0.93;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+}
+
+.emi-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.emi-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.emi-btn-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.emi-spinner-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.emi-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: emi-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes emi-spin {
+  to { transform: rotate(360deg); }
+}
+
+.emi-consent {
+  margin: 16px 0 0;
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ===== Sidebar ===== */
+.emi-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emi-info-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.emi-info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.emi-info-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ===== Benefits List ===== */
+.emi-benefits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.emi-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.emi-check-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.emi-check-dot::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -55%) rotate(45deg);
+  width: 4px;
+  height: 7px;
+  border-right: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+}
+
+/* ===== Steps ===== */
+.emi-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emi-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.emi-step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.emi-steps li div strong {
+  font-size: 13px;
+  color: #1e293b;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.emi-steps li div p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ===== Trust Badges ===== */
+.emi-trust-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.emi-badge {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 8px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+}
+
+.emi-badge svg {
+  width: 16px;
+  height: 16px;
+  color: #667eea;
+}
+
+.emi-badge span:first-child {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* ===== Success Card ===== */
+.emi-success-card {
+  max-width: 480px;
+  margin: 40px auto;
+  background: white;
+  border-radius: 24px;
+  padding: 48px 36px;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+}
+
+.emi-success-icon {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.45);
+  animation: emi-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.emi-success-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+@keyframes emi-pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.emi-success-card h2 {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 10px;
+}
+
+.emi-success-sub {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0 0 28px;
+  line-height: 1.6;
+}
+
+.emi-success-details {
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.emi-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.emi-detail-row:last-child {
+  border-bottom: none;
+}
+
+.emi-detail-row span {
+  color: #64748b;
+}
+
+.emi-detail-row strong {
+  color: #1e293b;
+}
+
+.emi-btn-secondary {
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: 2px solid #667eea;
+  background: transparent;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.emi-btn-secondary:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .emi-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .emi-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .emi-info-card {
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .emi-trust-badges {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .emi-main {
+    padding: 24px 16px 48px;
+  }
+
+  .emi-hero-title {
+    font-size: 24px;
+  }
+
+  .emi-form-card {
+    padding: 24px 20px;
+  }
+
+  .emi-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .emi-success-card {
+    padding: 36px 24px;
+    margin: 24px auto;
+  }
+
+  .emi-header-inner {
+    padding: 12px 16px;
+  }
+
+  .emi-secure-badge {
+    display: none;
+  }
+
+  .emi-sidebar {
+    flex-direction: column;
+  }
+}
+
+/* ===== Dark Mode ===== */
+@media (prefers-color-scheme: dark) {
+  .emi-page {
+    background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+    color: #e2e8f0;
+  }
+
+  .emi-hero-title {
+    color: #f1f5f9;
+  }
+
+  .emi-hero-sub {
+    color: #94a3b8;
+  }
+
+  .emi-form-card,
+  .emi-info-card {
+    background: #1e293b;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .emi-input-wrap input,
+  .emi-input-wrap textarea {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+  }
+
+  .emi-input-wrap input::placeholder,
+  .emi-input-wrap textarea::placeholder {
+    color: #64748b;
+  }
+
+  .emi-input-wrap input:focus,
+  .emi-input-wrap textarea:focus {
+    background: #1e293b;
+    border-color: #667eea;
+  }
+
+  .emi-phone-prefix {
+    background: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+  }
+
+  .emi-field--valid .emi-input-wrap input,
+  .emi-field--valid .emi-input-wrap textarea {
+    background: #0d2218;
+  }
+
+  .emi-field--error .emi-input-wrap input,
+  .emi-field--error .emi-input-wrap textarea {
+    background: #2d0f0f;
+  }
+
+  .emi-field label {
+    color: #94a3b8;
+  }
+
+  .emi-info-header {
+    color: #f1f5f9;
+  }
+
+  .emi-benefits li {
+    color: #94a3b8;
+  }
+
+  .emi-steps li div strong {
+    color: #f1f5f9;
+  }
+
+  .emi-steps li div p {
+    color: #64748b;
+  }
+
+  .emi-badge {
+    background: #0f172a;
+    border-color: #334155;
+    color: #94a3b8;
+  }
+
+  .emi-success-card {
+    background: #1e293b;
+  }
+
+  .emi-success-card h2 {
+    color: #f1f5f9;
+  }
+
+  .emi-success-details {
+    background: #0f172a;
+  }
+
+  .emi-detail-row {
+    border-color: #334155;
+  }
+
+  .emi-detail-row strong {
+    color: #f1f5f9;
+  }
+}
