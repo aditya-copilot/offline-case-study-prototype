@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 import './AIChatWidget.css'
+import InstantEMIForm from './InstantEMIForm'
 
 // Backend API endpoint - configure this to your backend URL
-const API_ENDPOINT = '/api/chat'
 
 // Categories data
 const categories = [
@@ -83,6 +84,7 @@ const categories = [
 ]
 
 function AIChatWidget() {
+  const location = useLocation()
   const [inputMode, setInputMode] = useState('text')
   const [message, setMessage] = useState('')
   const [isListening, setIsListening] = useState(false)
@@ -186,13 +188,23 @@ function AIChatWidget() {
         image: imageData
       }
 
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
+      const response = await fetch("https://grid.ai.juspay.net/v1/chat/completions", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
         },
-        body: JSON.stringify(payload)
-      })
+        body: JSON.stringify({
+          model: "kimi-latest",
+          max_tokens: 4096,
+          messages: [
+            {
+              role: "user",
+              content: userMessage
+            }
+          ]
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`)
@@ -200,14 +212,13 @@ function AIChatWidget() {
 
       const data = await response.json()
 
-      if (data.response) {
+      // Handle OpenAI-compatible response format
+      if (data.choices && data.choices[0] && data.choices[0].message) {
+        return data.choices[0].message.content
+      } else if (data.response) {
         return data.response
       } else if (data.message) {
         return data.message
-      } else if (data.answer) {
-        return data.answer
-      } else if (data.text) {
-        return data.text
       } else if (typeof data === 'string') {
         return data
       } else {
@@ -345,8 +356,10 @@ function AIChatWidget() {
         </div>
       </div>
 
+
       {/* Messages Area */}
       <div className="ai-fullscreen-messages">
+        {location.pathname === '/checkout/user-input' && <InstantEMIForm />}
         {messages.length === 0 ? (
           <div className="ai-welcome-container">
             {/* Single Carousel Space */}
