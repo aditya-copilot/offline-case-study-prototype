@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import './ProductGallery.css'
+import InstantEMIForm from './InstantEMIForm'
 
 const ChevronLeftIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -43,9 +43,9 @@ const ShareIcon = () => (
 )
 
 export default function ProductGallery({ product, onBack }) {
-  const navigate = useNavigate()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [liked, setLiked] = useState(false)
+  const [showEMIForm, setShowEMIForm] = useState(false)
 
   const getProductImages = (product) => {
     const baseImage = product.image
@@ -77,7 +77,11 @@ export default function ProductGallery({ product, onBack }) {
   }
 
   const handleBuyNow = () => {
-    navigate('/checkout')
+    setShowEMIForm(true)
+  }
+
+  const handleCloseEMIForm = () => {
+    setShowEMIForm(false)
   }
 
   return (
@@ -166,6 +170,15 @@ export default function ProductGallery({ product, onBack }) {
             </button>
           ))}
         </div>
+
+        {/* Instant EMI Form Modal */}
+        {showEMIForm && (
+          <div className="emi-modal-overlay" onClick={handleCloseEMIForm}>
+            <div className="emi-modal-content" onClick={(e) => e.stopPropagation()}>
+              <InstantEMIForm onClose={handleCloseEMIForm} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -64,6 +64,13 @@ const CameraIcon = () => (
   </svg>
 )
 
+const XIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+)
+
 const CloseIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <line x1="18" y1="6" x2="6" y2="18" />
@@ -89,7 +96,7 @@ function validateDOB(dob) {
   return actualAge >= 18 && actualAge <= 75
 }
 
-export default function InstantEMIForm() {
+export default function InstantEMIForm({ onClose }) {
   const [form, setForm] = useState({
     name: '',
     pan: '',
@@ -341,9 +348,16 @@ export default function InstantEMIForm() {
             <JusPayLogo />
             <span>JusPay</span>
           </div>
-          <div className="emi-secure-badge">
-            <ShieldIcon />
-            <span>256-bit Encrypted</span>
+          <div className="emi-header-actions">
+            <div className="emi-secure-badge">
+              <ShieldIcon />
+              <span>256-bit Encrypted</span>
+            </div>
+            {onClose && (
+              <button className="emi-close-btn" onClick={onClose} aria-label="Close form">
+                <XIcon />
+              </button>
+            )}
           </div>
         </div>
       </header>
