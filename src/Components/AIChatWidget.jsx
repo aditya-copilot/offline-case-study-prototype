@@ -143,7 +143,7 @@ function AIChatWidget() {
     const utterance = new SpeechSynthesisUtterance(text);
 
     utterance.lang = "en-US";
-    utterance.rate = 1;      // speed (0.1 - 10)
+    utterance.rate = 1.6;      // speed (0.1 - 10)
     utterance.pitch = 1;     // tone (0 - 2)
     utterance.volume = 1;    // volume (0 - 1)
 
@@ -216,10 +216,9 @@ function AIChatWidget() {
           setSpeechSupported(false)
         }
       }
-
-    recognitionRef.current.onend = () => {
-      setIsListening(false);
-    }
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      }
     } else {
       setSpeechSupported(false);
     }
@@ -251,7 +250,7 @@ Only return the JSON array of product IDs, nothing else.`
           "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
         },
         body: JSON.stringify({
-          model: "kimi-latest",
+          model: "claude-sonnet-4-5",
           max_tokens: 4096,
           messages: [
             {
