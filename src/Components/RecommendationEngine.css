@@ -1,0 +1,237 @@
+.recommendation-engine {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 24px;
+  margin: 20px 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  color: white;
+  max-width: 100%;
+}
+
+.recommendation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.recommendation-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.recommendation-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.recommendation-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.recommendation-progress {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.recommendation-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.question-step {
+  margin-bottom: 20px;
+}
+
+.step-indicator {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.question-text {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.option-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 16px;
+  padding: 20px 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #333;
+}
+
+.option-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background: white;
+}
+
+.option-card:active {
+  transform: translateY(-2px);
+}
+
+.option-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.option-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #1a1a1a;
+}
+
+.option-description {
+  font-size: 11px;
+  color: #666;
+  line-height: 1.3;
+}
+
+/* Results styles */
+.recommendation-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #333;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.recommendation-card h4 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #667eea;
+}
+
+.recommendation-reason {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.recommended-bikes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recommended-bike-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.recommended-bike-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.bike-icon {
+  font-size: 24px;
+}
+
+.bike-name {
+  flex: 1;
+  margin: 0 12px;
+  text-align: left;
+}
+
+.bike-arrow {
+  font-size: 20px;
+  opacity: 0.8;
+}
+
+.restart-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 14px 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 8px;
+}
+
+.restart-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 360px) {
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recommendation-engine {
+    padding: 16px;
+    margin: 12px;
+  }
+}

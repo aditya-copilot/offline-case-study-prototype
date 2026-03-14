@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import './AIChatWidget.css'
 import InstantEMIForm from './InstantEMIForm'
 import ProductGrid from './ProductGrid'
 import ProductGallery from './ProductGallery'
 import VisualResponse from './VisualResponse'
+import RecommendationEngine from './RecommendationEngine'
 import { products, searchProducts, getProductByName, getSearchMeta } from '../data/products'
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -13,7 +14,7 @@ import remarkGfm from "remark-gfm";
 const categories = [
   {
     id: 'popular',
-    title: 'Popular Products',
+    title: 'Popular Motorcycles',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -21,15 +22,15 @@ const categories = [
     ),
     color: '#f59e0b',
     items: [
-      { name: 'Apple iPhone 15', price: '₹54,900', image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=300&h=300&fit=crop', offer: '20% OFF' },
-      { name: 'Samsung Galaxy S23', price: '₹64,999', image: 'https://images.unsplash.com/photo-1678911820864-e2c567c655d7?w=300&h=300&fit=crop', offer: 'Bestseller' },
-      { name: 'Apple Watch Series 9', price: '₹41,999', image: 'https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=300&h=300&fit=crop', offer: 'Buy 2 Get 1' },
-      { name: 'Sony PlayStation 5', price: '₹54,990', image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=300&h=300&fit=crop', offer: 'Limited' }
+      { name: 'Hero Splendor Plus', price: '₹77,176', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop', offer: 'Bestseller' },
+      { name: 'Hero Glamour', price: '₹85,738', image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=300&h=300&fit=crop', offer: 'Stylish' },
+      { name: 'Hero Xtreme 160R', price: '₹1,11,388', image: 'https://images.unsplash.com/photo-1615172284350-668170a4f2e9?w=300&h=300&fit=crop', offer: 'Performance' },
+      { name: 'Hero Xtreme 200S', price: '₹1,39,871', image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=300&h=300&fit=crop', offer: 'Sports' }
     ]
   },
   {
-    id: 'trending',
-    title: 'Trending Items',
+    id: 'scooters',
+    title: 'Popular Scooters',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
@@ -38,15 +39,15 @@ const categories = [
     ),
     color: '#10b981',
     items: [
-      { name: 'Apple AirPods Pro 2', price: '₹22,999', image: 'https://images.unsplash.com/photo-1603351154351-5cfb3d04ef32?w=300&h=300&fit=crop', offer: 'New' },
-      { name: 'Samsung 55 inch TV', price: '₹42,490', image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=300&h=300&fit=crop', offer: 'Hot' },
-      { name: 'MacBook Air M2', price: '₹99,990', image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=300&h=300&fit=crop', offer: '-30%' },
-      { name: 'JBL Flip 6', price: '₹10,999', image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=300&fit=crop', offer: 'Sale' }
+      { name: 'Hero Maestro Edge 125', price: '₹79,468', image: 'https://images.unsplash.com/photo-1611365892117-00ac5ef43c90?w=300&h=300&fit=crop', offer: 'Premium' },
+      { name: 'Hero Pleasure Plus', price: '₹63,750', image: 'https://images.unsplash.com/photo-1589354784757-9229742e666a?w=300&h=300&fit=crop', offer: 'Lightweight' },
+      { name: 'Hero Destini 125', price: '₹71,558', image: 'https://images.unsplash.com/photo-1558981285-6f0c94958bb6?w=300&h=300&fit=crop', offer: 'Family' },
+      { name: 'Hero Duet', price: '₹65,658', image: 'https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=300&h=300&fit=crop', offer: 'Practical' }
     ]
   },
   {
-    id: 'seasonal',
-    title: 'Seasonal Recommendations',
+    id: 'electric',
+    title: 'Electric Vehicles',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="5" />
@@ -62,15 +63,15 @@ const categories = [
     ),
     color: '#ec4899',
     items: [
-      { name: 'LG 1.5 Ton AC', price: '₹45,999', image: 'https://images.unsplash.com/photo-1617103893393-277579601d36?w=300&h=300&fit=crop', offer: 'Sale' },
-      { name: 'Samsung Refrigerator', price: '₹26,999', image: 'https://images.unsplash.com/photo-1571175443880-49e1d58b794a?w=300&h=300&fit=crop', offer: '-25%' },
-      { name: 'Samsung Washing Machine', price: '₹32,999', image: 'https://images.unsplash.com/photo-1626806775351-538068a21838?w=300&h=300&fit=crop', offer: 'Deal' },
-      { name: 'Sony Bravia TV', price: '₹67,999', image: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=300&h=300&fit=crop', offer: 'Hot' }
+      { name: 'Hero Electric Optima', price: '₹67,190', image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?w=300&h=300&fit=crop', offer: 'Eco' },
+      { name: 'Hero Electric Flash', price: '₹59,640', image: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=300&h=300&fit=crop', offer: 'Affordable' },
+      { name: 'Hero Electric NYX', price: '₹73,590', image: 'https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=300&h=300&fit=crop', offer: 'Cargo' },
+      { name: 'Hero Electric Atria', price: '₹63,640', image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=300&h=300&fit=crop', offer: 'City' }
     ]
   },
   {
-    id: 'deals',
-    title: 'Best Deals',
+    id: 'adventure',
+    title: 'Adventure & Off-Road',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
@@ -79,10 +80,10 @@ const categories = [
     ),
     color: '#ef4444',
     items: [
-      { name: 'Xiaomi 13 Pro', price: '₹69,999', originalPrice: '₹79,999', image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff23?w=300&h=300&fit=crop', offer: '-50%' },
-      { name: 'iPad 10th Gen', price: '₹44,900', originalPrice: '₹49,900', image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=300&h=300&fit=crop', offer: 'Sale' },
-      { name: 'Xbox Series X', price: '₹52,990', originalPrice: '₹55,990', image: 'https://images.unsplash.com/photo-1605901309584-818e25960a8f?w=300&h=300&fit=crop', offer: '-40%' },
-      { name: 'Marshall Speaker', price: '₹14,999', originalPrice: '₹17,999', image: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=300&fit=crop', offer: 'Deal' }
+      { name: 'Hero Xpulse 200', price: '₹1,43,645', image: 'https://images.unsplash.com/photo-1568708160-6eddaf55124b?w=300&h=300&fit=crop', offer: 'Off-Road' },
+      { name: 'Hero Passion Xtec', price: '₹81,038', image: 'https://images.unsplash.com/photo-1558981285-6f0c94958bb6?w=300&h=300&fit=crop', offer: 'Xtec' },
+      { name: 'Hero Passion Plus', price: '₹76,538', image: 'https://images.unsplash.com/photo-1449426468159-d96dbf08f19f?w=300&h=300&fit=crop', offer: 'Reliable' },
+      { name: 'Hero Splendor Plus Xtec', price: '₹79,338', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop', offer: 'Xtec' }
     ]
   }
 ]
@@ -90,6 +91,7 @@ const categories = [
 function AIChatWidget() {
   console.log("Re-rendering AIChatWidget")
   const location = useLocation()
+  const navigate = useNavigate()
   const [inputMode, setInputMode] = useState('text')
   const [message, setMessage] = useState('')
   const [isListening, setIsListening] = useState(false)
@@ -101,6 +103,7 @@ function AIChatWidget() {
   const [searchResults, setSearchResults] = useState([])
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [currentSearch, setCurrentSearch] = useState(null)
+  const [showRecommendation, setShowRecommendation] = useState(false)
 
   const messagesEndRef = useRef(null)
   const recognitionRef = useRef(null)
@@ -109,6 +112,7 @@ function AIChatWidget() {
   const [activeOfferIndex, setActiveOfferIndex] = useState(0)
   const [userInput, setUserInput] = useState({});
   const inputModeRef = useRef('text')
+  const locationRef = useRef(location)
 
   // Extract JSON from AI response (handles markdown code blocks and extra text)
   
@@ -130,6 +134,20 @@ function AIChatWidget() {
       setIsListening(false)
     }
   } , [inputMode])
+
+  // Keep location ref updated
+  useEffect(() => {
+    locationRef.current = location
+  }, [location])
+
+  // Clear messages when navigating away from conversation page
+  useEffect(() => {
+    if (!location.pathname.includes('/conversation')) {
+      setMessages([])
+      setSearchResults([])
+      setCurrentSearch(null)
+    }
+  }, [location.pathname])
 
   function speakText(text) {
     console.log("Attempting to speak text:", text)
@@ -233,13 +251,14 @@ function AIChatWidget() {
 
   // Search products using AI
   const searchWithAI = async (query) => {
-    const searchPrompt = `You are a product search assistant. I have a catalog of ${products.length} electronics products. 
+    const searchPrompt = `You are a product search assistant for a two-wheeler dealership. I have a catalog of ${products.length} motorcycles and scooters.
 
-The user is looking for: "${query}"
+Search Query: "${query}"
 
-Based on the search query, identify which products from our catalog might be relevant. Return a JSON array of product IDs that match the user's intent. If no products match well, return an empty array.
+Available products:
+${products.map(p => `- ID: ${p.id}, Name: ${p.name}, Brand: ${p.brand}, Category: ${p.category}, Price: ₹${p.price}`).join('\n')}
 
-Product catalog includes: smartphones, laptops, TVs, earbuds, smartwatches, refrigerators, washing machines, tablets, speakers, printers, gaming consoles, accessories, and air conditioners from brands like Apple, Samsung, Sony, OnePlus, Xiaomi, HP, Dell, LG, etc.
+Based on the search query, identify which two-wheelers from our catalog might be relevant. Return a JSON array of product IDs that match the user's intent. If no products match well, return an empty array.
 
 Only return the JSON array of product IDs, nothing else.`
 
@@ -251,7 +270,7 @@ Only return the JSON array of product IDs, nothing else.`
           "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
         },
         body: JSON.stringify({
-          model: "kimi-latest",
+          model: "glm-latest",
           max_tokens: 4096,
           messages: [
             {
@@ -289,9 +308,9 @@ Only return the JSON array of product IDs, nothing else.`
   // Call backend API
   const callBackend = async (userMessage, conversationHistory, imageData = null) => {
     try {
-      const contextMessage = `You are a helpful shopping assistant. You have access to a product catalog with ${products.length} electronics products.
+      const contextMessage = `You are a helpful two-wheeler dealership assistant. You have access to a product catalog with ${products.length} motorcycles and scooters.
 
-When users ask about products, help them find what they're looking for. If they mention specific products, brands, or categories, acknowledge their interest and let them know they can click on product cards to see more details.
+When users ask about bikes, scooters, motorcycles, or two-wheelers, help them find what they're looking for. If they mention specific models, brands (Hero), types (commuter, sports, scooter, electric), or price ranges, acknowledge their interest and let them know they can click on product cards to see more details.
 
 User message: ${userMessage}`
 
@@ -348,6 +367,11 @@ User message: ${userMessage}`
   // Send message and get bot response
   const sendMessage = useCallback(async (text, imageData = null) => {
     if (!text.trim() && !imageData) return
+    
+    // Navigate to conversation screen on first message
+    if (location.pathname === '/chat' && messages.length === 0) {
+      navigate('/chat/conversation')
+    }
 
     let nText = text;
 
@@ -412,19 +436,22 @@ User message: ${userMessage}`
       // Only call AI if no products found - otherwise skip text response
       if (foundProducts.length === 0) {
         const response = await callBackend(text, messages, imageData)
-        const botMessage = {
-          id: Date.now() + 1,
-          type: 'bot',
-          text: response,
-          timestamp: new Date()
-        }
-        setMessages(prev => [...prev, botMessage])
-        console.log('AI response for product search:', response)
-        if (inputModeRef.current == 'speech'){
-          speakText(response)
-        }
-        else{
-          console.log("Not speaking AI response because input mode is:", inputMode)
+        // Only add bot message if still on conversation page (use ref to get current value)
+        if (locationRef.current.pathname.includes('/conversation')) {
+          const botMessage = {
+            id: Date.now() + 1,
+            type: 'bot',
+            text: response,
+            timestamp: new Date()
+          }
+          setMessages(prev => [...prev, botMessage])
+          console.log('AI response for product search:', response)
+          if (inputModeRef.current == 'speech'){
+            speakText(response)
+          }
+          else{
+            console.log("Not speaking AI response because input mode is:", inputMode)
+          }
         }
       }
     }
@@ -560,19 +587,30 @@ User message: ${userMessage}`
             </svg>
           </div>
           <div className="ai-header-info">
-            <h1>Shopping Assistant</h1>
+            <h1>Sana</h1>
             <span className={`ai-status ${isTyping ? 'typing' : ''}`}>
               {isTyping ? 'Typing...' : 'Online'}
             </span>
           </div>
         </div>
+        {location.pathname.includes("/conversation") && (
+          <button 
+            className="ai-close-btn" 
+            onClick={() => navigate('/chat')}
+            title="Close conversation"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        )}
       </div>
 
 
       {/* Messages Area */}
       <div className="ai-fullscreen-messages">
         {location.pathname.includes("checkout") && <InstantEMIForm userInput={userInput} />}
-        {!location.pathname.includes("checkout") && (
+        {!location.pathname.includes("checkout") && !location.pathname.includes("/conversation") && (
           <div className="ai-welcome-container">
             {/* Single Carousel Space */}
             <div className="ai-shop-carousel">
@@ -693,6 +731,34 @@ User message: ${userMessage}`
                 ))}
               </div>
             </div>
+
+            {/* Recommendation Engine for First-Time Visitors */}
+            {!showRecommendation && (
+              <div className="ai-recommendation-prompt">
+                <div className="recommendation-prompt-content">
+                  <span className="recommendation-icon">🤔</span>
+                  <div className="recommendation-text">
+                    <h4>Not sure which bike to choose?</h4>
+                    <p>Answer a few questions and we'll find your perfect match!</p>
+                  </div>
+                  <button 
+                    className="recommendation-start-btn"
+                    onClick={() => setShowRecommendation(true)}
+                  >
+                    Find My Bike →
+                  </button>
+                </div>
+              </div>
+            )}
+            {showRecommendation && (
+              <RecommendationEngine 
+                onClose={() => setShowRecommendation(false)}
+                onSelectBike={(bikeName) => {
+                  setShowRecommendation(false)
+                  sendMessage(`Tell me more about ${bikeName}`)
+                }}
+              />
+            )}
           </div>
         )}
         <div className="ai-messages-list">
@@ -754,6 +820,28 @@ User message: ${userMessage}`
           )}
           <div ref={messagesEndRef} />
         </div>
+
+        {/* Recommendation Bot for Conversation Page */}
+        {location.pathname.includes('/conversation') && messages.length > 0 && (
+          <div className="recommendation-bot-float">
+            <button 
+              className="recommendation-bot-btn"
+              onClick={() => setShowRecommendation(true)}
+            >
+              <div className="bot-avatar-small">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="8" r="5" />
+                  <path d="M20 21a8 8 0 1 0-16 0" />
+                </svg>
+              </div>
+              <div className="bot-message">
+                <span className="bot-label">💡 Not sure?</span>
+                <span className="bot-text">Let me help you find the perfect bike</span>
+              </div>
+              <span className="bot-arrow">→</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Bottom Input Section */}

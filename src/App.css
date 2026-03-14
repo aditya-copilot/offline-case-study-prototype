@@ -1,11 +1,383 @@
 .app-container {
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated showroom background */
+.app-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    /* Moving gradient overlay - simulates road movement */
+    linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.03) 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.05) 75%,
+      transparent 100%
+    ),
+    /* Mountain-like layered gradients */
+    linear-gradient(180deg,
+      #e8f4f8 0%,
+      #d4e8ed 15%,
+      #b8d4de 30%,
+      #9fc5d1 45%,
+      #87b8c4 60%,
+      #6fa8b5 75%,
+      #5a99a6 90%,
+      #4a8a97 100%
+    );
+  animation: roadMove 8s linear infinite;
+  z-index: -3;
+}
+
+/* Mountain silhouettes layer */
+.app-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    /* Distant mountains */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23c4d9e0' fill-opacity='0.4' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom center/cover no-repeat,
+    /* Closer mountains */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23a8c5cf' fill-opacity='0.5' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,218.7C672,235,768,245,864,234.7C960,224,1056,192,1152,181.3C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom center/cover no-repeat;
+  animation: mountainFloat 20s ease-in-out infinite;
+  z-index: -2;
+}
+
+/* Floating bikes animation layer */
+.bike-animation-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bike-silhouette {
+  position: absolute;
+  width: 80px;
+  height: 56px;
+  opacity: 0.25;
+  color: #3d4852;
+  animation: bikeRide 18s linear infinite;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+}
+
+/* Reverse direction for left-going bikes */
+.bike-reverse {
+  animation-name: bikeRideReverse;
+  transform: scaleX(-1);
+}
+
+/* Diagonal movements - all right-moving bikes face right, left-moving face left */
+.bike-5 {
+  animation-name: bikeRideDiagonalDown;
+}
+
+.bike-6 {
+  animation-name: bikeRideDiagonalUp;
+}
+
+.bike-silhouette.bike-1 {
+  top: 12%;
+  animation-delay: 0s;
+  animation-duration: 14s;
+  width: 100px;
+  height: 70px;
+  opacity: 0.18;
+  animation-name: bikeRideDiagonalDown;
+}
+
+.bike-silhouette.bike-2 {
+  top: 80%;
+  animation-delay: -3s;
+  animation-duration: 20s;
+  width: 75px;
+  height: 52px;
+  opacity: 0.22;
+  animation-name: bikeRideDiagonalUpReverse;
+}
+
+.bike-silhouette.bike-3 {
+  top: 48%;
+  animation-delay: -7s;
+  animation-duration: 16s;
+  width: 85px;
+  height: 60px;
+  opacity: 0.28;
+  animation-name: bikeRideZigZag;
+}
+
+.bike-silhouette.bike-4 {
+  top: 35%;
+  animation-delay: -11s;
+  animation-duration: 22s;
+  width: 60px;
+  height: 42px;
+  opacity: 0.32;
+  animation-name: bikeRideZigZagReverse;
+}
+
+.bike-silhouette.bike-5 {
+  top: 20%;
+  animation-delay: -5s;
+  animation-duration: 18s;
+  width: 70px;
+  height: 49px;
+  opacity: 0.2;
+}
+
+.bike-silhouette.bike-6 {
+  top: 65%;
+  animation-delay: -9s;
+  animation-duration: 24s;
+  width: 55px;
+  height: 38px;
+  opacity: 0.35;
+  animation-name: bikeRideDiagonalUp;
+}
+
+/* Light rays effect */
+.light-rays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 100%, rgba(90, 153, 166, 0.2) 0%, transparent 60%);
+  animation: lightPulse 6s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Keyframes */
+@keyframes roadMove {
+  0% {
+    background-position: 0% 0%, 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%, 0% 0%;
+  }
+}
+
+@keyframes mountainFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes bikeRide {
+  0% {
+    left: -120px;
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+  75% {
+    transform: translateY(-6px);
+  }
+  100% {
+    left: calc(100% + 120px);
+    transform: translateY(0);
+  }
+}
+
+@keyframes bikeRideReverse {
+  0% {
+    left: calc(100% + 120px);
+    transform: scaleX(-1) translateY(0);
+  }
+  25% {
+    transform: scaleX(-1) translateY(-6px);
+  }
+  50% {
+    transform: scaleX(-1) translateY(5px);
+  }
+  75% {
+    transform: scaleX(-1) translateY(-4px);
+  }
+  100% {
+    left: -120px;
+    transform: scaleX(-1) translateY(0);
+  }
+}
+
+@keyframes bikeRideDiagonalDown {
+  0% {
+    left: -120px;
+    top: 15%;
+    transform: translateY(0);
+  }
+  25% {
+    top: 22%;
+    transform: translateY(-2px);
+  }
+  50% {
+    top: 28%;
+    transform: translateY(1px);
+  }
+  75% {
+    top: 35%;
+    transform: translateY(-1px);
+  }
+  100% {
+    left: calc(100% + 120px);
+    top: 42%;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bikeRideDiagonalUp {
+  0% {
+    left: calc(100% + 120px);
+    top: 70%;
+    transform: scaleX(-1) translateY(0);
+  }
+  25% {
+    top: 60%;
+    transform: scaleX(-1) translateY(-2px);
+  }
+  50% {
+    top: 50%;
+    transform: scaleX(-1) translateY(1px);
+  }
+  75% {
+    top: 40%;
+    transform: scaleX(-1) translateY(-1px);
+  }
+  100% {
+    left: -120px;
+    top: 30%;
+    transform: scaleX(-1) translateY(0);
+  }
+}
+
+@keyframes bikeRideDiagonalUpReverse {
+  0% {
+    left: -120px;
+    top: 30%;
+    transform: translateY(0);
+  }
+  25% {
+    top: 40%;
+    transform: translateY(-2px);
+  }
+  50% {
+    top: 50%;
+    transform: translateY(1px);
+  }
+  75% {
+    top: 60%;
+    transform: translateY(-1px);
+  }
+  100% {
+    left: calc(100% + 120px);
+    top: 70%;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bikeRideZigZag {
+  0% {
+    left: -120px;
+    top: 15%;
+    transform: translateY(0);
+  }
+  20% {
+    top: 35%;
+    transform: translateY(-2px);
+  }
+  40% {
+    top: 25%;
+    transform: translateY(1px);
+  }
+  60% {
+    top: 55%;
+    transform: translateY(-2px);
+  }
+  80% {
+    top: 45%;
+    transform: translateY(1px);
+  }
+  100% {
+    left: calc(100% + 120px);
+    top: 20%;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bikeRideZigZagReverse {
+  0% {
+    left: calc(100% + 120px);
+    top: 75%;
+    transform: scaleX(-1) translateY(0);
+  }
+  20% {
+    top: 55%;
+    transform: scaleX(-1) translateY(-2px);
+  }
+  40% {
+    top: 65%;
+    transform: scaleX(-1) translateY(1px);
+  }
+  60% {
+    top: 35%;
+    transform: scaleX(-1) translateY(-2px);
+  }
+  80% {
+    top: 45%;
+    transform: scaleX(-1) translateY(1px);
+  }
+  100% {
+    left: -120px;
+    top: 70%;
+    transform: scaleX(-1) translateY(0);
+  }
+}
+
+@keyframes lightPulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes roadLinesMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-200px);
+  }
 }
 
 .app-nav {
@@ -38,13 +410,68 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .app-container {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  .app-container::before {
+    background:
+      linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.02) 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.03) 75%,
+        transparent 100%
+      ),
+      linear-gradient(180deg,
+        #1a2a3a 0%,
+        #1e3344 15%,
+        #234055 30%,
+        #284d66 45%,
+        #2d5a77 60%,
+        #326788 75%,
+        #377499 90%,
+        #3c81aa 100%
+      );
+  }
+
+  .bike-silhouette {
+    color: #94a3b8;
+    opacity: 0.18;
+    filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.3));
+  }
+
+  .bike-silhouette.bike-1 {
+    opacity: 0.12;
+  }
+
+  .bike-silhouette.bike-2 {
+    opacity: 0.15;
+  }
+
+  .bike-silhouette.bike-3 {
+    opacity: 0.2;
+  }
+
+  .bike-silhouette.bike-4 {
+    opacity: 0.22;
+  }
+
+  .bike-silhouette.bike-5 {
+    opacity: 0.16;
+  }
+
+  .bike-silhouette.bike-6 {
+    opacity: 0.25;
+  }
+
+  .light-rays {
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(100, 150, 200, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 0%, rgba(80, 130, 180, 0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 100%, rgba(60, 120, 160, 0.15) 0%, transparent 60%);
   }
 
   .app-nav {
-    background: #1e293b;
+    background: rgba(30, 41, 59, 0.95);
     border-color: #334155;
+    backdrop-filter: blur(10px);
   }
 
   .nav-link {
