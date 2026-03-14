@@ -1,0 +1,600 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.showroom-container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #f8fafc;
+  padding-bottom: 100px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Header */
+.showroom-header {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.showroom-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.showroom-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.showroom-logo svg {
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 3px;
+}
+
+.showroom-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.showroom-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.showroom-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.showroom-icon-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.showroom-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #fbbf24;
+  color: #1f2937;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showroom-search {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.showroom-search svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+}
+
+.showroom-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  min-width: 0;
+}
+
+.showroom-search input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.showroom-clear-search {
+  background: none;
+  border: none;
+  color: white;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showroom-clear-search svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Welcome Section */
+.showroom-welcome {
+  padding: 20px 16px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  text-align: center;
+}
+
+.showroom-welcome h1 {
+  font-size: 20px;
+  color: #92400e;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.showroom-welcome p {
+  font-size: 13px;
+  color: #a16207;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.showroom-ai-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+}
+
+.showroom-ai-btn:active {
+  transform: scale(0.98);
+}
+
+.showroom-ai-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Categories */
+.showroom-categories {
+  background: white;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 90;
+}
+
+.showroom-categories-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 12px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.showroom-categories-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.showroom-category {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.showroom-category.active {
+  background: var(--cat-color);
+  border-color: var(--cat-color);
+  color: white;
+}
+
+.showroom-category:hover:not(.active) {
+  border-color: var(--cat-color);
+  color: var(--cat-color);
+}
+
+/* Offers */
+.showroom-offers {
+  padding: 16px 12px;
+  background: white;
+  margin-top: 8px;
+}
+
+.showroom-offers-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.showroom-offers-header svg {
+  width: 20px;
+  height: 20px;
+  color: #f59e0b;
+}
+
+.showroom-offers-header h3 {
+  font-size: 15px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.showroom-offers-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.showroom-offers-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.showroom-offer-card {
+  flex-shrink: 0;
+  width: 140px;
+  background: var(--offer-bg);
+  border-radius: 12px;
+  padding: 12px 10px;
+  color: white;
+  text-align: center;
+}
+
+.showroom-offer-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.showroom-offer-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.showroom-offer-tag {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.showroom-offer-desc {
+  font-size: 11px;
+  line-height: 1.3;
+  opacity: 0.95;
+  margin: 0;
+}
+
+/* Bikes Section */
+.showroom-bikes {
+  padding: 16px 12px;
+}
+
+.showroom-bikes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.showroom-bikes-header h2 {
+  font-size: 16px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.showroom-compare-btn {
+  padding: 6px 12px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.showroom-bikes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.showroom-bike-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.showroom-bike-card:active {
+  transform: scale(0.98);
+}
+
+.showroom-bike-image {
+  position: relative;
+  height: 120px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.showroom-bike-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showroom-bike-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+}
+
+.showroom-bike-placeholder svg {
+  width: 48px;
+  height: 48px;
+}
+
+.showroom-new-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: #10b981;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 3px;
+}
+
+.showroom-bike-rating {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 3px 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #f59e0b;
+}
+
+.showroom-bike-rating svg {
+  width: 12px;
+  height: 12px;
+}
+
+.showroom-bike-info {
+  padding: 10px;
+}
+
+.showroom-bike-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.showroom-bike-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 6px;
+}
+
+.showroom-bike-specs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.showroom-spec-divider {
+  opacity: 0.5;
+}
+
+.showroom-bike-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.showroom-compare-toggle {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.showroom-compare-toggle.active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: white;
+}
+
+.showroom-shortlist-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ef4444;
+  transition: all 0.2s;
+}
+
+.showroom-shortlist-btn:active {
+  background: #fef2f2;
+}
+
+.showroom-shortlist-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Floating AI Button */
+.showroom-fab-ai {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+  z-index: 1000;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.showroom-fab-ai:active {
+  transform: scale(0.95);
+}
+
+.showroom-fab-ai svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Mobile-first Responsive Design */
+@media (max-width: 360px) {
+  .showroom-welcome h1 {
+    font-size: 18px;
+  }
+  
+  .showroom-welcome p {
+    font-size: 12px;
+  }
+  
+  .showroom-bikes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .showroom-offer-card {
+    width: 130px;
+  }
+}
+
+@media (min-width: 768px) {
+  .showroom-container {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  
+  .showroom-bikes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .showroom-offer-card {
+    width: 170px;
+  }
+}
+
+/* Safe area for notched devices */
+@supports (padding: max(0px)) {
+  .showroom-header {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  
+  .showroom-fab-ai {
+    bottom: max(16px, env(safe-area-inset-bottom));
+    right: max(16px, env(safe-area-inset-right));
+  }
+  
+  .showroom-container {
+    padding-bottom: max(100px, env(safe-area-inset-bottom) + 80px);
+  }
+}
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Touch improvements */
+button, .showroom-bike-card {
+  touch-action: manipulation;
+}
+
+/* Image loading placeholder */
+.showroom-bike-image {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}

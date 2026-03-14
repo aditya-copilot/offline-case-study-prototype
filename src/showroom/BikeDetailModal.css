@@ -1,0 +1,755 @@
+* {
+  box-sizing: border-box;
+}
+
+.bike-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 0.2s ease;
+  padding: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bike-modal {
+  background: white;
+  width: 100%;
+  max-width: 100%;
+  max-height: 90vh;
+  max-height: 90dvh;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Header */
+.bike-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.bike-modal-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  flex: 1;
+  text-align: center;
+  margin: 0 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bike-modal-back,
+.bike-modal-share {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bike-modal-back:active,
+.bike-modal-share:active {
+  background: #e5e7eb;
+}
+
+.bike-modal-back svg,
+.bike-modal-share svg {
+  width: 18px;
+  height: 18px;
+  color: #4b5563;
+}
+
+/* Image */
+.bike-modal-image {
+  position: relative;
+  height: 180px;
+  min-height: 180px;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bike-modal-image img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.bike-modal-placeholder {
+  color: #9ca3af;
+}
+
+.bike-modal-placeholder svg {
+  width: 80px;
+  height: 80px;
+}
+
+.bike-modal-rating {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 6px 10px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bike-modal-rating svg {
+  width: 14px;
+  height: 14px;
+  color: #f59e0b;
+}
+
+.bike-modal-rating span {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 13px;
+}
+
+.bike-modal-rating small {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Price Section */
+.bike-modal-price-section {
+  padding: 16px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bike-modal-price-label {
+  display: block;
+  font-size: 11px;
+  color: #92400e;
+  margin-bottom: 2px;
+}
+
+.bike-modal-price-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #92400e;
+}
+
+.bike-modal-price-breakup {
+  background: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #dc2626;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Variants */
+.bike-modal-variants {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.bike-modal-variants h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.bike-variants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bike-variant-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bike-variant-btn.active {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.bike-variant-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.bike-variant-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #dc2626;
+}
+
+/* Colors */
+.bike-modal-colors {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.bike-modal-colors h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.bike-colors-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bike-color-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: none;
+}
+
+.bike-color-btn.active {
+  border-color: #dc2626;
+}
+
+.bike-color-swatch {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.bike-selected-color {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Tabs */
+.bike-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0 16px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.bike-modal-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.bike-tab {
+  flex: 1;
+  min-width: 80px;
+  padding: 12px 8px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.bike-tab.active {
+  color: #dc2626;
+}
+
+.bike-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #dc2626;
+  border-radius: 3px 3px 0 0;
+}
+
+/* Content - Scrollable Area */
+.bike-modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Overview */
+.bike-key-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.bike-spec-item {
+  background: #f9fafb;
+  padding: 14px 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.bike-spec-item svg {
+  width: 22px;
+  height: 22px;
+  color: #dc2626;
+  margin-bottom: 6px;
+}
+
+.bike-spec-item .bike-spec-value {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.bike-spec-item .bike-spec-label {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Location */
+.bike-location {
+  background: #f0fdf4;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.bike-location h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #166534;
+  margin-bottom: 10px;
+}
+
+.bike-location-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.bike-location-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 3px;
+}
+
+.bike-location-item svg {
+  width: 18px;
+  height: 18px;
+  color: #16a34a;
+}
+
+.bike-location-label {
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.bike-location-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.bike-view-map-btn {
+  width: 100%;
+  padding: 10px;
+  background: white;
+  border: 2px solid #16a34a;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.bike-view-map-btn:active {
+  background: #16a34a;
+  color: white;
+}
+
+.bike-view-map-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* FAQs */
+.bike-faqs {
+  margin-bottom: 16px;
+}
+
+.bike-faqs h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.bike-faq-item {
+  background: #f9fafb;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.bike-faq-q {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.bike-faq-a {
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Specs Tab */
+.bike-spec-category {
+  margin-bottom: 20px;
+}
+
+.bike-spec-category h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #fecaca;
+}
+
+.bike-specs-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bike-spec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  gap: 10px;
+}
+
+.bike-spec-row .bike-spec-name {
+  font-size: 13px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.bike-spec-row .bike-spec-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Reviews Tab */
+.bike-rating-summary {
+  text-align: center;
+  padding: 20px 16px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.bike-big-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bike-big-rating span {
+  font-size: 40px;
+  font-weight: 800;
+  color: #92400e;
+}
+
+.bike-rating-stars {
+  display: flex;
+  gap: 3px;
+}
+
+.bike-rating-stars svg {
+  width: 20px;
+  height: 20px;
+  color: #f59e0b;
+}
+
+.bike-big-rating small {
+  font-size: 12px;
+  color: #a16207;
+}
+
+.bike-review-item {
+  background: #f9fafb;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.bike-review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.bike-review-rating {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: #16a34a;
+  color: white;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.bike-review-rating svg {
+  width: 12px;
+  height: 12px;
+}
+
+.bike-review-user {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.bike-review-item h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.bike-review-item p {
+  font-size: 12px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+.bike-review-mileage {
+  font-size: 11px;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+/* Features Tab */
+.bike-features-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.bike-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: #f0fdf4;
+  border-radius: 8px;
+}
+
+.bike-feature-item svg {
+  width: 16px;
+  height: 16px;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.bike-feature-item span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #166534;
+}
+
+/* Actions */
+.bike-modal-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 12px 16px;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.bike-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bike-action-btn:active {
+  background: #f9fafb;
+}
+
+.bike-action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* CTA Buttons */
+.bike-modal-cta {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px 16px;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  flex-shrink: 0;
+}
+
+.bike-cta-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.bike-cta-btn.primary {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+}
+
+.bike-cta-btn.primary:active {
+  transform: scale(0.98);
+}
+
+.bike-cta-btn.secondary {
+  background: white;
+  color: #dc2626;
+  border: 2px solid #dc2626;
+}
+
+.bike-cta-btn.secondary:active {
+  background: #fef2f2;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 380px) {
+  .bike-modal-header h2 {
+    font-size: 14px;
+  }
+  
+  .bike-modal-image {
+    height: 160px;
+  }
+  
+  .bike-modal-price-value {
+    font-size: 18px;
+  }
+  
+  .bike-key-specs {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .bike-spec-item {
+    padding: 10px 8px;
+  }
+  
+  .bike-location-info {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  
+  .bike-tab {
+    font-size: 12px;
+    padding: 10px 6px;
+  }
+}
+
+/* Touch improvements */
+button, .bike-variant-btn, .bike-color-btn, .bike-tab {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area support */
+@supports (padding: max(0px)) {
+  .bike-modal-cta {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}

@@ -10,6 +10,7 @@ import KFSPage from './screens/KFSPage'
 import LoanApprovedPage from './screens/LoanApprovedPage'
 import InvoicePage from './screens/InvoicePage'
 import DisbursedPage from './screens/DisbursedPage'
+import ShowroomHome from './showroom/ShowroomHome'
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Router>
         <div className="app-container">
           <Routes>
+            <Route path="/showroom" element={<ShowroomHome />} />
             <Route path="/offer" element={<OffersScreen />} />
             <Route path="/cykc" element={<CYKCPage />} />
             <Route path="/mandate" element={<MandatePage />} />
@@ -25,7 +27,7 @@ function App() {
             <Route path="/approved" element={<LoanApprovedPage />} />
             <Route path="/invoice" element={<InvoicePage />} />
             <Route path="/disbursed" element={<DisbursedPage />} />
-            <Route path="/*" element={<AIChatWidget />} />
+            <Route path="/*" element={<Navigate to="/showroom" replace />} />
           </Routes>
         </div>
       </Router>
