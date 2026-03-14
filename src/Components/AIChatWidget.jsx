@@ -6,6 +6,8 @@ import ProductGrid from './ProductGrid'
 import ProductGallery from './ProductGallery'
 import VisualResponse from './VisualResponse'
 import { products, searchProducts, getProductByName, getSearchMeta } from '../data/products'
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 // Categories data
 const categories = [
@@ -86,6 +88,7 @@ const categories = [
 ]
 
 function AIChatWidget() {
+  console.log("Re-rendering AIChatWidget")
   const location = useLocation()
   const [inputMode, setInputMode] = useState('text')
   const [message, setMessage] = useState('')
@@ -105,8 +108,10 @@ function AIChatWidget() {
   const offersScrollRef = useRef(null)
   const [activeOfferIndex, setActiveOfferIndex] = useState(0)
   const [userInput, setUserInput] = useState({});
+  const inputModeRef = useRef('text')
 
   // Extract JSON from AI response (handles markdown code blocks and extra text)
+  
   function extractJSON(text) {
     const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
     if (!match) return null;
@@ -118,11 +123,22 @@ function AIChatWidget() {
     }
   }
 
+  useEffect(() => {
+    console.log("Input mode changed:", inputMode)
+    inputModeRef.current = inputMode;
+    if(inputMode != 'speech'){
+      setIsListening(false)
+    }
+  } , [inputMode])
+
   function speakText(text) {
+    console.log("Attempting to speak text:", text)
     if (!("speechSynthesis" in window)) {
       console.error("TTS not supported in this browser");
       return;
     }
+
+    console.log("Speaking text:", text);
 
     const utterance = new SpeechSynthesisUtterance(text);
 
@@ -169,53 +185,12 @@ function AIChatWidget() {
     return () => clearInterval(timer)
   }, [messages.length])
 
-  // Initialize speech recognition
-  // useEffect(() => {
-  //   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  //   if (!SpeechRecognition) return;
 
-  //   const recognition = new SpeechRecognition();
-
-  //   // 1. Keep the session alive even during pauses
-  //   recognition.continuous = true;
-  //   recognition.interimResults = true;
-  //   recognition.lang = "en-US";
-
-  //   let silenceTimer;
-
-  //   recognition.onresult = (event) => {
-  //     // 2. Clear the timer every time the user speaks
-  //     clearTimeout(silenceTimer);
-
-  //     const current = event.resultIndex;
-  //     const transcriptText = event.results[current][0].transcript;
-
-  //     if (event.results[current].isFinal) {
-  //       if (transcriptText.length > 0) sendMessage(transcriptText);
-
-  //       // 3. Start a 4-second countdown after a final result
-  //       silenceTimer = setTimeout(() => {
-  //         console.log("4 seconds of silence detected. Stopping...");
-  //         recognition.stop();
-  //         setIsListening(false);
-  //       }, 4000);
-  //     }
-  //   };
-
-  //   recognition.onend = () => {
-  //     // Only restart here if it closed due to a network error or 
-  //     // browser timeout, NOT if we manually stopped it.
-  //     if (isListening) {
-  //       try { recognition.start(); } catch (e) { }
-  //     }
-  //   };
-
-  //   recognitionRef.current = recognition;
-  //   return () => {
-  //     clearTimeout(silenceTimer);
-  //     recognition.stop();
-  //   };
-  // }, [isListening]); // Added isListening to dependencies to track state
+  useEffect(() => {
+    if(!isListening){
+      window.speechSynthesis.cancel()
+    }
+  } , [isListening])
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -226,6 +201,7 @@ function AIChatWidget() {
       recognitionRef.current.lang = 'en-US'
 
       recognitionRef.current.onresult = (event) => {
+        console.log("Speech recognition result received:", event)
         const current = event.resultIndex
         const transcriptText = event.results[current][0].transcript
 
@@ -235,18 +211,17 @@ function AIChatWidget() {
       }
 
       recognitionRef.current.onerror = (event) => {
-        console.error('Speech recognition error:', event.error)
         setIsListening(false)
         if (event.error === 'not-allowed') {
           setSpeechSupported(false)
         }
       }
 
-      recognitionRef.current.onend = () => {
-        setIsListening(false)
-      }
+    recognitionRef.current.onend = () => {
+      setIsListening(false);
+    }
     } else {
-      setSpeechSupported(false)
+      setSpeechSupported(false);
     }
 
     return () => {
@@ -444,6 +419,13 @@ User message: ${userMessage}`
           timestamp: new Date()
         }
         setMessages(prev => [...prev, botMessage])
+        console.log('AI response for product search:', response)
+        if (inputModeRef.current == 'speech'){
+          speakText(response)
+        }
+        else{
+          console.log("Not speaking AI response because input mode is:", inputMode)
+        }
       }
     }
 
@@ -461,7 +443,7 @@ User message: ${userMessage}`
           timestamp: new Date()
         }
         setMessages(prev => [...prev, botMessage])
-        if (inputMode === 'speech') speakText(res)
+        if (inputModeRef.current == 'speech') speakText(res)
       }
       else {
         const botMessage = {
@@ -471,7 +453,9 @@ User message: ${userMessage}`
           timestamp: new Date()
         }
         setMessages(prev => [...prev, botMessage])
-        if (inputMode === 'speech') {
+        console.log("AI response for checkout is not in expected format:", response)
+        if (inputModeRef.current == 'speech') {
+          console.log("Speaking AI response for checkout:", response)
           speakText(response)
         }
 
@@ -479,7 +463,7 @@ User message: ${userMessage}`
     }
     setIsTyping(false)
 
-  }, [messages])
+  }, [messages, inputMode, location.pathname])
 
   const handleSend = () => {
     if (message.trim() || uploadedImage) {
@@ -587,8 +571,8 @@ User message: ${userMessage}`
 
       {/* Messages Area */}
       <div className="ai-fullscreen-messages">
-        {location.pathname === '/checkout/user-input' && <InstantEMIForm userInput={userInput} />}
-        {messages.length === 0 ? (
+        {location.pathname.includes("checkout") && <InstantEMIForm userInput={userInput} />}
+        {!location.pathname.includes("checkout") && (
           <div className="ai-welcome-container">
             {/* Single Carousel Space */}
             <div className="ai-shop-carousel">
@@ -710,67 +694,66 @@ User message: ${userMessage}`
               </div>
             </div>
           </div>
-        ) : (
-          <div className="ai-messages-list">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`ai-message ${msg.type}`}>
-                {msg.type === 'bot' && (
-                  <div className="ai-bot-msg-avatar">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="8" r="5" />
-                      <path d="M20 21a8 8 0 1 0-16 0" />
-                    </svg>
-                  </div>
-                )}
-                <div className="ai-message-content">
-                  {msg.image && (
-                    <div className="ai-message-image">
-                      <img src={msg.image} alt="Uploaded" />
-                    </div>
-                  )}
-                  {msg.text && <p>{msg.text}</p>}
-                  <span className="ai-message-time">{formatTime(msg.timestamp)}</span>
-                </div>
-              </div>
-            ))}
-
-            {/* Display visual response with search results */}
-            {searchResults.length > 0 && currentSearch && (
-              <div className="ai-visual-results">
-                <VisualResponse
-                  query={currentSearch.query}
-                  count={searchResults.length}
-                  brand={currentSearch.brand}
-                  category={currentSearch.category}
-                />
-                <ProductGrid
-                  products={searchResults}
-                  onProductClick={handleProductCardClick}
-                />
-              </div>
-            )}
-
-            {/* Typing indicator */}
-            {isTyping && (
-              <div className="ai-message bot">
+        )}
+        <div className="ai-messages-list">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`ai-message ${msg.type}`}>
+              {msg.type === 'bot' && (
                 <div className="ai-bot-msg-avatar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <circle cx="12" cy="8" r="5" />
                     <path d="M20 21a8 8 0 1 0-16 0" />
                   </svg>
                 </div>
-                <div className="ai-message-content">
-                  <div className="ai-typing-indicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+              )}
+              <div className="ai-message-content">
+                {msg.image && (
+                  <div className="ai-message-image">
+                    <img src={msg.image} alt="Uploaded" />
                   </div>
+                )}
+                {msg.text && <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>}
+                <span className="ai-message-time">{formatTime(msg.timestamp)}</span>
+              </div>
+            </div>
+          ))}
+
+          {/* Display visual response with search results */}
+          {searchResults.length > 0 && currentSearch && (
+            <div className="ai-visual-results">
+              <VisualResponse
+                query={currentSearch.query}
+                count={searchResults.length}
+                brand={currentSearch.brand}
+                category={currentSearch.category}
+              />
+              <ProductGrid
+                products={searchResults}
+                onProductClick={handleProductCardClick}
+              />
+            </div>
+          )}
+
+          {/* Typing indicator */}
+          {isTyping && (
+            <div className="ai-message bot">
+              <div className="ai-bot-msg-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="8" r="5" />
+                  <path d="M20 21a8 8 0 1 0-16 0" />
+                </svg>
+              </div>
+              <div className="ai-message-content">
+                <div className="ai-typing-indicator">
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </div>
               </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-        )}
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Bottom Input Section */}
@@ -779,7 +762,10 @@ User message: ${userMessage}`
         <div className="ai-mode-selector">
           <button
             className={`ai-mode-btn ${inputMode === 'text' ? 'active' : ''}`}
-            onClick={() => setInputMode('text')}
+            onClick={() => {
+              console.log("Switching to text input mode")
+              setInputMode('text')
+            }}
             title="Text Input"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -356,25 +356,6 @@ export default function InstantEMIForm({ onClose , userInput}) {
 
   return (
     <div className="emi-page">
-      <header className="emi-header">
-        <div className="emi-header-inner">
-          <div className="emi-brand">
-            <JusPayLogo />
-            <span>JusPay</span>
-          </div>
-          <div className="emi-header-actions">
-            <div className="emi-secure-badge">
-              <ShieldIcon />
-              <span>256-bit Encrypted</span>
-            </div>
-            {onClose && (
-              <button className="emi-close-btn" onClick={onClose} aria-label="Close form">
-                <XIcon />
-              </button>
-            )}
-          </div>
-        </div>
-      </header>
 
       <main className="emi-main">
         <div className="emi-hero">
