@@ -618,7 +618,7 @@ export default function InstantEMIForm({ onClose , userInput}) {
                 </span>
               ) : (
                 <span onClick={() => {
-                    window.location.href = "/offer"
+                    window.location.href = "/checkout/offer"
                 }} className="emi-btn-row">
                   <LockIcon />
                   Apply for Instant EMI

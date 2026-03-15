@@ -88,7 +88,6 @@ const categories = [
 ]
 
 function AIChatWidget() {
-  console.log("Re-rendering AIChatWidget")
   const location = useLocation()
   const [inputMode, setInputMode] = useState('text')
   const [message, setMessage] = useState('')
@@ -289,10 +288,9 @@ Only return the JSON array of product IDs, nothing else.`
   const callBackend = async (userMessage, conversationHistory, imageData = null) => {
     try {
       const contextMessage = `You are a helpful shopping assistant. You have access to a product catalog with ${products.length} electronics products.
+        When users ask about products, help them find what they're looking for. If they mention specific products, brands, or categories, acknowledge their interest and let them know they can click on product cards to see more details.
 
-When users ask about products, help them find what they're looking for. If they mention specific products, brands, or categories, acknowledge their interest and let them know they can click on product cards to see more details.
-
-User message: ${userMessage}`
+        User message: ${userMessage}`
 
       const response = await fetch("https://grid.ai.juspay.net/v1/chat/completions", {
         method: "POST",
@@ -428,9 +426,9 @@ User message: ${userMessage}`
       }
     }
 
-    const response = await callBackend(nText, messages, imageData);
-
+    
     if (location.pathname === '/checkout/user-input') {
+      const response = await callBackend(nText, messages, imageData);
       let output = extractJSON(response)
       setUserInput(output);
       if (output) {
@@ -570,7 +568,7 @@ User message: ${userMessage}`
 
       {/* Messages Area */}
       <div className="ai-fullscreen-messages">
-        {location.pathname.includes("checkout") && <InstantEMIForm userInput={userInput} />}
+        {location.pathname == ("/checkout/user-input") && <InstantEMIForm userInput={userInput} />}
         {!location.pathname.includes("checkout") && (
           <div className="ai-welcome-container">
             {/* Single Carousel Space */}

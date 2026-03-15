@@ -713,6 +713,7 @@
 .ai-fullscreen-input-area {
   max-width: 800px;
   margin: 0 auto;
+  max-height: 100px;
 }
 
 /* Text Input */

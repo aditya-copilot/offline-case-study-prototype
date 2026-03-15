@@ -12,7 +12,7 @@ function DisbursedPage() {
 
   useEffect(() => {
     if (!selectedOffer) {
-      navigate('/offer');
+      navigate('/checkout/offer');
     }
   }, [selectedOffer, navigate]);
 

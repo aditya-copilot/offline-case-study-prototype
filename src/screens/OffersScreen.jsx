@@ -128,9 +128,63 @@ const lenderOffers = [
   }
 ]
 
-function OffersScreen() {
+function extractJSON(text) {
+  const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[0]);
+  } catch (e) {
+    return null;
+  }
+}
+
+function OffersScreen({toolCallUtils}) {
+
+  toolCallUtils.getFullPrompt = (text) => {
+    let str = `
+     User is currently in the loan offer viewing page.
+     These are the offers:
+     ${JSON.stringify(lenderOffers)}
+     This is user's query: ${text}
+     If user is querying about the offer then return the result in json format in below format:
+    {
+      "index": index of offer user queried in integer,
+      "response": "your response to user query in text"
+    }
+
+    If user is asking you to go ahead with one of the offers, then output:
+    {
+      "selectedOfferIndex": index of selected offer in integer,
+      "response": "your response to user (say something like, ok, going ahead with the offer"
+    }
+    Make sure to only send json and no other text.
+    `
+    return str
+  }
+
+  toolCallUtils.getDisplayResponse = (res) => {
+    if (typeof res === 'object'){
+      return res.response || "Sorry, I'm unable to process your query at the moment."
+    }
+    else return res
+  }
+
+  toolCallUtils.handleResponse = (res) => {
+    let obj = extractJSON(res)
+    if (obj){
+      if(obj.selectedOfferIndex !== undefined){
+        handleSelectOffer(lenderOffers[obj.selectedOfferIndex])
+      }
+      else{
+        return
+      }
+    }
+    else return
+  }
+
   const navigate = useNavigate()
   const { setSelectedOffer } = useOffer()
+
   const [modalOffer, setModalOffer] = useState(null)
 
   const handleSelectOffer = (offer) => {
@@ -143,7 +197,8 @@ function OffersScreen() {
 
   const handleApplyNow = (offer) => {
     setSelectedOffer(offer)
-    navigate('/cykc')
+    console.log("Selected offer: " , offer)
+    navigate('/checkout/cykc')
   }
 
   return (

@@ -12,7 +12,7 @@ function InvoicePage() {
 
   useEffect(() => {
     if (!selectedOffer) {
-      navigate('/offer');
+      navigate('/checkout/offer');
     }
   }, [selectedOffer, navigate]);
 
@@ -30,7 +30,7 @@ function InvoicePage() {
       setTimeout(() => {
         setStatus('verified');
         setTimeout(() => {
-          navigate('/disbursed');
+          navigate('/checkout/disbursed');
         }, 1500);
       }, 3000);
     }
@@ -46,7 +46,7 @@ function InvoicePage() {
       setTimeout(() => {
         setStatus('verified');
         setTimeout(() => {
-          navigate('/disbursed');
+          navigate('/checkout/disbursed');
         }, 1500);
       }, 3000);
     }
