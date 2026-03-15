@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useOffer } from '../context/OfferContext';
 import './InvoicePage.css';
 
-function InvoicePage() {
+function InvoicePage({toolCallUtils}) {
+  if (toolCallUtils) {
+    toolCallUtils.getFullPrompt = (text) => text;
+    toolCallUtils.getDisplayResponse = (res) => res;
+    toolCallUtils.handleResponse = (res) => res;
+  }
+
   const navigate = useNavigate();
   const { selectedOffer } = useOffer();
   const [file, setFile] = useState(null);

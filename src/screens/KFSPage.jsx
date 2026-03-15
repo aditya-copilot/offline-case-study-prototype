@@ -4,9 +4,21 @@ import { jsPDF } from 'jspdf';
 import { useOffer } from '../context/OfferContext';
 import './KFSPage.css';
 
-function KFSPage() {
+function KFSPage({toolCallUtils}) {
   const navigate = useNavigate();
   const { selectedOffer } = useOffer();
+
+  if (toolCallUtils) {
+    toolCallUtils.getFullPrompt = (text) => {
+      return `
+      this is the offer: ${JSON.stringify(selectedOffer)}
+      User is asking the below question: ${text}
+      Generate a response that would be suitable to show to the user on the Key Fact Statement page, based on the offer details and the user's question. The response should be concise and informative, directly addressing the user's query while referencing relevant offer information where applicable.
+      `
+    };
+    toolCallUtils.getDisplayResponse = (res) => res;
+    toolCallUtils.handleResponse = (res) => res;
+  }
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
