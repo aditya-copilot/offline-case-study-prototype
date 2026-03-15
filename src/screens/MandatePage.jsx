@@ -28,7 +28,7 @@ function MandatePage() {
 
   useEffect(() => {
     if (!selectedOffer) {
-      navigate('/offer');
+      navigate('/checkout/offer');
     }
   }, [selectedOffer, navigate]);
 
@@ -61,7 +61,7 @@ function MandatePage() {
     setTimeout(() => {
       setPaymentStatus('success');
       setTimeout(() => {
-        navigate('/kfs');
+        navigate('/checkout/kfs');
       }, 1500);
     }, 2500);
   };

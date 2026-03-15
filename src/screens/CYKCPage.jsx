@@ -19,7 +19,7 @@ function CYKCPage() {
 
   useEffect(() => {
     if (!selectedOffer) {
-      navigate('/offer');
+      navigate('/checkout/offer');
     }
   }, [selectedOffer, navigate]);
 
@@ -62,7 +62,7 @@ function CYKCPage() {
     if (currentStep === 'mandateLoading') {
       setLoadingText('Starting Mandate Page');
       const timer = setTimeout(() => {
-        navigate('/mandate');
+        navigate('/checkout/mandate');
       }, 2500);
       return () => clearTimeout(timer);
     }

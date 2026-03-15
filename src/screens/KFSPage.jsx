@@ -12,7 +12,7 @@ function KFSPage() {
 
   useEffect(() => {
     if (!selectedOffer) {
-      navigate('/offer');
+      navigate('/checkout/offer');
     }
   }, [selectedOffer, navigate]);
 
@@ -113,7 +113,7 @@ function KFSPage() {
   const handleAccept = () => {
     setShowSuccess(true);
     setTimeout(() => {
-      navigate('/approved');
+      navigate('/checkout/approved');
     }, 2000);
   };
 

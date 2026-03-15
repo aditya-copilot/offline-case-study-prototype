@@ -80,7 +80,7 @@ export default function ProductPage() {
   }
 
   const handleBuyNow = (product) => {
-    navigate('/checkout')
+    navigate('/checkout/user-input')
   }
 
   return (

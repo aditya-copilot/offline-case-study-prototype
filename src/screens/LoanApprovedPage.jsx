@@ -10,7 +10,7 @@ function LoanApprovedPage() {
 
   useEffect(() => {
     if (!selectedOffer) {
-      navigate('/offer');
+      navigate('/checkout/offer');
     }
   }, [selectedOffer, navigate]);
 
@@ -119,7 +119,7 @@ function LoanApprovedPage() {
           </div>
         )}
 
-        <button className="upload-btn" onClick={() => navigate('/invoice')}>
+        <button className="upload-btn" onClick={() => navigate('/checkout/invoice')}>
           Upload Invoice
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />

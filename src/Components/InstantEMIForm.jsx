@@ -111,6 +111,10 @@ export default function InstantEMIForm({ onClose , userInput}) {
   const [scanning, setScanning] = useState(false)
   const [scannedImage, setScannedImage] = useState(null)
   const [ocrProgress, setOcrProgress] = useState(0)
+  const [cameraOpen, setCameraOpen] = useState(false)
+  const [cameraError, setCameraError] = useState('')
+  const videoRef = useRef(null)
+  const streamRef = useRef(null)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -126,6 +130,78 @@ export default function InstantEMIForm({ onClose , userInput}) {
       ...(hasValue(userInput.address) && { address: userInput.address }),
     }));
   }, [userInput]);
+
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop())
+      }
+    }
+  }, []);
+
+  const closeCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop())
+      streamRef.current = null
+    }
+    setCameraOpen(false)
+  }
+
+  const openCamera = () => {
+    setCameraError('')
+    setCameraOpen(true)
+  }
+
+  useEffect(() => {
+    if (!cameraOpen) return
+
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+        streamRef.current = stream
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+          videoRef.current.muted = true
+          videoRef.current.onloadedmetadata = () => {
+            videoRef.current.play().catch(playError => {
+              console.warn('Unable to autoplay camera stream', playError)
+            })
+          }
+        }
+      } catch (err) {
+        console.error('Camera open failed', err)
+        setCameraError('Camera not accessible. You can still upload the image.')
+        setCameraOpen(false)
+      }
+    }
+
+    startCamera()
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop())
+        streamRef.current = null
+      }
+    }
+  }, [cameraOpen])
+
+  const captureFromCamera = () => {
+    if (!videoRef.current) return
+    const video = videoRef.current
+    if (!video.videoWidth || !video.videoHeight) {
+      setCameraError('Camera preview not ready yet. Please wait a moment.')
+      return
+    }
+    const canvas = document.createElement('canvas')
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+    const imageData = canvas.toDataURL('image/jpeg', 0.9)
+    setScannedImage(imageData)
+    performOCR(imageData)
+    closeCamera()
+  }
 
   const validate = (fields = form) => {
     const e = {}
@@ -371,18 +447,39 @@ export default function InstantEMIForm({ onClose , userInput}) {
                 <UserIcon />
                 Personal Details
               </div>
-              <label className="emi-ocr-btn" title="Scan ID document">
-                <CameraIcon />
-                <span>Scan ID</span>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  hidden
-                />
-              </label>
+              <div className="emi-ocr-actions">
+                <label className="emi-ocr-btn" title="Upload ID image">
+                  <CameraIcon />
+                  <span>Upload Image</span>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    hidden
+                  />
+                </label>
+                <button type="button" className="emi-ocr-btn emi-camera-btn" onClick={openCamera} title="Capture from camera">
+                  <CameraIcon />
+                  <span>Use Camera</span>
+                </button>
+              </div>
             </div>
+            {cameraError && <p className="emi-camera-error">{cameraError}</p>}
+            {cameraOpen && (
+              <div className="emi-camera-modal">
+                <div className="emi-camera-header">
+                  <h3>Capture ID Photo</h3>
+                  <button type="button" className="emi-close-camera" onClick={closeCamera}><XIcon /></button>
+                </div>
+                <video ref={videoRef} autoPlay playsInline muted className="emi-camera-video" />
+                <div className="emi-camera-hint">If camera preview does not appear, allow camera access and refresh.</div>
+                <div className="emi-camera-actions">
+                  <button type="button" className="emi-ocr-btn" onClick={captureFromCamera}>Capture</button>
+                  <button type="button" className="emi-ocr-btn emi-camera-btn" onClick={closeCamera}>Cancel</button>
+                </div>
+              </div>
+            )}
 
             {scannedImage && (
               <div className="emi-scanned-preview">
@@ -521,7 +618,7 @@ export default function InstantEMIForm({ onClose , userInput}) {
                 </span>
               ) : (
                 <span onClick={() => {
-                    window.location.href = "/offer"
+                    window.location.href = "/checkout/offer"
                 }} className="emi-btn-row">
                   <LockIcon />
                   Apply for Instant EMI
