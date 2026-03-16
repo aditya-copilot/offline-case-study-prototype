@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useOffer } from '../context/OfferContext'
 import './OffersScreen.css'
@@ -149,22 +149,24 @@ function OffersScreen({toolCallUtils}) {
      If user is querying about the offer then return the result in json format in below format:
     {
       "index": index of offer user queried in integer,
-      "response": "your response to user query in text"
+      "response": "your response to explain that offer to user query in text, also ask user if they want to go ahead with this offer or not"
     }
+    
 
     If user is asking you to go ahead with one of the offers, then output:
     {
       "selectedOfferIndex": index of selected offer in integer,
       "response": "your response to user (say something like, ok, going ahead with the offer"
     }
-    Make sure to only send json and no other text.
+    Make sure to only send json and no other text. Also, strictly no emojis and TTS friendly outputs for "response" field. Keep responses super short.
     `
     return str
   }
 
   toolCallUtils.getDisplayResponse = (res) => {
-    if (typeof res === 'object'){
-      return res.response || "Sorry, I'm unable to process your query at the moment."
+    let obj = extractJSON(res);
+    if (obj && obj.response){
+      return obj.response
     }
     else return res
   }
@@ -173,14 +175,18 @@ function OffersScreen({toolCallUtils}) {
     let obj = extractJSON(res)
     if (obj){
       if(obj.selectedOfferIndex !== undefined){
-        handleSelectOffer(lenderOffers[obj.selectedOfferIndex])
+        handleApplyNow(lenderOffers[obj.selectedOfferIndex])
       }
-      else{
-        return
+      else if(obj.index !== undefined && obj.index >= 0 && obj.index < lenderOffers.length){
+        handleSelectOffer(lenderOffers[obj.index])
       }
     }
     else return
   }
+
+  useEffect(() => {
+    
+  } , [])
 
   const navigate = useNavigate()
   const { setSelectedOffer } = useOffer()
@@ -358,6 +364,34 @@ function OffersScreen({toolCallUtils}) {
                   <span className="modal-detail-icon">💳</span>
                   <span className="modal-detail-label">Monthly EMI</span>
                   <span className="modal-detail-value">{modalOffer.monthlyPayment}</span>
+                </div>
+              </div>
+              <div className="modal-breakup">
+                <div className="modal-breakup-head">
+                  <h4>Offer Breakup</h4>
+                  <span className="breakup-chip">{modalOffer.expiresIn || 'Valid this week'}</span>
+                </div>
+                <div className="modal-breakup-grid">
+                  <div className="modal-breakup-item">
+                    <span className="label">Loan Amount</span>
+                    <span className="value">{modalOffer.amount}</span>
+                  </div>
+                  <div className="modal-breakup-item">
+                    <span className="label">Processing Fee</span>
+                    <span className="value">₹{modalOffer.processingFee?.toLocaleString() || '0'}</span>
+                  </div>
+                  <div className="modal-breakup-item">
+                    <span className="label">Down Payment</span>
+                    <span className="value">₹{modalOffer.downpayment?.toLocaleString() || '0'}</span>
+                  </div>
+                  <div className="modal-breakup-item">
+                    <span className="label">Total Interest</span>
+                    <span className="value">₹{modalOffer.totalInterest?.toLocaleString() || '0'}</span>
+                  </div>
+                  <div className="modal-breakup-item">
+                    <span className="label">Total Payable</span>
+                    <span className="value">₹{modalOffer.totalPayable?.toLocaleString() || '0'}</span>
+                  </div>
                 </div>
               </div>
               <div className="modal-features">
