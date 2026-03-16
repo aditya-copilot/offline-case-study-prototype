@@ -19,6 +19,7 @@ function MandatePage({toolCallUtils}) {
   const [username, setUsername] = useState('');
   const [selectedBank, setSelectedBank] = useState('');
   const [customBank, setCustomBank] = useState('');
+  const [errors, setErrors] = useState({});
 
   const bankOptions = [
     { value: 'hdfcbank', label: '@hdfcbank' },
@@ -52,8 +53,21 @@ function MandatePage({toolCallUtils}) {
     lenderName: selectedOffer.lenderName || 'Lender',
   };
 
+  const validateVPA = (vpaValue) => {
+    const errors = {};
+    if (!vpaValue || !vpaValue.includes('@')) {
+      errors.vpa = 'Please enter a valid UPI ID (e.g., name@bank)';
+    }
+    return errors;
+  };
+
   const handleVpaSubmit = (e) => {
     e.preventDefault();
+    const validationErrors = validateVPA(vpa);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
     setStep('combined');
   };
 
@@ -72,9 +86,14 @@ function MandatePage({toolCallUtils}) {
     }, 2500);
   };
 
+  const handleGoBack = () => {
+    navigate('/cykc');
+  };
+
   const handleBankChange = (e) => {
     const value = e.target.value;
     setSelectedBank(value);
+    setErrors(prev => ({ ...prev, bank: null }));
     if (value !== 'custom') {
       setVpa(username + '@' + value);
     } else {
@@ -85,6 +104,7 @@ function MandatePage({toolCallUtils}) {
   const handleUsernameChange = (e) => {
     const value = e.target.value;
     setUsername(value);
+    setErrors(prev => ({ ...prev, username: null }));
     if (selectedBank === 'custom') {
       setVpa(value + '@' + customBank);
     } else if (selectedBank) {
@@ -95,6 +115,7 @@ function MandatePage({toolCallUtils}) {
   const handleCustomBankChange = (e) => {
     const value = e.target.value;
     setCustomBank(value);
+    setErrors(prev => ({ ...prev, customBank: null }));
     if (value) {
       setVpa(username + '@' + value);
     }
@@ -108,7 +129,7 @@ function MandatePage({toolCallUtils}) {
       </div>
 
       <form onSubmit={handleVpaSubmit} className="payment-form">
-        <div className="form-group">
+        <div className={`form-group ${errors.username ? 'error' : ''}`}>
           <label>Your Name / Username</label>
           <input
             type="text"
@@ -118,9 +139,10 @@ function MandatePage({toolCallUtils}) {
             required
             className="vpa-input"
           />
+          {errors.username && <span className="error-message">{errors.username}</span>}
         </div>
 
-        <div className="form-group">
+        <div className={`form-group ${errors.bank ? 'error' : ''}`}>
           <label>Select Bank Handle</label>
           <select
             value={selectedBank}
@@ -135,23 +157,28 @@ function MandatePage({toolCallUtils}) {
               </option>
             ))}
           </select>
+          {errors.bank && <span className="error-message">{errors.bank}</span>}
           {selectedBank === 'custom' && (
-            <input
-              type="text"
-              value={customBank}
-              onChange={handleCustomBankChange}
-              placeholder="Enter custom handle (e.g., yourbank)"
-              className="custom-bank-input"
-              required
-            />
+            <>
+              <input
+                type="text"
+                value={customBank}
+                onChange={handleCustomBankChange}
+                placeholder="Enter custom handle (e.g., yourbank)"
+                className={`custom-bank-input ${errors.customBank ? 'error' : ''}`}
+                required
+              />
+              {errors.customBank && <span className="error-message">{errors.customBank}</span>}
+            </>
           )}
         </div>
 
         <div className="form-group">
           <label>Your VPA</label>
-          <div className="vpa-display-preview">
+          <div className={`vpa-display-preview ${errors.vpa ? 'error' : ''}`}>
             <span className="vpa-preview-value">{vpa || 'name@bank'}</span>
           </div>
+          {errors.vpa && <span className="error-message">{errors.vpa}</span>}
         </div>
 
         <button type="submit" className="submit-btn primary" disabled={!vpa.includes('@')}>
@@ -279,26 +306,29 @@ function MandatePage({toolCallUtils}) {
 
   return (
     <div className="mandate-page">
-      <div className="mandate-container">
-        <div className="mandate-header">
+      <div className="mandate-header">
+        <div className="header-content">
+          <button className="back-btn" onClick={handleGoBack} aria-label="Go back to KYC">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </button>
           <h1>Mandate Setup</h1>
-          <p>Quick and secure UPI payments</p>
-        </div>
-
-        <div className="step-indicator">
-          <div className={`step ${step === 'vpa' ? 'active' : 'completed'}`}>
-            <div className="step-dot">1</div>
-            <span>VPA</span>
-          </div>
-          <div className="step-line"></div>
-          <div className={`step ${step === 'combined' ? 'active' : ''}`}>
-            <div className="step-dot">2</div>
-            <span>Payment</span>
+          <div className="step-indicator">
+            <span className="step completed">CKYC</span>
+            <span className="step-divider">→</span>
+            <span className={`step ${step === 'vpa' || step === 'combined' ? 'active' : ''}`}>Mandate</span>
+            <span className="step-divider">→</span>
+            <span className="step">Complete</span>
           </div>
         </div>
+      </div>
 
-        {step === 'vpa' && renderVpaStep()}
-        {step === 'combined' && renderCombinedStep()}
+      <div className="mandate-content">
+        <div className="mandate-container">
+          {step === 'vpa' && renderVpaStep()}
+          {step === 'combined' && renderCombinedStep()}
+        </div>
       </div>
 
       {showConfirmation && renderConfirmation()}

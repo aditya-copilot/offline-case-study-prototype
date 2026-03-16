@@ -1,4 +1,6 @@
 import { useState, useRef , useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useOffer } from '../context/OfferContext'
 import './InstantEMIForm.css'
 
 const JusPayLogo = () => (
@@ -97,6 +99,8 @@ function validateDOB(dob) {
 }
 
 export default function InstantEMIForm({ onClose , userInput}) {
+  const navigate = useNavigate()
+  const { selectedProduct, productType, saveUserFormData } = useOffer()
   const [form, setForm] = useState({
     name: '',
     pan: '',
@@ -106,15 +110,10 @@ export default function InstantEMIForm({ onClose , userInput}) {
   })
   const [errors, setErrors] = useState({})
   const [touched, setTouched] = useState({})
-  const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [scanning, setScanning] = useState(false)
   const [scannedImage, setScannedImage] = useState(null)
   const [ocrProgress, setOcrProgress] = useState(0)
-  const [cameraOpen, setCameraOpen] = useState(false)
-  const [cameraError, setCameraError] = useState('')
-  const videoRef = useRef(null)
-  const streamRef = useRef(null)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -130,78 +129,6 @@ export default function InstantEMIForm({ onClose , userInput}) {
       ...(hasValue(userInput.address) && { address: userInput.address }),
     }));
   }, [userInput]);
-
-  useEffect(() => {
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop())
-      }
-    }
-  }, []);
-
-  const closeCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop())
-      streamRef.current = null
-    }
-    setCameraOpen(false)
-  }
-
-  const openCamera = () => {
-    setCameraError('')
-    setCameraOpen(true)
-  }
-
-  useEffect(() => {
-    if (!cameraOpen) return
-
-    const startCamera = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
-        streamRef.current = stream
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          videoRef.current.muted = true
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current.play().catch(playError => {
-              console.warn('Unable to autoplay camera stream', playError)
-            })
-          }
-        }
-      } catch (err) {
-        console.error('Camera open failed', err)
-        setCameraError('Camera not accessible. You can still upload the image.')
-        setCameraOpen(false)
-      }
-    }
-
-    startCamera()
-
-    return () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop())
-        streamRef.current = null
-      }
-    }
-  }, [cameraOpen])
-
-  const captureFromCamera = () => {
-    if (!videoRef.current) return
-    const video = videoRef.current
-    if (!video.videoWidth || !video.videoHeight) {
-      setCameraError('Camera preview not ready yet. Please wait a moment.')
-      return
-    }
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    const ctx = canvas.getContext('2d')
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-    const imageData = canvas.toDataURL('image/jpeg', 0.9)
-    setScannedImage(imageData)
-    performOCR(imageData)
-    closeCamera()
-  }
 
   const validate = (fields = form) => {
     const e = {}
@@ -252,10 +179,10 @@ export default function InstantEMIForm({ onClose , userInput}) {
     if (Object.keys(errs).length > 0) return
 
     setLoading(true)
-    // Simulate JusPay API call
     await new Promise(r => setTimeout(r, 1800))
     setLoading(false)
-    setSubmitted(true)
+    saveUserFormData(form)
+    navigate('/offer')
   }
 
   const maxDOB = (() => {
@@ -387,49 +314,6 @@ export default function InstantEMIForm({ onClose , userInput}) {
     }
   }
 
-  if (submitted) {
-    return (
-      <div className="emi-page">
-        <header className="emi-header">
-          <div className="emi-header-inner">
-            <div className="emi-brand">
-              <JusPayLogo />
-              <span>EMI</span>
-            </div>
-          </div>
-        </header>
-        <main className="emi-main">
-          <div className="emi-success-card">
-            <div className="emi-success-icon">
-              <CheckIcon />
-            </div>
-            <h2>Application Submitted!</h2>
-            <p className="emi-success-sub">
-              Your instant EMI request has been received. We'll verify your details and send an OTP to <strong>+91 {form.phone}</strong> shortly.
-            </p>
-            <div className="emi-success-details">
-              <div className="emi-detail-row">
-                <span>Name</span>
-                <strong>{form.name}</strong>
-              </div>
-              <div className="emi-detail-row">
-                <span>PAN</span>
-                <strong>{form.pan}</strong>
-              </div>
-              <div className="emi-detail-row">
-                <span>Mobile</span>
-                <strong>+91 {form.phone}</strong>
-              </div>
-            </div>
-            <button className="emi-btn-secondary" onClick={() => { setSubmitted(false); setForm({ name: '', pan: '', dob: '', address: '', phone: '' }); setTouched({}); setErrors({}) }}>
-              Start New Application
-            </button>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
   return (
     <div className="emi-page">
 
@@ -447,39 +331,18 @@ export default function InstantEMIForm({ onClose , userInput}) {
                 <UserIcon />
                 Personal Details
               </div>
-              <div className="emi-ocr-actions">
-                <label className="emi-ocr-btn" title="Upload ID image">
-                  <CameraIcon />
-                  <span>Upload Image</span>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    hidden
-                  />
-                </label>
-                <button type="button" className="emi-ocr-btn emi-camera-btn" onClick={openCamera} title="Capture from camera">
-                  <CameraIcon />
-                  <span>Use Camera</span>
-                </button>
-              </div>
+              <label className="emi-ocr-btn" title="Scan ID document">
+                <CameraIcon />
+                <span>Scan ID</span>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  hidden
+                />
+              </label>
             </div>
-            {cameraError && <p className="emi-camera-error">{cameraError}</p>}
-            {cameraOpen && (
-              <div className="emi-camera-modal">
-                <div className="emi-camera-header">
-                  <h3>Capture ID Photo</h3>
-                  <button type="button" className="emi-close-camera" onClick={closeCamera}><XIcon /></button>
-                </div>
-                <video ref={videoRef} autoPlay playsInline muted className="emi-camera-video" />
-                <div className="emi-camera-hint">If camera preview does not appear, allow camera access and refresh.</div>
-                <div className="emi-camera-actions">
-                  <button type="button" className="emi-ocr-btn" onClick={captureFromCamera}>Capture</button>
-                  <button type="button" className="emi-ocr-btn emi-camera-btn" onClick={closeCamera}>Cancel</button>
-                </div>
-              </div>
-            )}
 
             {scannedImage && (
               <div className="emi-scanned-preview">
@@ -614,12 +477,10 @@ export default function InstantEMIForm({ onClose , userInput}) {
               {loading ? (
                 <span className="emi-spinner-row">
                   <span className="emi-spinner" />
-                  Verifying with JusPay...
+                  Verifying your details...
                 </span>
               ) : (
-                <span onClick={() => {
-                    window.location.href = "/checkout/offer"
-                }} className="emi-btn-row">
+                <span className="emi-btn-row">
                   <LockIcon />
                   Apply for Instant EMI
                 </span>

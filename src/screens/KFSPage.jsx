@@ -129,6 +129,10 @@ function KFSPage({toolCallUtils}) {
     }, 2000);
   };
 
+  const handleGoBack = () => {
+    navigate('/mandate');
+  };
+
   if (showSuccess) {
     return (
       <div className="kfs-page">
@@ -163,6 +167,11 @@ function KFSPage({toolCallUtils}) {
 
   return (
     <div className="kfs-page">
+      <button className="back-btn-floating" onClick={handleGoBack} aria-label="Go back to mandate">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </button>
       <div className="main-card">
         <div className="card-header">
           <h1>Key Fact Statement</h1>

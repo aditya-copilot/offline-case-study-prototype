@@ -35,6 +35,13 @@ export default function ProductPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedProduct, setSelectedProduct] = useState(null)
 
+  useEffect(() => {
+    document.body.style.overflow = selectedProduct ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [selectedProduct])
+
   const query = searchParams.get('q') || ''
   const brand = searchParams.get('brand') || ''
   const category = searchParams.get('category') || ''
@@ -43,19 +50,19 @@ export default function ProductPage() {
     let filtered = products
 
     if (brand) {
-      filtered = filtered.filter(p => p.brand.toLowerCase() === brand.toLowerCase())
+      filtered = filtered.filter(p => (p.brand || '').toLowerCase() === brand.toLowerCase())
     }
 
     if (category) {
-      filtered = filtered.filter(p => p.category.toLowerCase() === category.toLowerCase())
+      filtered = filtered.filter(p => (p.category || '').toLowerCase() === category.toLowerCase())
     }
 
     if (query) {
       const q = query.toLowerCase()
       filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(q) ||
-        p.brand.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
+        (p.name || '').toLowerCase().includes(q) ||
+        (p.brand || '').toLowerCase().includes(q) ||
+        (p.category || '').toLowerCase().includes(q)
       )
     }
 
@@ -72,6 +79,7 @@ export default function ProductPage() {
   }
 
   const getDiscount = (mrp, price) => {
+    if (!mrp || !price || mrp <= 0) return 0
     return Math.round(((mrp - price) / mrp) * 100)
   }
 
@@ -169,7 +177,7 @@ export default function ProductPage() {
                         )}
                       </div>
                       <button className="buy-now-btn" onClick={() => handleBuyNow(product)}>
-                        Buy Now
+                        Apply for Loan
                       </button>
                     </div>
                   </div>
@@ -205,7 +213,7 @@ export default function ProductPage() {
                 <span className="modal-mrp">{formatPrice(selectedProduct.mrp)}</span>
               </div>
               <button className="modal-buy-btn" onClick={() => handleBuyNow(selectedProduct)}>
-                Buy Now
+                Apply for Loan
               </button>
             </div>
           </div>

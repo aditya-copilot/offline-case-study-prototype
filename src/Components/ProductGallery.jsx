@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './ProductGallery.css'
 import InstantEMIForm from './InstantEMIForm'
+import { useOffer } from '../context/OfferContext'
 
 const ChevronLeftIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -43,16 +45,35 @@ const ShareIcon = () => (
 )
 
 export default function ProductGallery({ product, onBack }) {
+  const navigate = useNavigate()
+  const { selectProduct } = useOffer()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [liked, setLiked] = useState(false)
   const [showEMIForm, setShowEMIForm] = useState(false)
 
   useEffect(() => {
-    if(showEMIForm){
-      window.location.href = "/checkout/user-input"
-      return;
+    document.body.style.overflow = showEMIForm ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
     }
   }, [showEMIForm])
+
+  useEffect(() => {
+    if(showEMIForm){
+      selectProduct({
+        id: product.id,
+        name: product.name,
+        brand: product.brand,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+        rating: product.rating,
+        offers: product.offers
+      }, 'electronics')
+      navigate('/checkout/user-input')
+      return;
+    }
+  }, [showEMIForm, navigate, product, selectProduct])
 
   const getProductImages = (product) => {
     const baseImage = product.image
