@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useOffer } from '../context/OfferContext';
 import './CYKCPage.css';
 
-function CYKCPage() {
+function CYKCPage({toolCallUtils}) {
+  if (toolCallUtils) {
+    toolCallUtils.getFullPrompt = (text) => text;
+    toolCallUtils.getDisplayResponse = (res) => res;
+    toolCallUtils.handleResponse = (res) => res;
+  }
+
   const navigate = useNavigate();
   const { selectedOffer } = useOffer();
   const [currentStep, setCurrentStep] = useState('loading');

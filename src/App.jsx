@@ -28,21 +28,35 @@ function extractJSON(text) {
 function removeEmojis(text) {
   return text.replace(/\p{Emoji}/gu, '');
 }
+function normalizeForTTS(text) {
+  if (!text || typeof text !== 'string') return '';
+  let normalized = text
+    .replace(/₹/g, ' rupees ')
+    .replace(/%/g, ' percent ')
+    .replace(/\u00A0/g, ' ') // non-breaking spaces
+    .replace(/,/g, '')
+    .replace(/(\d+)\.(\d+)/g, '$1 point $2')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // Expand numbers like 12000 to 12 000 (or simply keep as digits) before speak.
+  normalized = normalized.replace(/\b(\d{1,3})(\d{3})\b/g, '$1 $2');
+
+  return normalized;
+}
 function speakText(text) {
-  console.log("Attempting to speak text:", text)
+  const normalizedText = normalizeForTTS(text);
+  console.log('Attempting to speak text:', normalizedText);
   if (!("speechSynthesis" in window)) {
-    console.error("TTS not supported in this browser");
+    console.error('TTS not supported in this browser');
     return;
   }
 
-  console.log("Speaking text:", text);
-
-  const utterance = new SpeechSynthesisUtterance(text);
-
-  utterance.lang = "en-US";
-  utterance.rate = 1.6;      // speed (0.1 - 10)
-  utterance.pitch = 1;     // tone (0 - 2)
-  utterance.volume = 1;    // volume (0 - 1)
+  const utterance = new SpeechSynthesisUtterance(normalizedText);
+  utterance.lang = 'en-US';
+  utterance.rate = 1.2;      // speed (0.1 - 10)
+  utterance.pitch = 1;       // tone (0 - 2)
+  utterance.volume = 1;      // volume (0 - 1)
 
   window.speechSynthesis.speak(utterance);
 }
@@ -167,18 +181,18 @@ function App() {
     const botMessage = {
       id: Date.now() + 1,
       type: 'bot',
-      text: overrideOutput || response,
+      text: toolCallUtils.getDisplayResponse(response),
       timestamp: new Date()
     }
     setMessages(prev => [...prev, botMessage])
+    toolCallUtils.handleResponse(response);
     if (inputModeRef.current == 'speech'){
-      speakText(removeEmojis(response))
+      speakText(removeEmojis(toolCallUtils.getDisplayResponse(response)))
     }
     else{
       console.log("Not speaking AI response because input mode is:", inputMode)
     }
     setIsTyping(false)
-
     return response
 
   }, [messages, inputMode]);
@@ -194,7 +208,7 @@ function App() {
           "Authorization": `Bearer ${import.meta.env.VITE_API_KEY}`
         },
         body: JSON.stringify({
-          model: "claude-sonnet-4-5",
+          model: "kimi-latest",
           max_tokens: 4096,
           messages: [
             {
@@ -249,9 +263,9 @@ function App() {
             <Route path="/checkout/approved" element={<LoanApprovedPage toolCallUtils={toolCallUtils}/>} />
             <Route path="/checkout/invoice" element={<InvoicePage toolCallUtils={toolCallUtils}/>} />
             <Route path="/checkout/disbursed" element={<DisbursedPage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/*" element={<AIChatWidget toolCallUtils={toolCallUtils}/>} />
+            <Route path="*" element={<AIChatWidget toolCallUtils={toolCallUtils}/>} />
           </Routes>
-          <ChatBot messages={messages} inputMode={inputMode} speechSupported={speechSupported} uploadedImage={uploadedImage} fileInputRef={fileInputRef} handleImageUpload ={handleImageUpload} message={message} handleKeyPress={handleKeyPress} handleSend={handleSend} setInputMode={setInputMode} isListening={isListening} toggleListening={toggleListening} isTyping={isTyping} messagesEndRef={messagesEndRef} />
+          <ChatBot messages={messages} inputMode={inputMode} speechSupported={speechSupported} uploadedImage={uploadedImage} fileInputRef={fileInputRef} handleImageUpload ={handleImageUpload} message={message} handleKeyPress={handleKeyPress} handleSend={handleSend} setInputMode={setInputMode} isListening={isListening} toggleListening={toggleListening} isTyping={isTyping} messagesEndRef={messagesEndRef} setMessage={setMessage} />
         </div>
       </Router>
     </OfferProvider>

@@ -13,8 +13,15 @@ const formatTime = (date) => {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
-function ChatBot({messages, inputMode, speechSupported, uploadedImage, fileInputRef, handleImageUpload, message, handleKeyPress, handleSend, setInputMode, isListening, toggleListening, isTyping, messagesEndRef}) {
+function ChatBot({messages, inputMode, speechSupported, uploadedImage, fileInputRef, handleImageUpload, message, handleKeyPress, handleSend, setInputMode, isListening, toggleListening, isTyping, messagesEndRef, setMessage}) {
   const location = useLocation();
+
+  const stopSpeaking = () => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+  };
+
   if(!location.pathname.includes('checkout') || location.pathname == "/checkout/user-input"){
     return (<></>)
   }
@@ -107,6 +114,16 @@ function ChatBot({messages, inputMode, speechSupported, uploadedImage, fileInput
               <path d="M21 15l-5-5L5 21" />
             </svg>
             <span>OCR</span>
+          </button>
+          <button
+            className="ai-mode-btn"
+            onClick={stopSpeaking}
+            title="Stop speaking"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+            <span>Stop TTS</span>
           </button>
         </div>
 

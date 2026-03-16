@@ -4,7 +4,13 @@ import { jsPDF } from 'jspdf';
 import { useOffer } from '../context/OfferContext';
 import './DisbursedPage.css';
 
-function DisbursedPage() {
+function DisbursedPage({toolCallUtils}) {
+  if (toolCallUtils) {
+    toolCallUtils.getFullPrompt = (text) => text;
+    toolCallUtils.getDisplayResponse = (res) => res;
+    toolCallUtils.handleResponse = (res) => res;
+  }
+
   const navigate = useNavigate();
   const { selectedOffer, loanId } = useOffer();
   const [showScheduleModal, setShowScheduleModal] = useState(false);
