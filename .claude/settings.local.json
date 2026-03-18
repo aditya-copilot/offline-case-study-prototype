@@ -5,7 +5,8 @@
       "Bash(npm install react-router-dom)",
       "Bash(npm ls react-router-dom)",
       "Bash(node -e \"const rrd = require(''./node_modules/react-router-dom''); console.log(Object.keys(rrd).filter(k => k.includes(''Router'')))\")",
-      "Bash(pkill -f \"vite\")"
+      "Bash(pkill -f \"vite\")",
+      "Bash(python3 src/screens/bike/Untitled-1.py)"
     ]
   }
 }

@@ -123,7 +123,7 @@ function CYKCPage({toolCallUtils}) {
   };
 
   const handleGoBack = () => {
-    navigate('/offer');
+    navigate('/checkout/offer');
   };
 
   const handleResend = () => {

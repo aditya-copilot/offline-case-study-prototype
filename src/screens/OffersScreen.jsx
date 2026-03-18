@@ -177,10 +177,20 @@ function OffersScreen({toolCallUtils}) {
       "selectedOfferIndex": index of selected offer in integer,
       "response": "your response to user (say something like, ok, going ahead with the offer"
     }
-    Make sure to only send json and no other text. Also, strictly no emojis and TTS friendly outputs for "response" field. Keep responses super short.
+    Make sure to only send json and no other text. Also, strictly no emojis and TTS friendly outputs for "response" field. Keep responses super short. Make sure numerical values are written in english text only. Hundred for 100 and one point two for 1.2 etc.
     `
     return str
   }
+
+function extractJSON(text) {
+  const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[0]);
+  } catch (e) {
+    return null;
+  }
+}
 
   toolCallUtils.getDisplayResponse = (res) => {
     let obj = extractJSON(res);
@@ -256,7 +266,7 @@ function OffersScreen({toolCallUtils}) {
 
   const handleApplyNow = (offer) => {
     setSelectedOffer(offer)
-    navigate('/cykc')
+    navigate('/checkout/cykc')
   }
 
   const formatPrice = (price) => {

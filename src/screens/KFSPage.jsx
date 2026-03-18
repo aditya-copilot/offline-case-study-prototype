@@ -130,7 +130,7 @@ function KFSPage({toolCallUtils}) {
   };
 
   const handleGoBack = () => {
-    navigate('/mandate');
+    navigate('/checkout/mandate');
   };
 
   if (showSuccess) {

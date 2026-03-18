@@ -87,7 +87,7 @@ function MandatePage({toolCallUtils}) {
   };
 
   const handleGoBack = () => {
-    navigate('/cykc');
+    navigate('/checkout/cykc');
   };
 
   const handleBankChange = (e) => {

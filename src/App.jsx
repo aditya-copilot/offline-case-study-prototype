@@ -127,13 +127,13 @@ function AppContent({
       {showProgress && <ProgressBar />}
       <div className="app-content">
         <Routes>
-          <Route path="/offer" element={<OffersScreen toolCallUtils={toolCallUtils} />} />
-          <Route path="/cykc" element={<CYKCPage toolCallUtils={toolCallUtils} />} />
-          <Route path="/mandate" element={<MandatePage toolCallUtils={toolCallUtils} />} />
-          <Route path="/kfs" element={<KFSPage toolCallUtils={toolCallUtils} />} />
-          <Route path="/approved" element={<LoanApprovedPage toolCallUtils={toolCallUtils} />} />
-          <Route path="/invoice" element={<InvoicePage toolCallUtils={toolCallUtils} />} />
-          <Route path="/disbursed" element={<DisbursedPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/offer" element={<OffersScreen toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/cykc" element={<CYKCPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/mandate" element={<MandatePage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/kfs" element={<KFSPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/approved" element={<LoanApprovedPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/invoice" element={<InvoicePage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/disbursed" element={<DisbursedPage toolCallUtils={toolCallUtils} />} />
           <Route path="/checkout/user-input" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
           
           {IS_BIKE_MODE ? (

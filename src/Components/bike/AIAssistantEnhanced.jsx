@@ -425,7 +425,7 @@ export default function AIAssistantEnhanced({ onClose }) {
     }, 'bike')
     
     showToast(`${vehicle.display_name} selected! Apply for loan now.`, 'success')
-    navigate('/offer')
+    navigate('/checkout/offer')
   }
   
   const handleKeyDown = (e) => {

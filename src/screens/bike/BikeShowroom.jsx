@@ -151,6 +151,7 @@ export default function BikeShowroom() {
   }, [selectedVehicle])
 
   useEffect(() => {
+    console.log("Start plling")
     const BASE_URL = import.meta.env.VITE_BASE_URL
     const pollInterval = 1000
     let lastNearestReceiver = null
