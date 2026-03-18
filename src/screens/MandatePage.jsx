@@ -3,6 +3,83 @@ import { useNavigate } from 'react-router-dom';
 import { useOffer } from '../context/OfferContext';
 import './MandatePage.css';
 
+const GPayIcon = () => (
+  <svg viewBox="0 0 24 24" className="upi-icon" fill="none">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="#EA4335"/>
+    <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c1.66 0 3.16-.67 4.24-1.76L12 12V6z" fill="#FBBC04"/>
+    <path d="M12 6v6l4.24 4.24C17.33 15.16 18 13.66 18 12c0-3.31-2.69-6-6-6z" fill="#34A853"/>
+    <path d="M6 12c0 3.31 2.69 6 6 6V6c-3.31 0-6 2.69-6 6z" fill="#4285F4"/>
+  </svg>
+);
+
+const PhonePeIcon = () => (
+  <svg viewBox="0 0 24 24" className="upi-icon" fill="none">
+    <circle cx="12" cy="12" r="10" fill="#5F259F"/>
+    <path d="M12 6v4l3 3-3 5v-4l-3-3 3-5z" fill="white"/>
+  </svg>
+);
+
+const PaytmIcon = () => (
+  <svg viewBox="0 0 24 24" className="upi-icon" fill="none">
+    <rect x="2" y="2" width="20" height="20" rx="4" fill="#00BAF2"/>
+    <path d="M7 8h3v8H7V8zm5 0h5v2h-5V8zm0 3h4v2h-4v-2zm0 3h5v2h-5v-2z" fill="white"/>
+  </svg>
+);
+
+const CredIcon = () => (
+  <svg viewBox="0 0 24 24" className="upi-icon" fill="none">
+    <rect x="2" y="2" width="20" height="20" rx="4" fill="#1A1A2E"/>
+    <text x="12" y="16" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">C</text>
+  </svg>
+);
+
+const UPI_APPS = [
+  {
+    value: 'gpay',
+    label: 'Google Pay',
+    color: '#4285F4',
+    bgColor: '#E8F0FE',
+    Icon: GPayIcon,
+    setupSubtitle: 'Connect your Google Pay for auto-debit',
+    setupSteps: ['Opening Google Pay...', 'Verifying UPI ID...', 'Setting up auto-debit mandate...'],
+    setupMessage: 'You will be redirected to Google Pay to approve the mandate. Please confirm the auto-pay request in your app.',
+    ctaText: 'Open Google Pay'
+  },
+  {
+    value: 'phonepe',
+    label: 'PhonePe',
+    color: '#5F259F',
+    bgColor: '#F3E8FF',
+    Icon: PhonePeIcon,
+    setupSubtitle: 'Connect your PhonePe for auto-debit',
+    setupSteps: ['Opening PhonePe...', 'Verifying UPI ID...', 'Setting up auto-debit mandate...'],
+    setupMessage: 'You will be redirected to PhonePe to approve the mandate. Please confirm the auto-pay request in your app.',
+    ctaText: 'Open PhonePe'
+  },
+  {
+    value: 'paytm',
+    label: 'Paytm',
+    color: '#00BAF2',
+    bgColor: '#E0F7FF',
+    Icon: PaytmIcon,
+    setupSubtitle: 'Connect your Paytm for auto-debit',
+    setupSteps: ['Opening Paytm...', 'Verifying UPI ID...', 'Setting up auto-debit mandate...'],
+    setupMessage: 'You will be redirected to Paytm to approve the mandate. Please confirm the auto-pay request in your app.',
+    ctaText: 'Open Paytm'
+  },
+  {
+    value: 'cred',
+    label: 'CRED',
+    color: '#1A1A2E',
+    bgColor: '#E8E8EC',
+    Icon: CredIcon,
+    setupSubtitle: 'Connect your CRED for auto-debit',
+    setupSteps: ['Opening CRED...', 'Verifying UPI ID...', 'Setting up auto-debit mandate...'],
+    setupMessage: 'You will be redirected to CRED to approve the mandate. Please confirm the auto-pay request in your app.',
+    ctaText: 'Open CRED'
+  }
+];
+
 function MandatePage({toolCallUtils}) {
   if (toolCallUtils) {
     toolCallUtils.getFullPrompt = (text) => text;
@@ -11,295 +88,266 @@ function MandatePage({toolCallUtils}) {
   }
 
   const navigate = useNavigate();
-  const { selectedOffer } = useOffer();
-  const [step, setStep] = useState('vpa');
-  const [vpa, setVpa] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null);
-  const [username, setUsername] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
-  const [customBank, setCustomBank] = useState('');
-  const [errors, setErrors] = useState({});
+  const { selectedOffer, mandateSetup, completeMandate } = useOffer();
 
-  const bankOptions = [
-    { value: 'hdfcbank', label: '@hdfcbank' },
-    { value: 'icici', label: '@icici' },
-    { value: 'sbi', label: '@sbi' },
-    { value: 'axisbank', label: '@axisbank' },
-    { value: 'kotak', label: '@kotak' },
-    { value: 'yesbank', label: '@yesbank' },
-    { value: 'pnb', label: '@pnb' },
-    { value: 'bob', label: '@bob' },
-    { value: 'custom', label: 'Custom (Enter manually)' }
-  ];
+  const [step, setStep] = useState('confirm');
+  const [selectedApp, setSelectedApp] = useState(null);
 
   useEffect(() => {
     if (!selectedOffer) {
       navigate('/checkout/offer');
+      return;
     }
   }, [selectedOffer, navigate]);
+
+  useEffect(() => {
+    if (step === 'success') {
+      completeMandate({
+        selectedApp: selectedApp?.value,
+        selectedAppLabel: selectedApp?.label,
+        setupDate: new Date().toISOString(),
+        status: 'active'
+      });
+      const timer = setTimeout(() => {
+        navigate('/checkout/kfs');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [step, completeMandate, navigate, selectedApp]);
 
   if (!selectedOffer) return null;
 
   const offer = {
-    downpayment: selectedOffer.downpayment || 2000,
-    mandateAmount: selectedOffer.monthlyPaymentValue || 3333,
-    tenure: selectedOffer.termMonths || 12,
-    loanAmount: selectedOffer.amountValue || 120000,
-    interestRate: selectedOffer.interestRateValue || 0,
-    processingFee: selectedOffer.processingFee || 1200,
-    totalInterest: selectedOffer.totalInterest || 0,
-    totalPayable: selectedOffer.totalPayable || 121200,
     lenderName: selectedOffer.lenderName || 'Lender',
+    monthlyPayment: selectedOffer.monthlyPayment || '₹0',
+    monthlyPaymentValue: selectedOffer.monthlyPaymentValue || 0,
+    term: selectedOffer.term || '12 Months',
+    termMonths: selectedOffer.termMonths || 12
   };
 
-  const validateVPA = (vpaValue) => {
-    const errors = {};
-    if (!vpaValue || !vpaValue.includes('@')) {
-      errors.vpa = 'Please enter a valid UPI ID (e.g., name@bank)';
-    }
-    return errors;
+  const handleConfirmMandate = () => {
+    setStep('select');
   };
 
-  const handleVpaSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validateVPA(vpa);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    setStep('combined');
+  const handleAppSelect = (app) => {
+    setSelectedApp(app);
+    setStep('setup');
   };
 
-  const handleCombinedSubmit = (e) => {
-    e.preventDefault();
-    setShowConfirmation(true);
+  const handleSetupComplete = () => {
+    setStep('processing');
   };
 
-  const handleConfirmPayment = () => {
-    setPaymentStatus('processing');
-    setTimeout(() => {
-      setPaymentStatus('success');
-      setTimeout(() => {
-        navigate('/checkout/kfs');
-      }, 1500);
-    }, 2500);
+  const handleProcessingComplete = () => {
+    setStep('success');
   };
 
   const handleGoBack = () => {
-    navigate('/checkout/cykc');
-  };
-
-  const handleBankChange = (e) => {
-    const value = e.target.value;
-    setSelectedBank(value);
-    setErrors(prev => ({ ...prev, bank: null }));
-    if (value !== 'custom') {
-      setVpa(username + '@' + value);
+    if (step === 'select') {
+      setStep('confirm');
+    } else if (step === 'setup' || step === 'processing') {
+      setStep('select');
+      setSelectedApp(null);
     } else {
-      setVpa(username + '@' + customBank);
+      navigate('/checkout/cykc');
     }
   };
 
-  const handleUsernameChange = (e) => {
-    const value = e.target.value;
-    setUsername(value);
-    setErrors(prev => ({ ...prev, username: null }));
-    if (selectedBank === 'custom') {
-      setVpa(value + '@' + customBank);
-    } else if (selectedBank) {
-      setVpa(value + '@' + selectedBank);
-    }
+  const getBackButtonText = () => {
+    if (step === 'select') return 'Back to Mandate Details';
+    if (step === 'setup' || step === 'processing') return 'Back to UPI Apps';
+    return 'Back to CKYC';
   };
 
-  const handleCustomBankChange = (e) => {
-    const value = e.target.value;
-    setCustomBank(value);
-    setErrors(prev => ({ ...prev, customBank: null }));
-    if (value) {
-      setVpa(username + '@' + value);
-    }
-  };
-
-  const renderVpaStep = () => (
+  const renderConfirmStep = () => (
     <div className="mandate-section">
       <div className="section-header">
-        <h2>Enter UPI ID</h2>
-        <p>We will use this for both mandate setup and downpayment</p>
+        <h2>Confirm Mandate</h2>
+        <p>Review your auto-debit mandate details</p>
       </div>
 
-      <form onSubmit={handleVpaSubmit} className="payment-form">
-        <div className={`form-group ${errors.username ? 'error' : ''}`}>
-          <label>Your Name / Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={handleUsernameChange}
-            placeholder="Enter your name"
-            required
-            className="vpa-input"
-          />
-          {errors.username && <span className="error-message">{errors.username}</span>}
+      <div className="payment-form">
+        <div className="detail-cards">
+          <div className="detail-card">
+            <div className="card-icon">📊</div>
+            <div className="card-content">
+              <span className="card-label">Monthly EMI</span>
+              <span className="card-value primary">{offer.monthlyPayment}</span>
+            </div>
+          </div>
+
+          <div className="detail-card">
+            <div className="card-icon">📅</div>
+            <div className="card-content">
+              <span className="card-label">Frequency</span>
+              <span className="card-value">Monthly</span>
+            </div>
+          </div>
+
+          <div className="detail-card">
+            <div className="card-icon">📄</div>
+            <div className="card-content">
+              <span className="card-label">Tenure</span>
+              <span className="card-value">{offer.term}</span>
+            </div>
+          </div>
+
+          <div className="detail-card">
+            <div className="card-icon">🗓️</div>
+            <div className="card-content">
+              <span className="card-label">First Debit</span>
+              <span className="card-value">{new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}</span>
+            </div>
+          </div>
         </div>
 
-        <div className={`form-group ${errors.bank ? 'error' : ''}`}>
-          <label>Select Bank Handle</label>
-          <select
-            value={selectedBank}
-            onChange={handleBankChange}
-            className="bank-select"
-            required
+        <div className="consent-box">
+          <div className="consent-icon">⚠️</div>
+          <p className="consent-text">
+            By proceeding, you authorize {offer.lenderName} to debit {offer.monthlyPayment}
+            from your selected UPI account every month for {offer.term.toLowerCase()}.
+          </p>
+        </div>
+
+        <div className="security-badge">
+          <span className="security-icon">🛡️</span>
+          <span>Secured by NPCI</span>
+        </div>
+
+        <button
+          type="button"
+          className="submit-btn primary large"
+          onClick={handleConfirmMandate}
+        >
+          Confirm & Continue
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderSelectStep = () => (
+    <div className="mandate-section">
+      <div className="section-header">
+        <h2>Choose UPI App</h2>
+        <p>Select your preferred UPI payment app for auto-debit</p>
+      </div>
+
+      <div className="upi-apps-grid">
+        {UPI_APPS.map((app) => (
+          <button
+            key={app.value}
+            className="upi-app-card"
+            onClick={() => handleAppSelect(app)}
+            style={{ backgroundColor: app.bgColor }}
           >
-            <option value="">Choose bank handle...</option>
-            {bankOptions.map((bank) => (
-              <option key={bank.value} value={bank.value}>
-                {bank.label}
-              </option>
-            ))}
-          </select>
-          {errors.bank && <span className="error-message">{errors.bank}</span>}
-          {selectedBank === 'custom' && (
-            <>
-              <input
-                type="text"
-                value={customBank}
-                onChange={handleCustomBankChange}
-                placeholder="Enter custom handle (e.g., yourbank)"
-                className={`custom-bank-input ${errors.customBank ? 'error' : ''}`}
-                required
-              />
-              {errors.customBank && <span className="error-message">{errors.customBank}</span>}
-            </>
-          )}
-        </div>
+            <div className="upi-app-icon-wrapper" style={{ backgroundColor: 'white' }}>
+              <app.Icon />
+            </div>
+            <span className="upi-app-label">{app.label}</span>
+            <span className="upi-app-hint">Tap to setup</span>
+            <div className="upi-app-select-hint">
+              Select →
+            </div>
+          </button>
+        ))}
+      </div>
 
-        <div className="form-group">
-          <label>Your VPA</label>
-          <div className={`vpa-display-preview ${errors.vpa ? 'error' : ''}`}>
-            <span className="vpa-preview-value">{vpa || 'name@bank'}</span>
-          </div>
-          {errors.vpa && <span className="error-message">{errors.vpa}</span>}
-        </div>
-
-        <button type="submit" className="submit-btn primary" disabled={!vpa.includes('@')}>
-          Continue
-        </button>
-      </form>
+      <div className="security-badge">
+        <span className="security-icon">🛡️</span>
+        <span>Secured by NPCI</span>
+      </div>
     </div>
   );
 
-  const renderCombinedStep = () => (
+  const renderSetupStep = () => (
     <div className="mandate-section">
       <div className="section-header">
-        <h2>Payment Setup</h2>
-        <p>Downpayment + Mandate in one go</p>
+        <h2>Setup {selectedApp?.label}</h2>
+        <p>{selectedApp?.setupSubtitle}</p>
       </div>
 
-      <div className="vpa-display">
-        <span className="vpa-label">UPI ID</span>
-        <span className="vpa-value">{vpa}</span>
-        <button className="change-btn" onClick={() => setStep('vpa')}>
-          Change
+      <div className="payment-form">
+        <div className="setup-steps">
+          {selectedApp?.setupSteps.map((stepText, idx) => (
+            <div key={idx} className="setup-step">
+              <div
+                className="step-number"
+                style={{ backgroundColor: selectedApp.color }}
+              >
+                {idx + 1}
+              </div>
+              <span className="step-text">{stepText}</span>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className="setup-message"
+          style={{
+            backgroundColor: selectedApp?.bgColor,
+            borderColor: selectedApp?.color + '40'
+          }}
+        >
+          <p style={{ color: selectedApp?.color }}>
+            {selectedApp?.setupMessage}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="submit-btn primary large"
+          onClick={handleSetupComplete}
+          style={{ background: selectedApp?.color }}
+        >
+          {selectedApp?.ctaText}
         </button>
       </div>
-
-      <div className="payment-cards">
-        <div className="payment-card dp-card">
-          <div className="card-icon">💰</div>
-          <h3>Downpayment</h3>
-          <div className="frozen-amount">
-            <span className="currency">₹</span>
-            <span className="amount">{offer.downpayment.toLocaleString()}</span>
-          </div>
-          <span className="frozen-badge">Fixed</span>
-        </div>
-
-        <div className="payment-card mandate-card">
-          <div className="card-icon">🔄</div>
-          <h3>Auto-Debit Mandate</h3>
-          <div className="frozen-amount">
-            <span className="currency">₹</span>
-            <span className="amount">{offer.mandateAmount.toLocaleString()}</span>
-            <span className="period">/month</span>
-          </div>
-          <span className="frozen-badge">{offer.tenure} Months</span>
-        </div>
-      </div>
-
-      <div className="total-section">
-        <div className="total-row">
-          <span>Downpayment</span>
-          <span>₹{offer.downpayment.toLocaleString()}</span>
-        </div>
-        <div className="total-row">
-          <span>First Mandate</span>
-          <span>₹{offer.mandateAmount.toLocaleString()}</span>
-        </div>
-        <div className="total-row grand">
-          <span>Total Today</span>
-          <span>₹{(offer.downpayment + offer.mandateAmount).toLocaleString()}</span>
-        </div>
-      </div>
-
-      <button onClick={handleCombinedSubmit} className="submit-btn primary large">
-        Pay ₹{(offer.downpayment + offer.mandateAmount).toLocaleString()}
-      </button>
     </div>
   );
 
-  const renderConfirmation = () => (
-    <div className="modal-overlay" onClick={() => setShowConfirmation(false)}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        {paymentStatus === null && (
-          <>
-            <h3>Confirm Payment</h3>
-            <div className="confirmation-details">
-              <div className="detail-row">
-                <span>UPI ID:</span>
-                <span className="highlight-text">{vpa}</span>
-              </div>
-              <div className="detail-row">
-                <span>Downpayment:</span>
-                <span>₹{offer.downpayment.toLocaleString()}</span>
-              </div>
-              <div className="detail-row">
-                <span>Mandate (Monthly):</span>
-                <span>₹{offer.mandateAmount.toLocaleString()}</span>
-              </div>
-              <div className="detail-row total-row-confirm">
-                <span>Total:</span>
-                <span className="total-amount">₹{(offer.downpayment + offer.mandateAmount).toLocaleString()}</span>
-              </div>
-            </div>
-            <p className="confirmation-text">
-              Approve this request on your UPI app
-            </p>
-            <div className="modal-actions">
-              <button className="btn-secondary" onClick={() => setShowConfirmation(false)}>
-                Cancel
-              </button>
-              <button className="btn-primary" onClick={handleConfirmPayment}>
-                Confirm
-              </button>
-            </div>
-          </>
-        )}
+  const renderProcessingStep = () => (
+    <div className="mandate-section processing-section" style={{ backgroundColor: selectedApp?.bgColor }}>
+      <div className="processing-content">
+        <div
+          className="upi-app-icon-wrapper large"
+          style={{ backgroundColor: 'white' }}
+        >
+          <selectedApp.Icon />
+        </div>
 
-        {paymentStatus === 'processing' && (
-          <div className="processing-state">
-            <div className="spinner-small"></div>
-            <h3>Processing</h3>
-            <p>Check your UPI app for approval</p>
-          </div>
-        )}
+        <h3 style={{ color: selectedApp?.color }}>{selectedApp?.label}</h3>
+        <p>Opening app to complete mandate...</p>
 
-        {paymentStatus === 'success' && (
-          <div className="success-state">
-            <div className="success-checkmark">✓</div>
-            <h3>Success!</h3>
-            <p>Redirecting to KFS...</p>
-          </div>
-        )}
+        <div className="processing-status">
+          <div className="spinner" style={{ borderTopColor: selectedApp?.color }}></div>
+          <span>Connecting to {selectedApp?.label}...</span>
+        </div>
+
+        <div className="security-badge small">
+          <span className="security-icon">🔒</span>
+          <span>Secure connection established</span>
+        </div>
+
+        <button
+          type="button"
+          className="submit-btn primary"
+          onClick={handleProcessingComplete}
+          style={{ background: selectedApp?.color }}
+        >
+          📱 Approve in {selectedApp?.label}
+        </button>
+      </div>
+    </div>
+  );
+
+  const renderSuccessStep = () => (
+    <div className="mandate-section success-section">
+      <div className="success-content">
+        <div className="success-checkmark">
+          ✓
+        </div>
+        <h3>Mandate Setup Complete!</h3>
+        <p>Your auto-pay has been configured successfully. Redirecting to agreement...</p>
       </div>
     </div>
   );
@@ -308,30 +356,29 @@ function MandatePage({toolCallUtils}) {
     <div className="mandate-page">
       <div className="mandate-header">
         <div className="header-content">
-          <button className="back-btn" onClick={handleGoBack} aria-label="Go back to KYC">
+          <button className="back-btn" onClick={handleGoBack} aria-label="Go back">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <h1>Mandate Setup</h1>
-          <div className="step-indicator">
-            <span className="step completed">CKYC</span>
-            <span className="step-divider">→</span>
-            <span className={`step ${step === 'vpa' || step === 'combined' ? 'active' : ''}`}>Mandate</span>
-            <span className="step-divider">→</span>
-            <span className="step">Complete</span>
-          </div>
+          <h1>Setup Auto-Pay</h1>
+          <p>
+            {step === 'confirm'
+              ? 'Review and confirm your mandate details'
+              : 'Select your UPI app for automatic EMI deductions'}
+          </p>
         </div>
       </div>
 
       <div className="mandate-content">
         <div className="mandate-container">
-          {step === 'vpa' && renderVpaStep()}
-          {step === 'combined' && renderCombinedStep()}
+          {step === 'confirm' && renderConfirmStep()}
+          {step === 'select' && renderSelectStep()}
+          {step === 'setup' && renderSetupStep()}
+          {step === 'processing' && renderProcessingStep()}
+          {step === 'success' && renderSuccessStep()}
         </div>
       </div>
-
-      {showConfirmation && renderConfirmation()}
     </div>
   );
 }

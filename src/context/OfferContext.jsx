@@ -47,6 +47,9 @@ export function OfferProvider({ children }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productType, setProductType] = useState(null);
   const [userFormData, setUserFormData] = useState(null);
+  const [mandateSetup, setMandateSetup] = useState(false);
+  const [mandateDetails, setMandateDetails] = useState(null);
+  const [ckycVerified, setCkycVerified] = useState(false);
 
   // Hydrate state from localStorage on mount
   useEffect(() => {
@@ -57,6 +60,9 @@ export function OfferProvider({ children }) {
       setSelectedProduct(stored.selectedProduct || null);
       setProductType(stored.productType || null);
       setUserFormData(stored.userFormData || null);
+      setMandateSetup(stored.mandateSetup || false);
+      setMandateDetails(stored.mandateDetails || null);
+      setCkycVerified(stored.ckycVerified || false);
     }
     setIsHydrated(true);
   }, []);
@@ -69,10 +75,13 @@ export function OfferProvider({ children }) {
         loanId,
         selectedProduct,
         productType,
-        userFormData
+        userFormData,
+        mandateSetup,
+        mandateDetails,
+        ckycVerified
       });
     }
-  }, [selectedOffer, loanId, selectedProduct, productType, userFormData, isHydrated]);
+  }, [selectedOffer, loanId, selectedProduct, productType, userFormData, mandateSetup, mandateDetails, ckycVerified, isHydrated]);
 
   const selectOfferWithLoanId = useCallback((offer) => {
     const newLoanId = 'LN-' + Date.now().toString().slice(-6);
@@ -91,11 +100,30 @@ export function OfferProvider({ children }) {
     setSelectedProduct(null);
     setProductType(null);
     setUserFormData(null);
+    setMandateSetup(false);
+    setMandateDetails(null);
+    setCkycVerified(false);
     clearStoredState();
   }, []);
 
   const saveUserFormData = useCallback((formData) => {
     setUserFormData(formData);
+  }, []);
+
+  const completeMandate = useCallback((details) => {
+    setMandateSetup(true);
+    if (details) {
+      setMandateDetails(details);
+    }
+  }, []);
+
+  const completeCKYC = useCallback(() => {
+    setCkycVerified(true);
+  }, []);
+
+  const resetMandate = useCallback(() => {
+    setMandateSetup(false);
+    setMandateDetails(null);
   }, []);
 
   // Helper to get current state summary for debugging
@@ -119,7 +147,13 @@ export function OfferProvider({ children }) {
     userFormData,
     saveUserFormData,
     isHydrated,
-    getStateSummary
+    getStateSummary,
+    mandateSetup,
+    mandateDetails,
+    ckycVerified,
+    completeMandate,
+    completeCKYC,
+    resetMandate
   };
 
   return (
