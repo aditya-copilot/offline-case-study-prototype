@@ -109,16 +109,16 @@ function LoanApprovedPage({toolCallUtils}) {
             <div className="schedule-header">
               <span>Month</span>
               <span>EMI</span>
-              <span>Principal</span>
               <span>Interest</span>
+              <span>Status</span>
             </div>
             <div className="schedule-list">
               {SCHEDULE_DATA.map((row) => (
                 <div key={row.month} className="schedule-row">
                   <span className="month">{row.month}</span>
                   <span className="emi">₹{row.emi}</span>
-                  <span className="principal">₹{row.principal}</span>
                   <span className="interest">₹{row.interest}</span>
+                  <span className="status pending">○</span>
                 </div>
               ))}
             </div>

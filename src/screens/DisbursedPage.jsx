@@ -146,9 +146,9 @@ function DisbursedPage({toolCallUtils}) {
       <div className="disbursed-card">
         <div className="success-header">
           <div className="money-rain">
-            <span>💸</span>
-            <span>💸</span>
-            <span>💸</span>
+            <span>🪙</span>
+            <span>🪙</span>
+            <span>🪙</span>
           </div>
           <h1>Loan Disbursed!</h1>
           <p className="amount">₹{loanAmount.toLocaleString()}</p>
@@ -216,7 +216,7 @@ function DisbursedPage({toolCallUtils}) {
               <div className="schedule-header">
                 <span>Month</span>
                 <span>EMI</span>
-                <span>Principal</span>
+                <span>Interest</span>
                 <span>Status</span>
               </div>
               <div className="schedule-body">
@@ -224,7 +224,7 @@ function DisbursedPage({toolCallUtils}) {
                   <div key={row.month} className={`schedule-row ${row.status}`}>
                     <span className="month">{row.month}</span>
                     <span className="emi">₹{row.emi}</span>
-                    <span className="principal">₹{row.principal}</span>
+                    <span className="interest">₹{row.interest}</span>
                     <span className={`status ${row.status}`}>
                       {row.status === 'paid' ? '✓' : '○'}
                     </span>

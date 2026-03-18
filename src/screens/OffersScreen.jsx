@@ -1,141 +1,160 @@
 import { useState , useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useOffer } from '../context/OfferContext'
+import { getVehicleOffers } from '../data/bike/recommendationEngine'
 import './OffersScreen.css'
 
-const product = {
-  image: '📱',
-  name: 'iPhone 15 Pro',
-  items: ['256GB Storage', 'Natural Titanium', '1 Year Warranty'],
-  price: '₹1,20,000'
+const calculateEMI = (principal, tenureMonths, interestRate) => {
+  const monthlyRate = interestRate / 12 / 100
+  const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths) / (Math.pow(1 + monthlyRate, tenureMonths) - 1)
+  return Math.round(emi)
 }
 
-const lenderOffers = [
-  {
-    id: 1,
-    lenderName: 'ICICI Bank',
-    lenderLogo: '🏦',
-    amount: '₹1,20,000',
-    amountValue: 120000,
-    interestRate: '0%',
-    interestRateValue: 0,
-    term: '36 Months',
-    termMonths: 36,
-    termDisplay: '3 Years',
-    monthlyPayment: '₹3,333',
-    monthlyPaymentValue: 3333,
-    downpayment: 2000,
-    processingFee: 1200,
-    processingFeePercent: 1,
-    totalInterest: 0,
-    totalPayable: 121200,
-    features: ['Instant approval', 'Zero foreclosure charges', 'Flexible EMI'],
-    expiresIn: '5 days',
-    isRecommended: true,
-    isNoCostEMI: true
-  },
-  {
-    id: 2,
-    lenderName: 'HDB Financial',
-    lenderLogo: '🏛️',
-    amount: '₹1,20,000',
-    amountValue: 120000,
-    interestRate: '12.99%',
-    interestRateValue: 12.99,
-    term: '24 Months',
-    termMonths: 24,
-    termDisplay: '2 Years',
-    monthlyPayment: '₹5,600',
-    monthlyPaymentValue: 5600,
-    downpayment: 2000,
-    processingFee: 1200,
-    processingFeePercent: 1,
-    totalInterest: 15480,
-    totalPayable: 136680,
-    features: ['Quick disbursement', 'Minimal documentation'],
-    expiresIn: '12 days',
-    isRecommended: false,
-    isNoCostEMI: false
-  },
-  {
-    id: 3,
-    lenderName: 'TVS Credit',
-    lenderLogo: '🏍️',
-    amount: '₹1,20,000',
-    amountValue: 120000,
-    interestRate: '0%',
-    interestRateValue: 0,
-    term: '24 Months',
-    termMonths: 24,
-    termDisplay: '2 Years',
-    monthlyPayment: '₹5,000',
-    monthlyPaymentValue: 5000,
-    downpayment: 2000,
-    processingFee: 1200,
-    processingFeePercent: 1,
-    totalInterest: 0,
-    totalPayable: 122000,
-    features: ['Low interest', 'Easy EMIs', 'Fast processing'],
-    expiresIn: '8 days',
-    isRecommended: false,
-    isNoCostEMI: true
-  },
-  {
-    id: 4,
-    lenderName: 'Fibe',
-    lenderLogo: '💰',
-    amount: '₹1,20,000',
-    amountValue: 120000,
-    interestRate: '14.99%',
-    interestRateValue: 14.99,
-    term: '12 Months',
-    termMonths: 12,
-    termDisplay: '1 Year',
-    monthlyPayment: '₹10,400',
-    monthlyPaymentValue: 10400,
-    downpayment: 2000,
-    processingFee: 1200,
-    processingFeePercent: 1,
-    totalInterest: 17988,
-    totalPayable: 138988,
-    features: ['100% digital', 'Money in 10 mins', 'No collateral'],
-    expiresIn: '15 days',
-    isRecommended: false,
-    isNoCostEMI: false
-  },
-  {
+const generateDynamicOffers = (product) => {
+  const productPrice = product?.price || 120000
+  const isBike = product?.category?.includes('Two') || product?.category?.includes('Bike')
+  const isEV = product?.category?.includes('Electric')
+  const brand = product?.brand?.toLowerCase() || ''
+  
+  const downpayment = Math.max(2000, Math.round(productPrice * 0.02))
+  const loanAmount = productPrice - downpayment
+  
+  const offers = [
+    {
+      id: 1,
+      lenderName: 'ICICI Bank',
+      lenderLogo: '🏦',
+      lenderColor: '#1B5E20',
+      amount: `₹${loanAmount.toLocaleString()}`,
+      amountValue: loanAmount,
+      interestRate: '0%',
+      interestRateValue: 0,
+      term: '36 Months',
+      termMonths: 36,
+      termDisplay: '3 Years',
+      monthlyPayment: `₹${Math.round(loanAmount / 36).toLocaleString()}`,
+      monthlyPaymentValue: Math.round(loanAmount / 36),
+      downpayment: downpayment,
+      processingFee: Math.round(loanAmount * 0.01),
+      processingFeePercent: 1,
+      totalInterest: 0,
+      totalPayable: loanAmount + downpayment + Math.round(loanAmount * 0.01),
+      features: ['Instant approval', 'Zero foreclosure charges', 'Flexible EMI'],
+      expiresIn: '5 days',
+      isRecommended: productPrice > 100000,
+      isNoCostEMI: true,
+      badge: 'AI Pick'
+    },
+    {
+      id: 2,
+      lenderName: 'HDB Financial',
+      lenderLogo: '🏛️',
+      lenderColor: '#1565C0',
+      amount: `₹${loanAmount.toLocaleString()}`,
+      amountValue: loanAmount,
+      interestRate: '12.99%',
+      interestRateValue: 12.99,
+      term: '24 Months',
+      termMonths: 24,
+      termDisplay: '2 Years',
+      monthlyPayment: `₹${calculateEMI(loanAmount, 24, 12.99).toLocaleString()}`,
+      monthlyPaymentValue: calculateEMI(loanAmount, 24, 12.99),
+      downpayment: downpayment,
+      processingFee: Math.round(loanAmount * 0.01),
+      processingFeePercent: 1,
+      totalInterest: Math.round(calculateEMI(loanAmount, 24, 12.99) * 24 - loanAmount),
+      totalPayable: downpayment + calculateEMI(loanAmount, 24, 12.99) * 24 + Math.round(loanAmount * 0.01),
+      features: ['Quick disbursement', 'Minimal documentation'],
+      expiresIn: '12 days',
+      isRecommended: false,
+      isNoCostEMI: false,
+      badge: null
+    }
+  ]
+  
+  if (isBike && (brand.includes('tvs') || brand.includes('bajaj'))) {
+    offers.push({
+      id: 3,
+      lenderName: 'TVS Credit',
+      lenderLogo: '🏍️',
+      lenderColor: '#E65100',
+      amount: `₹${loanAmount.toLocaleString()}`,
+      amountValue: loanAmount,
+      interestRate: '0%',
+      interestRateValue: 0,
+      term: '24 Months',
+      termMonths: 24,
+      termDisplay: '2 Years',
+      monthlyPayment: `₹${Math.round(loanAmount / 24).toLocaleString()}`,
+      monthlyPaymentValue: Math.round(loanAmount / 24),
+      downpayment: downpayment,
+      processingFee: 0,
+      processingFeePercent: 0,
+      totalInterest: 0,
+      totalPayable: loanAmount + downpayment,
+      features: ['Zero processing fee', 'Easy EMIs', 'Fast processing'],
+      expiresIn: '8 days',
+      isRecommended: false,
+      isNoCostEMI: true,
+      badge: 'Brand Special'
+    })
+  }
+  
+  if (isEV) {
+    offers.push({
+      id: 4,
+      lenderName: 'Fibe',
+      lenderLogo: '⚡',
+      lenderColor: '#2E7D32',
+      amount: `₹${loanAmount.toLocaleString()}`,
+      amountValue: loanAmount,
+      interestRate: '14.99%',
+      interestRateValue: 14.99,
+      term: '12 Months',
+      termMonths: 12,
+      termDisplay: '1 Year',
+      monthlyPayment: `₹${calculateEMI(loanAmount, 12, 14.99).toLocaleString()}`,
+      monthlyPaymentValue: calculateEMI(loanAmount, 12, 14.99),
+      downpayment: downpayment,
+      processingFee: Math.round(loanAmount * 0.01),
+      processingFeePercent: 1,
+      totalInterest: Math.round(calculateEMI(loanAmount, 12, 14.99) * 12 - loanAmount),
+      totalPayable: downpayment + calculateEMI(loanAmount, 12, 14.99) * 12 + Math.round(loanAmount * 0.01),
+      features: ['100% digital', 'Money in 10 mins', 'No collateral', '₹15,000 EV subsidy included'],
+      expiresIn: '15 days',
+      isRecommended: false,
+      isNoCostEMI: false,
+      badge: 'EV Special'
+    })
+  }
+  
+  offers.push({
     id: 5,
     lenderName: 'Bajaj Finserv',
     lenderLogo: '🏢',
-    amount: '₹1,20,000',
-    amountValue: 120000,
+    lenderColor: '#0066B3',
+    amount: `₹${loanAmount.toLocaleString()}`,
+    amountValue: loanAmount,
     interestRate: '0%',
     interestRateValue: 0,
     term: '36 Months',
     termMonths: 36,
     termDisplay: '3 Years',
-    monthlyPayment: '₹3,333',
-    monthlyPaymentValue: 3333,
-    downpayment: 2000,
-    processingFee: 1200,
+    monthlyPayment: `₹${Math.round(loanAmount / 36).toLocaleString()}`,
+    monthlyPaymentValue: Math.round(loanAmount / 36),
+    downpayment: downpayment,
+    processingFee: Math.round(loanAmount * 0.01),
     processingFeePercent: 1,
     totalInterest: 0,
-    totalPayable: 121200,
-    features: ['Flexible tenure', 'Pre-approved'],
+    totalPayable: loanAmount + downpayment + Math.round(loanAmount * 0.01),
+    features: ['Flexible tenure', 'Pre-approved', 'No documentation'],
     expiresIn: '20 days',
     isRecommended: false,
-    isNoCostEMI: true
-  }
-]
-
-function extractJSON(text) {
-  const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
-  if (!match) return null;
-  try {
-    return JSON.parse(match[0]);
-  } catch (e) {
-    return null;
-  }
+    isNoCostEMI: true,
+    badge: null
+  })
+  
+  return offers.sort((a, b) => (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0))
 }
 
 function OffersScreen({toolCallUtils}) {
@@ -189,9 +208,43 @@ function OffersScreen({toolCallUtils}) {
   } , [])
 
   const navigate = useNavigate()
-  const { setSelectedOffer } = useOffer()
-
+  const { selectedOffer, setSelectedOffer, selectedProduct, productType } = useOffer()
   const [modalOffer, setModalOffer] = useState(null)
+  const [lenderOffers, setLenderOffers] = useState([])
+  const [selectedTenure, setSelectedTenure] = useState(36)
+  const [loading, setLoading] = useState(true)
+
+  const handleGoBack = () => {
+    navigate(-1)
+  }
+
+  const product = selectedProduct || {
+    image: 'https://assets.otocapital.in/staging/09403d52-dac4-4521-9b83-491fa84bb52d.jpeg',
+    name: 'Honda CB Shine',
+    items: ['125cc Engine', '65 kmpl Mileage', '1 Year Warranty', 'Electric Start'],
+    price: 120000,
+    brand: 'Honda',
+    category: 'Two Wheeler',
+    specs: { power: '125 cc', mileage: '65 kmpl' },
+    rating: 4.2
+  }
+
+  useEffect(() => {
+    setLoading(true)
+    const timer = setTimeout(() => {
+      const offers = generateDynamicOffers(product)
+      setLenderOffers(offers)
+      setLoading(false)
+    }, 800)
+    return () => clearTimeout(timer)
+  }, [selectedProduct])
+
+  useEffect(() => {
+    document.body.style.overflow = modalOffer ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [modalOffer])
 
   const handleSelectOffer = (offer) => {
     setModalOffer(offer)
@@ -203,167 +256,193 @@ function OffersScreen({toolCallUtils}) {
 
   const handleApplyNow = (offer) => {
     setSelectedOffer(offer)
-    console.log("Selected offer: " , offer)
     navigate('/checkout/cykc')
+  }
+
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(price)
+  }
+
+  if (loading) {
+    return (
+      <div className="offers-screen-container">
+        <div className="offers-loading">
+          <div className="loading-spinner"></div>
+          <p>Finding the best loan offers for you...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="offers-screen-container">
-      {/* Header */}
       <div className="offers-header">
-        <div className="offers-header-left">
-          <div className="offers-icon">
+        <div className="offers-header-content">
+          <button className="back-btn" onClick={handleGoBack} aria-label="Go back">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
-          </div>
-          <div className="offers-header-info">
-            <h1>Your Loan Offers</h1>
-            <p>AI-powered recommendations</p>
+          </button>
+          <div className="offers-brand">
+            <div className="offers-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+            </div>
+            <div className="offers-title">
+              <h1>Your Loan Offers</h1>
+              <p>AI-powered recommendations for {product.name}</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="offers-content">
-        {/* Product Section - Sticky on Top */}
-        <div className="product-section-container">
-          <div className="product-section">
-            <div className="product-image">{product.image}</div>
-            <div className="product-info">
-              <h3 className="product-name">{product.name}</h3>
-              <div className="product-items">
-                {product.items.map((item, index) => (
-                  <span key={index} className="product-item">
-                    <span className="item-bullet">•</span>
-                    {item}
-                  </span>
-                ))}
+        <div className="product-section-card">
+          <div className="product-image-wrapper">
+            <img src={product.image} alt={product.name} />
+            {product.rating && (
+              <div className="product-rating">
+                <span>⭐</span>
+                <span>{product.rating}</span>
               </div>
+            )}
+          </div>
+          <div className="product-details">
+            <div className="product-header">
+              <h3 className="product-name">{product.name}</h3>
+              <span className="product-brand">{product.brand}</span>
             </div>
-            <div className="product-price">
-              <span className="price-label">Price</span>
-              <span className="price-value">{product.price}</span>
+            <div className="product-specs">
+              {product.items?.slice(0, 3).map((item, index) => (
+                <span key={index} className="spec-chip">{item}</span>
+              ))}
             </div>
+          </div>
+          <div className="product-price-section">
+            <span className="price-label">Ex-Showroom Price</span>
+            <span className="price-value">{formatPrice(product.price)}</span>
           </div>
         </div>
 
-        {/* Offers List */}
-        <div className="offers-list">
+        <div className="offers-grid">
           {lenderOffers.map((offer) => (
             <div
               key={offer.id}
               className={`offer-card ${offer.isRecommended ? 'recommended' : ''}`}
               onClick={() => handleSelectOffer(offer)}
             >
-              {/* Card Header */}
-              <div className="offer-card-header">
-                <div className="offer-bank-info">
-                  <span className="offer-bank-logo">{offer.lenderLogo}</span>
-                  <div>
-                    <h3 className="offer-bank-name">{offer.lenderName}</h3>
-                  </div>
+              {offer.isRecommended && (
+                <div className="recommended-badge">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                  AI Recommended
                 </div>
-                {offer.isRecommended && (
-                  <div className="ai-badge">
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
-                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                    </svg>
-                    <span>AI Pick</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Key Details Grid */}
-              <div className="offer-details-grid">
-                <div className="detail-item">
-                  <div className="detail-icon">📅</div>
-                  <div className="detail-content">
-                    <span className="detail-value">{offer.term}</span>
-                    <span className="detail-label">Duration</span>
-                  </div>
+              )}
+              
+              {offer.badge && !offer.isRecommended && (
+                <div className="special-badge" style={{ background: offer.lenderColor }}>
+                  {offer.badge}
                 </div>
-                <div className="detail-item">
-                  <div className="detail-icon">📈</div>
-                  <div className="detail-content">
-                    <span className="detail-value">{offer.interestRate}</span>
-                    <span className="detail-label">Interest</span>
-                  </div>
-                </div>
-                <div className="detail-item">
-                  <div className="detail-icon">💳</div>
-                  <div className="detail-content">
-                    <span className="detail-value">{offer.monthlyPayment}</span>
-                    <span className="detail-label">/month</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="offer-features-row">
-                {offer.isNoCostEMI && (
-                  <span className="feature-pill no-cost-emi">
-                    <span className="feature-dot">⚡</span>
-                    No Cost EMI
+              )}
+              
+              <div className="offer-header">
+                <div className="lender-info">
+                  <span className="lender-logo" style={{ background: offer.lenderColor }}>
+                    {offer.lenderLogo}
                   </span>
-                )}
-                {offer.features.slice(0, offer.isNoCostEMI ? 1 : 2).map((feature, index) => (
-                  <span key={index} className="feature-pill">
+                  <div>
+                    <h3 className="lender-name">{offer.lenderName}</h3>
+                    <span className="loan-type">
+                      {offer.isNoCostEMI ? 'No Cost EMI' : 'Standard Loan'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="offer-stats">
+                <div className="stat-item">
+                  <span className="stat-icon">📅</span>
+                  <div className="stat-content">
+                    <span className="stat-value">{offer.term}</span>
+                    <span className="stat-label">Duration</span>
+                  </div>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-icon">📈</span>
+                  <div className="stat-content">
+                    <span className="stat-value">{offer.interestRate}</span>
+                    <span className="stat-label">Interest</span>
+                  </div>
+                </div>
+                <div className="stat-item highlight">
+                  <span className="stat-icon">💳</span>
+                  <div className="stat-content">
+                    <span className="stat-value">{offer.monthlyPayment}</span>
+                    <span className="stat-label">per month</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="offer-features">
+                {offer.features.slice(0, 2).map((feature, index) => (
+                  <span key={index} className="feature-tag">
                     <span className="feature-dot">✓</span>
                     {feature}
                   </span>
                 ))}
               </div>
 
-              {/* Apply Button */}
-              <button className="offer-cta-button">
-                Apply Now
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+              <div className="offer-footer">
+                <span className="expires">⏰ Expires in {offer.expiresIn}</span>
+                <button className="apply-btn">
+                  Apply Now
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Offer Detail Modal */}
       {modalOffer && (
         <div className="offer-modal-overlay" onClick={handleCloseModal}>
           <div className="offer-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="offer-modal-header">
-              <div className="modal-bank-info">
-                <span className="modal-bank-logo">{modalOffer.lenderLogo}</span>
+            <div className="modal-header">
+              <div className="modal-lender">
+                <span className="modal-logo" style={{ background: modalOffer.lenderColor }}>
+                  {modalOffer.lenderLogo}
+                </span>
                 <div>
                   <h2>{modalOffer.lenderName}</h2>
-                  <span className="modal-loan-type">{modalOffer.offerType}</span>
+                  <span className="modal-type">
+                    {modalOffer.isNoCostEMI ? 'No Cost EMI' : 'Standard Loan'}
+                  </span>
                 </div>
               </div>
-              <button className="offer-modal-close" onClick={handleCloseModal}>
+              <button className="modal-close" onClick={handleCloseModal}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <div className="offer-modal-content">
-              <div className="modal-amount-section">
-                <span className="modal-amount-label">Loan Amount</span>
-                <span className="modal-amount-value">{modalOffer.amount}</span>
-              </div>
-              <div className="modal-details-grid">
-                <div className="modal-detail-box">
-                  <span className="modal-detail-icon">📅</span>
-                  <span className="modal-detail-label">Tenure</span>
-                  <span className="modal-detail-value">{modalOffer.term}</span>
+            
+            <div className="modal-content">
+              <div className="loan-summary">
+                <div className="summary-row">
+                  <span className="summary-label">Loan Amount</span>
+                  <span className="summary-value">{modalOffer.amount}</span>
                 </div>
-                <div className="modal-detail-box">
-                  <span className="modal-detail-icon">📈</span>
-                  <span className="modal-detail-label">Interest Rate</span>
-                  <span className="modal-detail-value">{modalOffer.interestRate}</span>
-                </div>
-                <div className="modal-detail-box">
-                  <span className="modal-detail-icon">💳</span>
-                  <span className="modal-detail-label">Monthly EMI</span>
-                  <span className="modal-detail-value">{modalOffer.monthlyPayment}</span>
+                <div className="summary-row">
+                  <span className="summary-label">Down Payment</span>
+                  <span className="summary-value">₹{modalOffer.downpayment.toLocaleString()}</span>
                 </div>
               </div>
               <div className="modal-breakup">
@@ -396,9 +475,9 @@ function OffersScreen({toolCallUtils}) {
               </div>
               <div className="modal-features">
                 <h4>Key Benefits</h4>
-                <div className="modal-features-list">
+                <div className="features-list">
                   {modalOffer.features.map((feature, index) => (
-                    <div key={index} className="modal-feature-item">
+                    <div key={index} className="feature-item">
                       <span className="check-icon">✓</span>
                       <span>{feature}</span>
                     </div>
@@ -406,11 +485,12 @@ function OffersScreen({toolCallUtils}) {
                 </div>
               </div>
             </div>
-            <div className="offer-modal-actions">
-              <button 
-                className="offer-modal-btn primary"
-                onClick={() => handleApplyNow(modalOffer)}
-              >
+            
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={handleCloseModal}>
+                Cancel
+              </button>
+              <button className="confirm-btn" onClick={() => handleApplyNow(modalOffer)}>
                 Apply Now
               </button>
             </div>

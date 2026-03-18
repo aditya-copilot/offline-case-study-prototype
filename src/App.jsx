@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
-import { BrowserRouter as Router, Routes, Route, NavLink, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { OfferProvider } from './context/OfferContext'
+import { ToastProvider } from './context/ToastContext'
+import ErrorBoundary from './Components/ErrorBoundary'
+import ProgressBar from './Components/ProgressBar'
+import ProductCatalog from './screens/ProductCatalog'
+import BikeShowroom from './screens/bike/BikeShowroom'
 import AIChatWidget from './Components/AIChatWidget'
-import InstantEMIForm from './Components/InstantEMIForm'
-import VoiceChatbot from './Components/StickyChat'
+import TwoWheelerChatWidget from './Components/bike/TwoWheelerChatWidget'
 import OffersScreen from './screens/OffersScreen'
 import CYKCPage from './screens/CYKCPage'
 import MandatePage from './screens/MandatePage'
@@ -12,8 +15,13 @@ import KFSPage from './screens/KFSPage'
 import LoanApprovedPage from './screens/LoanApprovedPage'
 import InvoicePage from './screens/InvoicePage'
 import DisbursedPage from './screens/DisbursedPage'
+import NotFoundPage from './screens/NotFoundPage'
 import ChatBot from './Components/ChatBot.jsx'
 import './App.css'
+
+const APP_MODE = import.meta.env.VITE_APP_MODE || 'electronics'
+const IS_BIKE_MODE = APP_MODE === 'bike'
+const IS_ELECTRONICS_MODE = APP_MODE === 'electronics'
 
 function extractJSON(text) {
   const match = text.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
@@ -61,6 +69,117 @@ function speakText(text) {
   window.speechSynthesis.speak(utterance);
 }
 
+function Navigation() {
+  const location = useLocation()
+  
+  if (IS_BIKE_MODE || IS_ELECTRONICS_MODE) {
+    return null
+  }
+  
+  const navItems = [
+    { path: '/', label: 'Electronics', icon: '📱' },
+    { path: '/showroom', label: '2-Wheeler Showroom', icon: '🏍️' },
+  ]
+  
+  const isActive = (path) => {
+    if (path === '/') {
+      return location.pathname === '/' || location.pathname === '/checkout' || location.pathname.includes('user-input')
+    }
+    return location.pathname.startsWith(path)
+  }
+  
+  return (
+    <nav className="app-navigation">
+      <div className="nav-brand">
+        <span className="nav-logo">🏪</span>
+        <span className="nav-title">HyperCredit</span>
+      </div>
+      <div className="nav-links">
+        {navItems.map(item => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+          >
+            <span className="nav-icon">{item.icon}</span>
+            <span className="nav-label">{item.label}</span>
+          </NavLink>
+        ))}
+      </div>
+    </nav>
+  )
+}
+
+function AppContent({ 
+  messages, inputMode, speechSupported, uploadedImage, fileInputRef, 
+  handleImageUpload, message, handleKeyPress, handleSend, setInputMode, 
+  isListening, toggleListening, isTyping, messagesEndRef, setMessage, 
+  toolCallUtils 
+}) {
+  const location = useLocation()
+  const showProgress = ['/checkout/offer', '/checkout/cykc', '/checkout/mandate', '/checkout/kfs', '/checkout/approved', '/checkout/invoice', '/checkout/disbursed'].some(path =>
+    location.pathname.includes(path)
+  )
+  
+  return (
+    <div className={`app-container ${IS_BIKE_MODE || IS_ELECTRONICS_MODE ? 'single-mode' : ''}`}>
+      <Navigation />
+      {showProgress && <ProgressBar />}
+      <div className="app-content">
+        <Routes>
+          <Route path="/checkout/offer" element={<OffersScreen toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/cykc" element={<CYKCPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/mandate" element={<MandatePage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/kfs" element={<KFSPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/approved" element={<LoanApprovedPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/invoice" element={<InvoicePage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/disbursed" element={<DisbursedPage toolCallUtils={toolCallUtils} />} />
+          
+          {IS_BIKE_MODE ? (
+            <>
+              <Route path="/chat" element={<TwoWheelerChatWidget toolCallUtils={toolCallUtils} />} />
+              <Route path="/checkout/user-input" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
+              <Route path="/" element={<BikeShowroom toolCallUtils={toolCallUtils} />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </>
+          ) : IS_ELECTRONICS_MODE ? (
+            <>
+              <Route path="/chat" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
+              <Route path="/checkout/user-input" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
+              <Route path="/" element={<ProductCatalog toolCallUtils={toolCallUtils} />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </>
+          ) : (
+            <>
+              <Route path="/showroom/*" element={<TwoWheelerChatWidget toolCallUtils={toolCallUtils} />} />
+              <Route path="/chat" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
+              <Route path="/" element={<ProductCatalog toolCallUtils={toolCallUtils} />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </>
+          )}
+        </Routes>
+      </div>
+      <ChatBot 
+        messages={messages} 
+        inputMode={inputMode} 
+        speechSupported={speechSupported} 
+        uploadedImage={uploadedImage} 
+        fileInputRef={fileInputRef} 
+        handleImageUpload={handleImageUpload} 
+        message={message} 
+        handleKeyPress={handleKeyPress} 
+        handleSend={handleSend} 
+        setInputMode={setInputMode} 
+        isListening={isListening} 
+        toggleListening={toggleListening} 
+        isTyping={isTyping} 
+        messagesEndRef={messagesEndRef}
+        setMessage={setMessage}
+      />
+    </div>
+  )
+}
+
 function App() {
   const [messages, setMessages] = useState([])
   const [isTyping, setIsTyping] = useState(false)
@@ -86,7 +205,7 @@ function App() {
     if(inputMode != 'speech'){
       setIsListening(false)
     }
-  } , [inputMode])
+  }, [inputMode])
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
@@ -136,17 +255,20 @@ function App() {
       reader.readAsDataURL(file)
     }
   }
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSend()
     }
   }
+
   const handleSend = () => {
     if (message.trim() || uploadedImage) {
       sendMessage(message, uploadedImage)
     }
   }
+
   const toggleListening = () => {
     if (!recognitionRef.current) return
 
@@ -176,7 +298,6 @@ function App() {
     setUploadedImage(null)
     setIsTyping(true)
 
-    // Search for products
     const response = await callBackend(fullPrompt, messages, imageData)
     const botMessage = {
       id: Date.now() + 1,
@@ -189,9 +310,7 @@ function App() {
     if (inputModeRef.current == 'speech'){
       speakText(removeEmojis(toolCallUtils.getDisplayResponse(response)))
     }
-    else{
-      console.log("Not speaking AI response because input mode is:", inputMode)
-    }
+    
     setIsTyping(false)
     return response
 
@@ -252,23 +371,30 @@ function App() {
   }
 
   return (
-    <OfferProvider>
-      <Router>
-        <div className="app-container">
-          <Routes>
-            <Route path="/checkout/offer" element={<OffersScreen toolCallUtils={toolCallUtils}/>} />
-            <Route path="/checkout/cykc" element={<CYKCPage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/checkout/mandate" element={<MandatePage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/checkout/kfs" element={<KFSPage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/checkout/approved" element={<LoanApprovedPage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/checkout/invoice" element={<InvoicePage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/checkout/disbursed" element={<DisbursedPage toolCallUtils={toolCallUtils}/>} />
-            <Route path="/*" element={<AIChatWidget toolCallUtils={toolCallUtils}/>} />
-          </Routes>
-          <ChatBot messages={messages} inputMode={inputMode} speechSupported={speechSupported} uploadedImage={uploadedImage} fileInputRef={fileInputRef} handleImageUpload ={handleImageUpload} message={message} handleKeyPress={handleKeyPress} handleSend={handleSend} setInputMode={setInputMode} isListening={isListening} toggleListening={toggleListening} isTyping={isTyping} messagesEndRef={messagesEndRef} />
-        </div>
-      </Router>
-    </OfferProvider>
+    <ToastProvider>
+      <OfferProvider>
+        <Router>
+          <AppContent 
+            messages={messages} 
+            inputMode={inputMode} 
+            speechSupported={speechSupported} 
+            uploadedImage={uploadedImage} 
+            fileInputRef={fileInputRef} 
+            handleImageUpload={handleImageUpload} 
+            message={message} 
+            handleKeyPress={handleKeyPress} 
+            handleSend={handleSend} 
+            setInputMode={setInputMode} 
+            isListening={isListening} 
+            toggleListening={toggleListening} 
+            isTyping={isTyping} 
+            messagesEndRef={messagesEndRef}
+            setMessage={setMessage}
+            toolCallUtils={toolCallUtils}
+          />
+        </Router>
+      </OfferProvider>
+    </ToastProvider>
   )
 }
 

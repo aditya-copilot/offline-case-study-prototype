@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './ProductDetail.css'
 import InstantEMIForm from './InstantEMIForm'
+import { useOffer } from '../context/OfferContext'
 
 const StarIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -41,6 +43,8 @@ const ShareIcon = () => (
 )
 
 export default function ProductDetail({ product, onBack }) {
+  const navigate = useNavigate()
+  const { selectProduct } = useOffer()
   const [showEMIForm, setShowEMIForm] = useState(false)
   
   const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100)
@@ -54,6 +58,17 @@ export default function ProductDetail({ product, onBack }) {
   }
 
   const handleBuyNow = () => {
+    // Store selected product in context
+    selectProduct({
+      id: product.id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      rating: product.rating,
+      offers: product.offers
+    }, 'electronics')
     setShowEMIForm(true)
   }
 
@@ -61,12 +76,19 @@ export default function ProductDetail({ product, onBack }) {
     setShowEMIForm(false)
   }
 
+  useEffect(() => {
+    document.body.style.overflow = showEMIForm ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [showEMIForm])
+
     useEffect(() => {
       if(showEMIForm){
-        window.location.href = "/checkout/user-input"
+        navigate('/checkout/user-input')
         return;
       }
-    }, [showEMIForm])
+    }, [showEMIForm, navigate])
 
   return (
     <div className="product-detail-overlay">
@@ -174,7 +196,7 @@ export default function ProductDetail({ product, onBack }) {
             <div className="product-detail-buy-section">
               <button className="buy-now-btn" onClick={handleBuyNow}>
                 <ShoppingCartIcon />
-                Buy Now
+                Apply for Loan
               </button>
             </div>
           </div>

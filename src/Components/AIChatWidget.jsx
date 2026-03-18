@@ -5,7 +5,10 @@ import InstantEMIForm from './InstantEMIForm'
 import ProductGrid from './ProductGrid'
 import ProductGallery from './ProductGallery'
 import VisualResponse from './VisualResponse'
+import { SearchBar } from './SearchBar'
 import { products, searchProducts, getProductByName, getSearchMeta } from '../data/products'
+import { searchProductsWithAI, getAssistantResponse, analyzeImage } from '../services/apiService'
+import { useDebounce } from '../hooks/useDebounce'
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -522,6 +525,13 @@ Only return the JSON array of product IDs, nothing else.`
     setSelectedProduct(null)
   }
 
+  useEffect(() => {
+    document.body.style.overflow = selectedProduct ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [selectedProduct])
+
   // Handle offers scroll to update active center card
   const handleOffersScroll = useCallback(() => {
     if (!offersScrollRef.current) return
@@ -546,24 +556,23 @@ Only return the JSON array of product IDs, nothing else.`
   }
 
   return (
-    <div className="ai-fullscreen-container">
-      {/* Header */}
-      <div className="ai-fullscreen-header">
+    <div className="ai-fullscreen-container" role="main" aria-label="Shopping Assistant Chat">
+      <header className="ai-fullscreen-header" role="banner">
         <div className="ai-header-left">
-          <div className="ai-bot-avatar">
+          <div className="ai-bot-avatar" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="12" cy="8" r="5" />
               <path d="M20 21a8 8 0 1 0-16 0" />
             </svg>
           </div>
           <div className="ai-header-info">
-            <h1>Shopping Assistant</h1>
-            <span className={`ai-status ${isTyping ? 'typing' : ''}`}>
+            <h1 id="chat-title">Shopping Assistant</h1>
+            <span className={`ai-status ${isTyping ? 'typing' : ''}`} role="status" aria-live="polite">
               {isTyping ? 'Typing...' : 'Online'}
             </span>
           </div>
         </div>
-      </div>
+      </header>
 
 
       {/* Messages Area */}

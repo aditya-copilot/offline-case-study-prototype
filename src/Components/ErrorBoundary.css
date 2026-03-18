@@ -1,0 +1,113 @@
+.error-boundary {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  padding: 24px;
+}
+
+.error-container {
+  background: var(--bg-primary);
+  border-radius: var(--radius-2xl);
+  padding: 48px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: var(--shadow-xl);
+}
+
+.error-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: var(--error-50);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-icon svg {
+  width: 40px;
+  height: 40px;
+  color: var(--error-500);
+}
+
+.error-container h1 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.error-container p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.error-details {
+  margin: 24px 0;
+  text-align: left;
+}
+
+.error-details details {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.error-details summary {
+  font-weight: var(--font-semibold);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.error-details pre {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--gray-800);
+  color: var(--gray-100);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.error-actions button {
+  padding: 12px 24px;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-secondary);
+}
