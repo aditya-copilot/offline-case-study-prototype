@@ -152,7 +152,7 @@ export default function BikeShowroom() {
 
   useEffect(() => {
     const BASE_URL = import.meta.env.VITE_BASE_URL
-    const pollInterval = 5000
+    const pollInterval = 1000
     let lastNearestReceiver = null
     let intervalId = null
 

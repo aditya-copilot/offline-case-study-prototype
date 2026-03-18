@@ -134,18 +134,17 @@ function AppContent({
           <Route path="/approved" element={<LoanApprovedPage toolCallUtils={toolCallUtils} />} />
           <Route path="/invoice" element={<InvoicePage toolCallUtils={toolCallUtils} />} />
           <Route path="/disbursed" element={<DisbursedPage toolCallUtils={toolCallUtils} />} />
+          <Route path="/checkout/user-input" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
           
           {IS_BIKE_MODE ? (
             <>
               <Route path="/chat" element={<TwoWheelerChatWidget toolCallUtils={toolCallUtils} />} />
-              <Route path="/checkout/user-input" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
               <Route path="/" element={<BikeShowroom toolCallUtils={toolCallUtils} />} />
               <Route path="*" element={<NotFoundPage />} />
             </>
           ) : IS_ELECTRONICS_MODE ? (
             <>
               <Route path="/chat" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
-              <Route path="/checkout/user-input" element={<AIChatWidget toolCallUtils={toolCallUtils} />} />
               <Route path="/" element={<ProductCatalog toolCallUtils={toolCallUtils} />} />
               <Route path="*" element={<NotFoundPage />} />
             </>
