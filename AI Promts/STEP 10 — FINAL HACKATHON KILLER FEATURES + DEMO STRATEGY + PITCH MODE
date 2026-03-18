@@ -1,0 +1,151 @@
+You are a world-class startup demo strategist, product storytelling expert, and principal innovation architect.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build the FINAL Hackathon Winning Layer that ensures:
+
+* Judges emotionally connect with the product
+* Innovation value is clearly communicated
+* Demo runs flawlessly without human mistakes
+* System feels like a real venture-backed startup
+
+GOALS:
+
+Create a complete Demo Strategy Engine, Killer Feature Packaging System, and Pitch Mode that transforms the product into a hackathon-winning experience.
+
+ARCHITECTURE REQUIREMENTS:
+
+1. KILLER FEATURE HIGHLIGHT ENGINE
+
+Create system that dynamically showcases:
+
+* AI recommendation intelligence
+* Offline autonomy
+* BLE spatial awareness
+* Smart route optimization
+* Behavioral analytics
+* Gamification engagement
+
+Add:
+
+Feature spotlight overlays
+Auto-focus transitions
+Innovation impact labels
+
+2. DEMO SCRIPT AUTOMATION
+
+Create:
+
+DemoOrchestrator
+
+Which can:
+
+* Run scripted store journey
+* Trigger simulated BLE movement
+* Show AI decision moments
+* Highlight analytics insights
+* Trigger gamification rewards
+* Present predictive intelligence
+
+Must support:
+
+Manual mode
+Auto demo mode
+
+3. PITCH MODE UI
+
+Create:
+
+PitchPresentationLayer
+
+Includes:
+
+* Slide-like UI transitions
+* Problem → Solution → Tech → Impact storytelling
+* Investor-style metrics visualization
+* Market opportunity mock insights
+* Business model simulation
+
+4. INNOVATION SCORE VISUALIZER
+
+Create dashboard showing:
+
+* System intelligence score
+* Engagement score
+* Retail efficiency improvement estimate
+* AI impact projection
+
+5. SYSTEM NARRATIVE ENGINE
+
+Create contextual storytelling:
+
+* "Customer enters store"
+* "AI detects intent"
+* "Navigation optimizes journey"
+* "Gamification increases engagement"
+* "Analytics improves retail strategy"
+
+6. FAILSAFE DEMO MODE
+
+Ensure:
+
+* No crashes
+* Predictable BLE simulation
+* Smooth animation fallback
+* Offline resilience messaging
+
+7. HACKATHON WOW FEATURES
+
+Add:
+
+* Predictive shopping future vision screen
+* AR-ready architecture explanation panel
+* Edge AI roadmap visualization
+* Multi-store scaling simulation
+* Smart city retail integration concept
+
+8. FINAL UX POLISH
+
+Add:
+
+* Celebration animations
+* Success journey summary
+* Intelligent session recap
+* AI generated shopping story
+
+9. DEMO PAGE
+
+Create:
+
+/pitch-lab
+
+Must feel like:
+
+Apple keynote + YC demo + futuristic retail vision.
+
+10. OFFLINE FIRST
+
+Entire demo must run without internet.
+
+11. ADVANCED TOUCH
+
+Add:
+
+"Startup launch cinematic intro animation"
+
+12. OUTPUT
+
+Provide FULL:
+
+* demo orchestrator
+* pitch UI
+* killer feature system
+* storytelling engine
+* wow feature modules
+* final integration hooks
+
+This must look like a real startup demo product ready for investors.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.

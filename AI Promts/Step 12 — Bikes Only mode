@@ -1,0 +1,158 @@
+You are a senior frontend platform architect, retail domain modeling expert, and AI systems integration engineer.
+
+You are given a large-scale offline-first React PWA project:
+
+Offline Smart Store Navigator
+
+This project has now been converted into:
+
+Offline Smart Two-Wheeler Experience Store
+
+DATA SOURCES:
+
+Vehicle dataset location:
+src/data/vehicles/twowheelerProducts.json
+
+Bike images location:
+src/assets/images/bikes/
+
+TASK:
+
+Create a FULL data integration system so that:
+
+* All UI renders real vehicles
+* AI uses real dataset
+* Navigation derives zones dynamically
+* Analytics uses real vehicle categories
+* Gamification uses real product exploration
+* No hardcoded demo data remains
+
+---
+
+STEP 1 — DATASET LOADER
+
+Create:
+
+src/core/data/vehicleDataLoader.ts
+
+This must:
+
+* Load JSON dataset
+* Validate schema
+* Normalize fields
+* Index by id
+* Group by zone
+* Group by category
+* Group by fuel type
+
+---
+
+STEP 2 — IMAGE RESOLUTION ENGINE
+
+Create:
+
+src/core/assets/vehicleImageResolver.ts
+
+System must:
+
+* Map product id → image file
+* Support fallback image
+* Lazy load images
+* Preload hero vehicles
+
+---
+
+STEP 3 — VEHICLE DOMAIN MODEL
+
+Create strong types:
+
+Vehicle
+EVVehicle
+PetrolBike
+Scooter
+PremiumBike
+
+---
+
+STEP 4 — DYNAMIC NAVIGATION ZONES
+
+Navigation engine must derive zones from dataset:
+
+Example:
+
+If dataset contains:
+fuel_type = Electric → EV Zone
+category = Scooter → Scooter Zone
+
+---
+
+STEP 5 — AI CONTEXT PIPELINE
+
+AI Recommendation Engine must consume:
+
+* Real product specs
+* Price distribution
+* Brand clusters
+* Feature tags
+* Zone layout
+
+---
+
+STEP 6 — ANALYTICS DATA MAPPING
+
+Analytics must track:
+
+* Most viewed vehicle
+* Zone heatmap
+* Price interest band
+* Fuel preference trend
+
+---
+
+STEP 7 — GAMIFICATION DATA INTEGRATION
+
+Missions must use real vehicles:
+
+* Find highest range EV
+* Discover cheapest scooter
+* Explore premium bike zone
+
+---
+
+STEP 8 — UI CARD SYSTEM
+
+Create reusable:
+
+VehicleCard
+VehicleDetailPanel
+ComparisonView
+
+---
+
+STEP 9 — PERFORMANCE
+
+* Image lazy loading
+* Dataset caching
+* IndexedDB persistence
+
+---
+
+STEP 10 — OUTPUT
+
+Provide FULL:
+
+* dataset loader
+* image resolver
+* domain models
+* UI bindings
+* navigation integration
+* AI integration
+* analytics integration
+* gamification integration
+
+This must look like real EV showroom intelligence platform.
+
+DO NOT simplify.
+
+Output FULL production-ready integration.
+

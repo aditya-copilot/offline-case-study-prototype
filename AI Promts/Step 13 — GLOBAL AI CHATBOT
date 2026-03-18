@@ -1,0 +1,194 @@
+You are a principal conversational AI architect, multimodal interaction designer, and senior React platform engineer.
+
+Extend the existing Offline Smart Two-Wheeler Experience Store PWA.
+
+Build a GLOBAL AI ASSISTANT SYSTEM that is available on ALL screens.
+
+The assistant must be dataset-driven and integrated with the existing AI Recommendation Engine.
+
+It must support:
+
+1. TEXT CHAT
+2. VOICE INTERACTION
+3. SCAN (camera-based vehicle recognition simulation)
+
+This system must feel like a futuristic showroom AI concierge.
+
+---
+
+ARCHITECTURE REQUIREMENTS
+
+Create:
+
+src/assistant/
+core/
+ui/
+voice/
+scan/
+context/
+adapters/
+reasoning/
+memory/
+multimodal/
+
+---
+
+STEP 1 — GLOBAL ASSISTANT UI
+
+Create floating assistant:
+
+* Persistent across routes
+* Expandable chat panel
+* Smart contextual suggestions
+* Emotion-aware animations
+* AI thinking indicator
+* Mini assistant mode
+
+---
+
+STEP 2 — DATASET-AWARE AI CHAT ENGINE
+
+Assistant must:
+
+* Query twowheelerProducts.json
+* Use AI reasoning engine
+* Provide:
+  vehicle suggestions
+  comparison
+  feature explanation
+  financing hints
+  navigation guidance
+  test ride advice
+
+NO HARDCODED RESPONSES.
+
+---
+
+STEP 3 — VOICE INTERACTION SYSTEM
+
+Implement:
+
+* Voice input via Web Speech API
+* Speech-to-text pipeline
+* AI response → text-to-speech
+* Smart interruption handling
+* Noise confidence UI
+
+Modes:
+
+* Push-to-talk
+* Continuous showroom mode
+
+---
+
+STEP 4 — SCAN FEATURE (CAMERA AI SIMULATION)
+
+Implement:
+
+* Camera UI overlay
+* Vehicle recognition simulation
+* Feature detection hints
+* Auto fetch vehicle details
+* AR-ready architecture placeholder
+
+Scan use cases:
+
+* Scan bike → show specs
+* Scan number tag → open product
+* Scan accessory → suggest bundle
+
+---
+
+STEP 5 — MULTIMODAL CONTEXT FUSION
+
+Assistant must combine:
+
+* User location zone
+* Browsing history
+* AI recommendations
+* Analytics signals
+* Shopping intent
+* Dataset knowledge
+
+---
+
+STEP 6 — ASSISTANT MEMORY
+
+Implement:
+
+* Session memory
+* Conversation context
+* Preference learning
+* Intent evolution tracking
+
+---
+
+STEP 7 — SMART RESPONSE UI
+
+Responses must support:
+
+* Rich cards
+* Comparison tables
+* Navigation CTA
+* Highlighted specs
+* Confidence indicators
+
+---
+
+STEP 8 — SHOWROOM PERSONALITY MODES
+
+Assistant personalities:
+
+* EV Expert
+* Budget Advisor
+* Performance Guru
+* Friendly Guide
+
+---
+
+STEP 9 — OFFLINE FIRST
+
+Assistant must:
+
+* Work without internet
+* Use local dataset reasoning
+* Cache AI responses
+* Fallback gracefully
+
+---
+
+STEP 10 — ASSISTANT DEMO PAGE
+
+Create:
+
+/assistant-lab
+
+Must look like futuristic AI showroom command system.
+
+---
+
+STEP 11 — ADVANCED TOUCH
+
+Add:
+
+"AI holographic pulse animation"
+
+---
+
+STEP 12 — OUTPUT
+
+Provide FULL:
+
+* chatbot architecture
+* voice system
+* scan system
+* dataset reasoning integration
+* UI components
+* hooks
+* multimodal orchestration
+
+This must feel like a next-gen AI showroom assistant platform.
+
+DO NOT simplify.
+
+Output FULL production-ready code.

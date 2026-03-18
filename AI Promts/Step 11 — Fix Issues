@@ -1,0 +1,208 @@
+You are a principal software architect, senior QA automation engineer, performance specialist, and distributed systems debugger.
+
+You are given a FULL large-scale React + TypeScript offline-first PWA codebase named:
+
+Offline Smart Store Navigator
+
+This system includes:
+
+* BLE Detection Engine
+* Store Map Engine
+* Smart Path Optimization
+* AI Recommendation Engine
+* Analytics Intelligence
+* Gamification Engine
+* Premium UI System
+* Offline AI Brain
+* Demo Orchestrator
+* Pitch Mode
+
+YOUR TASK:
+
+Perform FULL SYSTEM STABILIZATION, SELF-HEALING REFACTOR, and END-TO-END VALIDATION.
+
+GOALS:
+
+Make the system:
+
+* Production stable
+* Demo-safe
+* Performance optimized
+* Bug resistant
+* Fully offline functional
+* Architecturally consistent
+* Hackathon reliable
+
+---
+
+STEP 1 — GLOBAL CODEBASE AUDIT
+
+Perform deep analysis of:
+
+* Folder architecture correctness
+* Dependency integrity
+* State management patterns
+* Async logic safety
+* Module coupling issues
+* Memory leak risks
+* Performance anti-patterns
+* Rendering inefficiencies
+* Event bus race conditions
+* Web worker lifecycle issues
+* IndexedDB transaction safety
+* PWA lifecycle correctness
+* Service worker caching correctness
+
+Then refactor entire system where necessary.
+
+---
+
+STEP 2 — TYPE SAFETY + BUILD FIXES
+
+* Fix all TypeScript issues
+* Remove unsafe any types
+* Add strict typing everywhere
+* Ensure project builds cleanly
+* Ensure Vite production build passes
+
+---
+
+STEP 3 — RUNTIME CRASH PROTECTION
+
+Add:
+
+* Global error boundary system
+* Async safe wrapper utilities
+* Offline fallback handlers
+* Safe state hydration
+* Module health watchdog
+
+---
+
+STEP 4 — PERFORMANCE OPTIMIZATION
+
+Optimize:
+
+* Map rendering performance
+* BLE signal pipeline performance
+* Routing algorithm efficiency
+* AI reasoning execution
+* Animation frame scheduling
+* React re-render reduction
+* Memory consumption
+* Bundle size optimization
+
+---
+
+STEP 5 — OFFLINE GUARANTEE
+
+Ensure:
+
+* All features work offline
+* Service worker caching correctness
+* IndexedDB schema migrations safe
+* No network dependency crashes
+
+---
+
+STEP 6 — DEMO MODE HARDENING
+
+Ensure:
+
+* DemoOrchestrator cannot fail
+* BLE simulation deterministic
+* Navigation demo always smooth
+* AI reasoning always returns result
+* Analytics demo always populated
+* Gamification demo always triggers rewards
+
+---
+
+STEP 7 — UI & UX STABILITY
+
+Fix:
+
+* Animation glitches
+* Layout shifts
+* Mobile responsiveness
+* Touch interaction issues
+* Accessibility violations
+
+---
+
+STEP 8 — END-TO-END TEST SUITE
+
+Create FULL test architecture:
+
+tests/
+e2e/
+integration/
+performance/
+simulation/
+
+Implement:
+
+* Full demo journey test
+* BLE simulation test
+* Navigation correctness test
+* AI recommendation pipeline test
+* Analytics pipeline test
+* Offline reload test
+* Route recalculation test
+* Gamification trigger test
+
+Use:
+
+Playwright or Cypress.
+
+---
+
+STEP 9 — SYSTEM HEALTH DASHBOARD
+
+Create:
+
+/system-health
+
+Showing:
+
+* Module health
+* FPS
+* Memory usage
+* Signal confidence
+* AI latency
+* Route compute time
+
+---
+
+STEP 10 — AUTO RECOVERY ENGINE
+
+Implement:
+
+* State corruption recovery
+* Signal loss recovery
+* Map engine restart
+* AI reasoning fallback
+* Event bus reset
+
+---
+
+STEP 11 — FINAL OUTPUT
+
+Provide:
+
+* Full refactored code
+* Test suite
+* Performance report
+* Stability report
+* Architecture improvement summary
+* Demo reliability checklist
+
+This must make the project:
+
+"Hackathon proof, demo proof, investor demo ready"
+
+DO NOT simplify.
+
+Perform deep engineering refactor.
+
+Output FULL production-grade system.

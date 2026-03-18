@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "zones": [
+    {
+      "zoneId": "electronics",
+      "averageDwellTime": 1200,
+      "crowdLevelWeights": { "morning": 0.3, "afternoon": 0.6, "evening": 0.8 },
+      "popularProducts": ["prod-004", "prod-007"],
+      "complementaryZones": ["clothing", "home"],
+      "behavioralSignals": ["high-engagement", "comparison-shopping"],
+      "conversionRate": 0.15,
+      "averageSpend": 450.00
+    },
+    {
+      "zoneId": "grocery",
+      "averageDwellTime": 2400,
+      "crowdLevelWeights": { "morning": 0.7, "afternoon": 0.8, "evening": 0.9 },
+      "popularProducts": ["prod-001", "prod-002", "prod-003"],
+      "complementaryZones": ["pharmacy", "home"],
+      "behavioralSignals": ["routine", "list-driven", "impulse-buying"],
+      "conversionRate": 0.78,
+      "averageSpend": 85.00
+    },
+    {
+      "zoneId": "clothing",
+      "averageDwellTime": 1800,
+      "crowdLevelWeights": { "morning": 0.4, "afternoon": 0.7, "evening": 0.6 },
+      "popularProducts": ["prod-020"],
+      "complementaryZones": ["electronics", "home"],
+      "behavioralSignals": ["browsing", "trend-following"],
+      "conversionRate": 0.32,
+      "averageSpend": 120.00
+    },
+    {
+      "zoneId": "home",
+      "averageDwellTime": 1500,
+      "crowdLevelWeights": { "morning": 0.5, "afternoon": 0.6, "evening": 0.5 },
+      "popularProducts": [],
+      "complementaryZones": ["grocery", "clothing"],
+      "behavioralSignals": ["project-driven", "inspiration-seeking"],
+      "conversionRate": 0.28,
+      "averageSpend": 95.00
+    },
+    {
+      "zoneId": "pharmacy",
+      "averageDwellTime": 600,
+      "crowdLevelWeights": { "morning": 0.6, "afternoon": 0.7, "evening": 0.5 },
+      "popularProducts": [],
+      "complementaryZones": ["grocery"],
+      "behavioralSignals": ["need-based", "quick-trip"],
+      "conversionRate": 0.85,
+      "averageSpend": 35.00
+    },
+    {
+      "zoneId": "checkout",
+      "averageDwellTime": 300,
+      "crowdLevelWeights": { "morning": 0.5, "afternoon": 0.8, "evening": 0.9 },
+      "popularProducts": [],
+      "complementaryZones": [],
+      "behavioralSignals": ["final-purchase", "impulse-add"],
+      "conversionRate": 0.95,
+      "averageSpend": 0
+    }
+  ]
+}

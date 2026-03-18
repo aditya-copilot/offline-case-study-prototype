@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "sessionId": "sess-demo-001",
+  "customerId": "cust-12345",
+  "startedAt": "2024-01-15T09:30:00Z",
+  "personality": "health",
+  "profile": {
+    "priceSensitivity": 0.6,
+    "brandLoyalty": 0.7,
+    "qualityPriority": 0.9,
+    "conveniencePriority": 0.5,
+    "sustainabilityConcern": 0.8,
+    "healthConsciousness": 0.95,
+    "preferredCategories": ["grocery", "pharmacy"],
+    "dislikedCategories": []
+  },
+  "shoppingHistory": {
+    "totalVisits": 24,
+    "averageBasketSize": 67.50,
+    "favoriteZones": ["grocery", "pharmacy"],
+    "frequentProducts": ["prod-001", "prod-002", "prod-003", "prod-018"],
+    "lastVisitDate": "2024-01-08T10:15:00Z",
+    "typicalVisitDuration": 1800
+  },
+  "currentSession": {
+    "currentZone": "grocery",
+    "position": { "x": 43, "y": 14 },
+    "shoppingList": [
+      { "productId": "prod-001", "quantity": 1, "isChecked": false },
+      { "productId": "prod-002", "quantity": 1, "isChecked": true },
+      { "productId": "prod-003", "quantity": 1, "isChecked": false },
+      { "productId": "prod-018", "quantity": 2, "isChecked": false }
+    ],
+    "collectedItems": ["prod-002"],
+    "skippedItems": [],
+    "searchQueries": ["organic", "spinach"],
+    "viewedProducts": ["prod-001", "prod-018"]
+  },
+  "behavioralSignals": [
+    {
+      "type": "dwell",
+      "zoneId": "grocery",
+      "timestamp": "2024-01-15T09:35:00Z",
+      "intensity": 0.8
+    },
+    {
+      "type": "view",
+      "productId": "prod-001",
+      "timestamp": "2024-01-15T09:36:00Z",
+      "intensity": 0.7
+    },
+    {
+      "type": "search",
+      "timestamp": "2024-01-15T09:37:00Z",
+      "intensity": 0.9,
+      "metadata": { "query": "organic spinach" }
+    }
+  ],
+  "zoneTransitions": [
+    {
+      "fromZoneId": "entrance",
+      "toZoneId": "grocery",
+      "timestamp": "2024-01-15T09:32:00Z",
+      "dwellTime": 300
+    }
+  ],
+  "affinityScores": {
+    "grocery": 0.92,
+    "pharmacy": 0.75,
+    "electronics": 0.15,
+    "clothing": 0.30,
+    "home": 0.45
+  }
+}

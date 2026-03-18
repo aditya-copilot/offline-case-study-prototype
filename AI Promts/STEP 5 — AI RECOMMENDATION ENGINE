@@ -1,0 +1,171 @@
+You are a senior AI systems architect, LLM product engineer, and advanced React platform designer.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL AI Recommendation Engine that does NOT rely on manual rule-based logic.
+
+Instead, recommendations must be generated via structured prompt-based AI reasoning using a product dataset.
+
+GOALS:
+
+Create a modular AI reasoning system that simulates real LLM-driven product recommendations, shopping insights, and behavioral suggestions.
+
+This system must feel like a real AI product intelligence engine.
+
+ARCHITECTURE REQUIREMENTS:
+
+1. AI ORCHESTRATION LAYER
+
+Create:
+
+src/ai/
+orchestrator/
+prompt-engine/
+context-builder/
+models/
+adapters/
+cache/
+reasoning/
+explainability/
+
+This layer must simulate interaction with an AI model.
+
+2. DATASET-DRIVEN AI CONTEXT
+
+Create:
+
+products.json
+shoppingPatterns.json
+zoneMetadata.json
+customerSession.json
+
+AI must consume these datasets dynamically.
+
+3. PROMPT COMPOSITION ENGINE
+
+Create dynamic prompt builder that includes:
+
+* Customer current zone
+* Shopping list
+* Product search history
+* Movement patterns
+* Time spent in zones
+* Store layout context
+* Seasonal promotions
+* Behavioral signals
+
+Prompt must be structured like real LLM input.
+
+4. AI RESPONSE SIMULATION MODEL
+
+Create:
+
+LocalAIReasoningModel
+
+This should:
+
+* Accept structured prompt
+* Produce recommendation reasoning output
+* Return:
+
+recommendedProducts
+bundles
+navigationHints
+behaviorInsights
+confidenceScore
+
+This is NOT rule-based.
+It should use dataset reasoning + semantic scoring.
+
+5. FUTURE LLM ADAPTER
+
+Create adapter interface:
+
+OpenAIAdapter
+LocalLLMAdapter
+EdgeAIAdapter
+
+Even if not used now.
+
+6. REAL-TIME RECOMMENDATION STREAM
+
+Implement:
+
+* Reactive recommendation updates
+* Zone entry triggers AI recompute
+* Shopping list changes trigger AI
+* Signal confidence affects suggestions
+
+7. AI EXPLAINABILITY PANEL
+
+Create UI that shows:
+
+* Why recommendation generated
+* Context used
+* Confidence level
+* Behavioral reasoning chain
+
+Judges LOVE explainable AI.
+
+8. PERSONALITY MODES
+
+AI modes:
+
+* Budget Shopper
+* Health Conscious
+* Premium Buyer
+* Quick Shopper
+* Explorer Mode
+
+9. PREDICTIVE INTENT MODEL
+
+AI must predict:
+
+* Next product search
+* Possible forgotten items
+* Shortcut shopping path
+
+10. OFFLINE AI CACHE
+
+Store:
+
+* Previous recommendations
+* Session embeddings (mock)
+* Context snapshots
+
+Using IndexedDB.
+
+11. UI PAGE
+
+Create:
+
+/ai-lab
+
+Must look like futuristic retail AI control system.
+
+12. ADVANCED TOUCH
+
+Add:
+
+"AI thinking visualization"
+during reasoning.
+
+13. OUTPUT
+
+Provide FULL:
+
+* AI architecture
+* Prompt system
+* Dataset
+* Simulation model
+* Hooks
+* UI
+* Example reasoning flow
+
+This must look like a funded AI retail startup system.
+
+DO NOT use manual if/else recommendation logic.
+
+Everything must pass through AI prompt pipeline.
+
+Output FULL production-ready code.

@@ -1,0 +1,172 @@
+You are a principal AI platform architect, distributed systems designer, and senior React product systems engineer.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL Offline AI Brain that orchestrates all subsystems:
+
+* BLE Detection Engine
+* Store Map Engine
+* Smart Path Optimization
+* AI Recommendation Engine
+* Analytics Intelligence
+* Gamification Engine
+* Premium UI System
+
+GOALS:
+
+Create a unified intelligence layer that transforms independent modules into a cohesive autonomous retail navigation product.
+
+ARCHITECTURE REQUIREMENTS:
+
+1. OFFLINE AI BRAIN CORE
+
+Create:
+
+src/brain/
+orchestrator/
+decision-engine/
+context-fusion/
+prediction/
+adaptation/
+memory/
+explainability/
+runtime/
+
+This system must act as central intelligence coordinator.
+
+2. CONTEXT FUSION ENGINE
+
+Aggregate real-time signals from:
+
+* BLE zone detection
+* Customer movement
+* Shopping list
+* AI recommendations
+* Game engagement
+* Analytics metrics
+* UI interaction signals
+
+Create unified:
+
+RetailSessionContext
+
+3. DECISION ENGINE
+
+Implement high-level decision flows:
+
+* When to recalculate route
+* When to trigger AI suggestions
+* When to modify gamification state
+* When to adapt UI emphasis
+* When to escalate guidance
+
+Decisions must be dataset-driven and AI-like.
+
+4. MEMORY SYSTEM
+
+Create offline persistent memory:
+
+* Session memory
+* Behavioral embeddings (mock)
+* Zone familiarity model
+* Recommendation success memory
+* Player progression memory
+
+Store using IndexedDB.
+
+5. PREDICTIVE RETAIL INTELLIGENCE
+
+Implement predictive models:
+
+* Next likely zone
+* Abandonment risk
+* Shopper intent evolution
+* Engagement fatigue detection
+* Purchase completion likelihood
+
+6. ADAPTIVE EXPERIENCE ENGINE
+
+System must dynamically adapt:
+
+* Route difficulty
+* Recommendation aggressiveness
+* Gamification intensity
+* UI complexity
+* Navigation hints frequency
+
+7. SYSTEM EVENT BUS
+
+Create unified event orchestration:
+
+* Cross-module communication
+* Signal priority handling
+* Debounced intelligence reactions
+* State reconciliation
+
+8. AI EXPLAINABILITY CORE
+
+Create unified explanation model:
+
+* Why system suggested route
+* Why recommendation shown
+* Why mission triggered
+* Why UI adapted
+
+9. REAL-TIME SYSTEM HEALTH MONITOR
+
+Create:
+
+* Module status dashboard
+* Intelligence cycle monitor
+* Signal confidence index
+* System load visualization
+
+10. FINAL INTEGRATION LAYER
+
+Create:
+
+src/platform/
+
+Where:
+
+* All modules connect
+* Shared runtime initialized
+* Global intelligence lifecycle managed
+
+11. DEMO CONTROL CENTER
+
+Create:
+
+/brain-lab
+
+This page must feel like:
+
+SpaceX mission control + AI operating system.
+
+12. OFFLINE FIRST
+
+Entire intelligence orchestration must run offline.
+
+13. ADVANCED TOUCH
+
+Add:
+
+"AI brain pulse visualization"
+showing system cognition cycle.
+
+14. OUTPUT
+
+Provide FULL:
+
+* brain architecture
+* orchestration engine
+* predictive models
+* integration wiring
+* hooks
+* runtime lifecycle
+
+This must look like a next-gen autonomous retail intelligence platform.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.

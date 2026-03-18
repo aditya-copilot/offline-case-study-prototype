@@ -1,0 +1,357 @@
+{
+  "id": "store-001",
+  "name": "SmartStore Downtown",
+  "version": "1.0.0",
+  "dimensions": {
+    "width": 100,
+    "height": 80,
+    "unit": "meters"
+  },
+  "grid": {
+    "enabled": true,
+    "size": 5,
+    "snap": false
+  },
+  "camera": {
+    "minZoom": 0.1,
+    "maxZoom": 3,
+    "defaultZoom": 0.8,
+    "inertia": true,
+    "boundsConstraint": true
+  },
+  "rendering": {
+    "antialias": true,
+    "pixelRatio": 2,
+    "maxEntities": 500,
+    "cullingEnabled": true,
+    "lodEnabled": true
+  },
+  "zones": [
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "type": "zone",
+      "category": "electronics",
+      "color": "#6366f1",
+      "bounds": {
+        "min": { "x": 5, "y": 5 },
+        "max": { "x": 30, "y": 25 }
+      },
+      "center": { "x": 17.5, "y": 15 },
+      "products": ["phone", "laptop", "tablet", "headphones"],
+      "beacons": ["beacon-elec-1", "beacon-elec-2"],
+      "capacity": 50,
+      "crowdLevel": "low",
+      "entryPoints": [
+        { "x": 17.5, "y": 5 },
+        { "x": 30, "y": 15 }
+      ],
+      "metadata": {
+        "lighting": "bright",
+        "temperature": 22
+      }
+    },
+    {
+      "id": "grocery",
+      "name": "Fresh Grocery",
+      "type": "zone",
+      "category": "grocery",
+      "color": "#10b981",
+      "bounds": {
+        "min": { "x": 35, "y": 5 },
+        "max": { "x": 65, "y": 35 }
+      },
+      "center": { "x": 50, "y": 20 },
+      "products": ["fruits", "vegetables", "dairy", "meat"],
+      "beacons": ["beacon-groc-1", "beacon-groc-2", "beacon-groc-3"],
+      "capacity": 100,
+      "crowdLevel": "medium",
+      "entryPoints": [
+        { "x": 35, "y": 20 },
+        { "x": 50, "y": 35 }
+      ],
+      "metadata": {
+        "temperature": 18,
+        "refrigerated": true
+      }
+    },
+    {
+      "id": "clothing",
+      "name": "Fashion & Clothing",
+      "type": "zone",
+      "category": "clothing",
+      "color": "#f59e0b",
+      "bounds": {
+        "min": { "x": 70, "y": 5 },
+        "max": { "x": 95, "y": 40 }
+      },
+      "center": { "x": 82.5, "y": 22.5 },
+      "products": ["mens", "womens", "kids", "accessories"],
+      "beacons": ["beacon-cloth-1", "beacon-cloth-2"],
+      "capacity": 80,
+      "crowdLevel": "low",
+      "entryPoints": [
+        { "x": 82.5, "y": 5 },
+        { "x": 70, "y": 22.5 }
+      ]
+    },
+    {
+      "id": "home",
+      "name": "Home & Living",
+      "type": "zone",
+      "category": "home",
+      "color": "#ec4899",
+      "bounds": {
+        "min": { "x": 5, "y": 30 },
+        "max": { "x": 30, "y": 55 }
+      },
+      "center": { "x": 17.5, "y": 42.5 },
+      "products": ["furniture", "decor", "kitchen", "bedding"],
+      "beacons": ["beacon-home-1"],
+      "capacity": 40,
+      "crowdLevel": "low",
+      "entryPoints": [
+        { "x": 5, "y": 42.5 },
+        { "x": 17.5, "y": 55 }
+      ]
+    },
+    {
+      "id": "sports",
+      "name": "Sports & Outdoors",
+      "type": "zone",
+      "category": "sports",
+      "color": "#3b82f6",
+      "bounds": {
+        "min": { "x": 5, "y": 60 },
+        "max": { "x": 30, "y": 75 }
+      },
+      "center": { "x": 17.5, "y": 67.5 },
+      "products": ["equipment", "apparel", "nutrition", "outdoor"],
+      "beacons": ["beacon-sport-1", "beacon-sport-2"],
+      "capacity": 30,
+      "crowdLevel": "low",
+      "entryPoints": [
+        { "x": 17.5, "y": 60 },
+        { "x": 30, "y": 67.5 }
+      ]
+    },
+    {
+      "id": "pharmacy",
+      "name": "Health & Pharmacy",
+      "type": "zone",
+      "category": "pharmacy",
+      "color": "#ef4444",
+      "bounds": {
+        "min": { "x": 70, "y": 45 },
+        "max": { "x": 90, "y": 60 }
+      },
+      "center": { "x": 80, "y": 52.5 },
+      "products": ["medicines", "wellness", "beauty", "personal-care"],
+      "beacons": ["beacon-pharm-1"],
+      "capacity": 20,
+      "crowdLevel": "low",
+      "entryPoints": [
+        { "x": 70, "y": 52.5 }
+      ]
+    },
+    {
+      "id": "checkout",
+      "name": "Checkout Counters",
+      "type": "zone",
+      "category": "checkout",
+      "color": "#8b5cf6",
+      "bounds": {
+        "min": { "x": 35, "y": 65 },
+        "max": { "x": 65, "y": 75 }
+      },
+      "center": { "x": 50, "y": 70 },
+      "products": [],
+      "beacons": ["beacon-checkout-1", "beacon-checkout-2"],
+      "capacity": 30,
+      "crowdLevel": "medium",
+      "entryPoints": [
+        { "x": 35, "y": 70 },
+        { "x": 65, "y": 70 }
+      ]
+    },
+    {
+      "id": "entrance",
+      "name": "Main Entrance",
+      "type": "zone",
+      "category": "entrance",
+      "color": "#14b8a6",
+      "bounds": {
+        "min": { "x": 40, "y": 75 },
+        "max": { "x": 60, "y": 80 }
+      },
+      "center": { "x": 50, "y": 77.5 },
+      "products": [],
+      "beacons": ["beacon-entrance-1"],
+      "capacity": 50,
+      "crowdLevel": "high",
+      "entryPoints": [
+        { "x": 50, "y": 80 }
+      ]
+    }
+  ],
+  "shelves": [
+    {
+      "id": "shelf-elec-1",
+      "type": "shelf",
+      "name": "Phones Display",
+      "zoneId": "electronics",
+      "bounds": {
+        "min": { "x": 8, "y": 8 },
+        "max": { "x": 12, "y": 22 }
+      },
+      "center": { "x": 10, "y": 15 },
+      "products": ["iphone", "samsung", "pixel"],
+      "height": 2,
+      "facing": "east",
+      "metadata": { "interactive": true }
+    },
+    {
+      "id": "shelf-elec-2",
+      "type": "shelf",
+      "name": "Laptops",
+      "zoneId": "electronics",
+      "bounds": {
+        "min": { "x": 15, "y": 8 },
+        "max": { "x": 27, "y": 12 }
+      },
+      "center": { "x": 21, "y": 10 },
+      "products": ["macbook", "dell", "hp"],
+      "height": 1.5,
+      "facing": "south"
+    },
+    {
+      "id": "shelf-groc-1",
+      "type": "shelf",
+      "name": "Fresh Produce",
+      "zoneId": "grocery",
+      "bounds": {
+        "min": { "x": 38, "y": 8 },
+        "max": { "x": 48, "y": 20 }
+      },
+      "center": { "x": 43, "y": 14 },
+      "products": ["apples", "bananas", "oranges", "grapes"],
+      "height": 1.2,
+      "facing": "east",
+      "metadata": { "temperature": 4 }
+    },
+    {
+      "id": "shelf-groc-2",
+      "type": "shelf",
+      "name": "Dairy Section",
+      "zoneId": "grocery",
+      "bounds": {
+        "min": { "x": 52, "y": 8 },
+        "max": { "x": 62, "y": 20 }
+      },
+      "center": { "x": 57, "y": 14 },
+      "products": ["milk", "cheese", "yogurt", "butter"],
+      "height": 1.5,
+      "facing": "west",
+      "metadata": { "temperature": 2 }
+    },
+    {
+      "id": "shelf-cloth-1",
+      "type": "shelf",
+      "name": "Mens Apparel",
+      "zoneId": "clothing",
+      "bounds": {
+        "min": { "x": 73, "y": 8 },
+        "max": { "x": 83, "y": 25 }
+      },
+      "center": { "x": 78, "y": 16.5 },
+      "products": ["shirts", "pants", "jackets"],
+      "height": 2,
+      "facing": "east"
+    },
+    {
+      "id": "shelf-cloth-2",
+      "type": "shelf",
+      "name": "Womens Fashion",
+      "zoneId": "clothing",
+      "bounds": {
+        "min": { "x": 85, "y": 15 },
+        "max": { "x": 92, "y": 35 }
+      },
+      "center": { "x": 88.5, "y": 25 },
+      "products": ["dresses", "tops", "skirts"],
+      "height": 2,
+      "facing": "west"
+    },
+    {
+      "id": "shelf-home-1",
+      "type": "shelf",
+      "name": "Kitchen Essentials",
+      "zoneId": "home",
+      "bounds": {
+        "min": { "x": 8, "y": 33 },
+        "max": { "x": 18, "y": 45 }
+      },
+      "center": { "x": 13, "y": 39 },
+      "products": ["cookware", "utensils", "appliances"],
+      "height": 1.8,
+      "facing": "east"
+    },
+    {
+      "id": "shelf-home-2",
+      "type": "shelf",
+      "name": "Home Decor",
+      "zoneId": "home",
+      "bounds": {
+        "min": { "x": 20, "y": 33 },
+        "max": { "x": 27, "y": 52 }
+      },
+      "center": { "x": 23.5, "y": 42.5 },
+      "products": ["lamps", "vases", "art", "cushions"],
+      "height": 1.5,
+      "facing": "south"
+    }
+  ],
+  "nodes": [
+    { "id": "node-entrance", "position": { "x": 50, "y": 75 }, "type": "zone-center", "connectedEdges": [], "zoneId": "entrance" },
+    { "id": "node-checkout-1", "position": { "x": 40, "y": 70 }, "type": "zone-center", "connectedEdges": [], "zoneId": "checkout" },
+    { "id": "node-checkout-2", "position": { "x": 50, "y": 70 }, "type": "zone-center", "connectedEdges": [], "zoneId": "checkout" },
+    { "id": "node-checkout-3", "position": { "x": 60, "y": 70 }, "type": "zone-center", "connectedEdges": [], "zoneId": "checkout" },
+    { "id": "node-elec-center", "position": { "x": 17.5, "y": 15 }, "type": "zone-center", "connectedEdges": [], "zoneId": "electronics" },
+    { "id": "node-groc-center", "position": { "x": 50, "y": 20 }, "type": "zone-center", "connectedEdges": [], "zoneId": "grocery" },
+    { "id": "node-cloth-center", "position": { "x": 82.5, "y": 22.5 }, "type": "zone-center", "connectedEdges": [], "zoneId": "clothing" },
+    { "id": "node-home-center", "position": { "x": 17.5, "y": 42.5 }, "type": "zone-center", "connectedEdges": [], "zoneId": "home" },
+    { "id": "node-sports-center", "position": { "x": 17.5, "y": 67.5 }, "type": "zone-center", "connectedEdges": [], "zoneId": "sports" },
+    { "id": "node-pharm-center", "position": { "x": 80, "y": 52.5 }, "type": "zone-center", "connectedEdges": [], "zoneId": "pharmacy" },
+    { "id": "node-junction-1", "position": { "x": 32.5, "y": 15 }, "type": "junction", "connectedEdges": [] },
+    { "id": "node-junction-2", "position": { "x": 67.5, "y": 22.5 }, "type": "junction", "connectedEdges": [] },
+    { "id": "node-junction-3", "position": { "x": 32.5, "y": 42.5 }, "type": "junction", "connectedEdges": [] },
+    { "id": "node-junction-4", "position": { "x": 67.5, "y": 52.5 }, "type": "junction", "connectedEdges": [] },
+    { "id": "node-junction-5", "position": { "x": 32.5, "y": 67.5 }, "type": "junction", "connectedEdges": [] },
+    { "id": "node-aisle-1", "position": { "x": 50, "y": 45 }, "type": "waypoint", "connectedEdges": [] },
+    { "id": "node-aisle-2", "position": { "x": 50, "y": 60 }, "type": "waypoint", "connectedEdges": [] },
+    { "id": "node-aisle-3", "position": { "x": 35, "y": 55 }, "type": "waypoint", "connectedEdges": [] },
+    { "id": "node-aisle-4", "position": { "x": 65, "y": 55 }, "type": "waypoint", "connectedEdges": [] }
+  ],
+  "edges": [
+    { "id": "edge-1", "fromNodeId": "node-entrance", "toNodeId": "node-checkout-2", "weight": 5, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-2", "fromNodeId": "node-checkout-1", "toNodeId": "node-checkout-2", "weight": 3, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-3", "fromNodeId": "node-checkout-2", "toNodeId": "node-checkout-3", "weight": 3, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-4", "fromNodeId": "node-checkout-2", "toNodeId": "node-aisle-2", "weight": 5, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-5", "fromNodeId": "node-aisle-2", "toNodeId": "node-aisle-1", "weight": 8, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-6", "fromNodeId": "node-aisle-1", "toNodeId": "node-junction-1", "weight": 10, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-7", "fromNodeId": "node-aisle-1", "toNodeId": "node-junction-2", "weight": 10, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-8", "fromNodeId": "node-junction-1", "toNodeId": "node-elec-center", "weight": 8, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-9", "fromNodeId": "node-junction-1", "toNodeId": "node-groc-center", "weight": 10, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-10", "fromNodeId": "node-junction-2", "toNodeId": "node-groc-center", "weight": 10, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-11", "fromNodeId": "node-junction-2", "toNodeId": "node-cloth-center", "weight": 8, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-12", "fromNodeId": "node-junction-1", "toNodeId": "node-junction-3", "weight": 15, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-13", "fromNodeId": "node-junction-3", "toNodeId": "node-home-center", "weight": 8, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-14", "fromNodeId": "node-junction-3", "toNodeId": "node-aisle-3", "weight": 10, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-15", "fromNodeId": "node-aisle-3", "toNodeId": "node-junction-5", "weight": 8, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-16", "fromNodeId": "node-junction-5", "toNodeId": "node-sports-center", "weight": 8, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-17", "fromNodeId": "node-junction-2", "toNodeId": "node-junction-4", "weight": 15, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-18", "fromNodeId": "node-junction-4", "toNodeId": "node-pharm-center", "weight": 8, "type": "aisle", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-19", "fromNodeId": "node-junction-4", "toNodeId": "node-aisle-4", "weight": 8, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } },
+    { "id": "edge-20", "fromNodeId": "node-aisle-4", "toNodeId": "node-aisle-2", "weight": 10, "type": "walkway", "bidirectional": true, "accessibility": { "wheelchair": true, "stroller": true, "cart": true } }
+  ]
+}

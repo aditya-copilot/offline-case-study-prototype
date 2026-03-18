@@ -1,0 +1,157 @@
+You are a principal product designer, motion systems architect, and senior React design systems engineer.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL Premium UI System and Hackathon Polish Layer that elevates the entire experience to a startup-grade product presentation level.
+
+GOALS:
+
+Create a cohesive, futuristic, emotionally engaging design system that enhances usability, storytelling, and visual credibility.
+
+ARCHITECTURE REQUIREMENTS:
+
+1. DESIGN SYSTEM CORE
+
+Create:
+
+src/design-system/
+tokens/
+components/
+motion/
+themes/
+layouts/
+feedback/
+storytelling/
+
+Implement:
+
+* Design tokens (spacing, color, typography)
+* Modular component variants
+* Semantic UI states
+* Visual hierarchy standards
+
+2. THEME ENGINE
+
+Create advanced theme system:
+
+* Light retail theme
+* Dark futuristic theme
+* Night shopping mode
+* Accessibility high-contrast mode
+* Gamified neon mode
+
+Dynamic theme switching must be smooth and animated.
+
+3. MOTION DESIGN SYSTEM
+
+Use Framer Motion to implement:
+
+* Navigation transitions
+* Micro-interactions
+* Path animation upgrades
+* AI thinking visuals enhancement
+* Reward animation refinement
+* System status feedback motion
+
+4. VISUAL STORYTELLING LAYER
+
+Create presentation flows:
+
+* Guided onboarding journey
+* Feature discovery walkthrough
+* Contextual tooltips
+* Demo storytelling mode
+
+5. UI PERFORMANCE OPTIMIZATION
+
+Implement:
+
+* Skeleton loaders
+* Smart lazy loading
+* Visual suspense patterns
+* Interaction responsiveness feedback
+
+6. SPATIAL UI ENHANCEMENTS
+
+Upgrade map + analytics + AI + game UIs to:
+
+* Glassmorphism surfaces
+* Depth layering
+* Dynamic lighting simulation
+* Zone glow improvements
+* Premium avatar rendering
+
+7. DEMO MODE SYSTEM
+
+Create:
+
+"Judge Demo Mode"
+
+Features:
+
+* Scripted navigation walkthrough
+* Highlight key innovations
+* Automatic transitions
+* Feature spotlight overlays
+
+8. ERROR EXPERIENCE DESIGN
+
+Create beautiful offline-first error handling:
+
+* Signal lost UI
+* Zone uncertainty UI
+* AI recalculating UI
+* System sync UI
+
+9. BRANDING SYSTEM
+
+Create:
+
+* Logo placeholder
+* App splash screen
+* App install prompt design
+* PWA install celebration animation
+
+10. HOOKS
+
+useThemeEngine()
+useDemoStory()
+useMotionFeedback()
+useUIStateLayer()
+
+11. UI PAGE
+
+Create:
+
+/design-lab
+
+This must feel like:
+
+Apple keynote demo app.
+
+12. OFFLINE FIRST
+
+All visual storytelling must work offline.
+
+13. ADVANCED TOUCH
+
+Add:
+
+"Retail universe ambient background animation"
+
+14. OUTPUT
+
+Provide FULL:
+
+* design tokens
+* theme system
+* motion system
+* UI upgrades
+* demo mode
+* layout improvements
+
+This must look like a venture-funded retail tech startup product.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.

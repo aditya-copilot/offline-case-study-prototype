@@ -1,0 +1,108 @@
+{
+  "version": "1.0.0",
+  "patterns": [
+    {
+      "id": "pattern-breakfast",
+      "name": "Breakfast Routine",
+      "description": "Customer typically purchases breakfast items together",
+      "triggerProducts": ["prod-002", "prod-003", "prod-008"],
+      "associatedProducts": ["prod-009", "prod-010"],
+      "confidence": 0.78,
+      "category": "routine",
+      "timeOfDay": "morning",
+      "seasonality": ["year-round"]
+    },
+    {
+      "id": "pattern-italian-meal",
+      "name": "Italian Dinner Night",
+      "description": "Customer preparing Italian cuisine",
+      "triggerProducts": ["prod-014", "prod-015"],
+      "associatedProducts": ["prod-016", "prod-017", "prod-012"],
+      "confidence": 0.85,
+      "category": "cooking",
+      "timeOfDay": "afternoon",
+      "seasonality": ["year-round"]
+    },
+    {
+      "id": "pattern-health-conscious",
+      "name": "Health Focused Shopping",
+      "description": "Customer prioritizes organic and healthy options",
+      "triggerProducts": ["prod-001", "prod-002", "prod-018"],
+      "associatedProducts": ["prod-003", "prod-008", "prod-019"],
+      "confidence": 0.82,
+      "category": "preference",
+      "timeOfDay": "any",
+      "seasonality": ["year-round"]
+    },
+    {
+      "id": "pattern-tech-enthusiast",
+      "name": "Tech Ecosystem Shopping",
+      "description": "Customer building Apple ecosystem",
+      "triggerProducts": ["prod-004"],
+      "associatedProducts": ["prod-005", "prod-006", "prod-007"],
+      "confidence": 0.91,
+      "category": "ecosystem",
+      "timeOfDay": "any",
+      "seasonality": ["year-round"]
+    },
+    {
+      "id": "pattern-weekend-cooking",
+      "name": "Weekend Meal Prep",
+      "description": "Customer preparing multiple meals for the week",
+      "triggerProducts": ["prod-013", "prod-014"],
+      "associatedProducts": ["prod-003", "prod-010", "prod-011", "prod-015"],
+      "confidence": 0.73,
+      "category": "routine",
+      "timeOfDay": "morning",
+      "seasonality": ["weekend"]
+    },
+    {
+      "id": "pattern-forgotten-milk",
+      "name": "Forgotten Dairy",
+      "description": "Customer often forgets dairy after produce",
+      "triggerProducts": ["prod-001", "prod-002", "prod-018"],
+      "associatedProducts": ["prod-003"],
+      "confidence": 0.68,
+      "category": "reminder",
+      "timeOfDay": "any",
+      "seasonality": ["year-round"]
+    },
+    {
+      "id": "pattern-salad-maker",
+      "name": "Fresh Salad Builder",
+      "description": "Customer assembling salad ingredients",
+      "triggerProducts": ["prod-018"],
+      "associatedProducts": ["prod-016", "prod-017", "prod-019"],
+      "confidence": 0.76,
+      "category": "cooking",
+      "timeOfDay": "any",
+      "seasonality": ["spring", "summer"]
+    }
+  ],
+  "seasonalTrends": [
+    {
+      "season": "summer",
+      "trendingCategories": ["fresh-produce", "grilling", "beverages"],
+      "decliningCategories": ["soup", "hot-cereal"]
+    },
+    {
+      "season": "winter",
+      "trendingCategories": ["soup", "hot-cereal", "comfort-food"],
+      "decliningCategories": ["salad", "frozen-treats"]
+    }
+  ],
+  "zoneTransitions": [
+    {
+      "fromZone": "grocery",
+      "toZone": "checkout",
+      "commonForgottenItems": ["prod-003", "prod-010"],
+      "frequency": 0.34
+    },
+    {
+      "fromZone": "electronics",
+      "toZone": "checkout",
+      "commonAddOns": ["prod-005", "prod-006"],
+      "frequency": 0.67
+    }
+  ]
+}

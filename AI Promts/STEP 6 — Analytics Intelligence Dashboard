@@ -1,0 +1,154 @@
+You are a senior data platform architect, product analytics expert, and advanced React visualization engineer.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL Analytics Intelligence Dashboard that provides deep retail insights using offline-collected behavioral data.
+
+GOALS:
+
+Create a modular analytics intelligence platform that visualizes customer movement, shopping behavior, AI recommendation performance, and store efficiency.
+
+This must feel like a real enterprise retail analytics system.
+
+ARCHITECTURE REQUIREMENTS:
+
+1. ANALYTICS DATA PIPELINE
+
+Create:
+
+src/analytics/
+collectors/
+processors/
+aggregators/
+models/
+visualization/
+export/
+prediction/
+
+System must collect:
+
+* Zone visit events
+* Dwell time
+* Movement path
+* Product search events
+* Recommendation interactions
+* Route efficiency metrics
+* Shopping completion metrics
+
+All stored offline using IndexedDB.
+
+2. EVENT STREAM MODEL
+
+Implement event-driven architecture:
+
+* Event bus
+* Time-series event storage
+* Session-based analytics
+* Real-time aggregation engine
+
+3. ANALYTICS MODELS
+
+Create computed metrics:
+
+* Most visited zones
+* Cold zones
+* Average dwell time
+* Path inefficiency score
+* AI recommendation success rate
+* Zone conversion rate
+* Shopping completion probability
+* Heatmap density model
+
+4. VISUALIZATION SYSTEM
+
+Create advanced charts using Chart.js:
+
+* Movement heatmap overlay
+* Time-series charts
+* Funnel visualization
+* Zone performance radar chart
+* AI performance dashboard
+* Shopping behavior cluster charts
+
+5. REAL-TIME DASHBOARD ENGINE
+
+Implement:
+
+* Live updating analytics
+* Streaming visualization updates
+* Session playback system
+* Path replay animation
+
+6. CUSTOMER JOURNEY PLAYBACK
+
+Create:
+
+* Timeline scrubber
+* Animated path replay
+* Interaction markers
+* AI decision overlays
+
+7. EXPORT INTELLIGENCE
+
+Provide:
+
+* CSV export
+* JSON analytics snapshot
+* Mock "manager report generator"
+
+8. PREDICTIVE ANALYTICS SIMULATION
+
+Implement models:
+
+* Next zone prediction
+* Abandonment probability
+* Peak congestion estimator
+* Recommendation impact predictor
+
+These must look AI-driven (dataset reasoning).
+
+9. HOOKS
+
+useAnalyticsStream()
+useZoneHeatmap()
+useBehaviorMetrics()
+useAIAnalytics()
+useSessionReplay()
+
+10. UI PAGE
+
+Create:
+
+/analytics-lab
+
+Must look like:
+
+Mixpanel + Tesla dashboard + Retail command center.
+
+11. OFFLINE FIRST
+
+All analytics must work fully offline.
+
+12. ADVANCED TOUCH
+
+Add:
+
+"Retail intelligence pulse animation"
+showing system learning.
+
+13. OUTPUT
+
+Provide FULL:
+
+* analytics architecture
+* data models
+* collectors
+* visual components
+* dashboard layout
+* example data flow
+
+This must look like a funded enterprise retail analytics platform.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.

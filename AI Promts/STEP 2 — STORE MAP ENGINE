@@ -1,0 +1,136 @@
+You are a senior spatial UI engineer, game engine architect, and React performance expert.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL Interactive Store Map Engine similar to a lightweight indoor navigation game engine.
+
+GOALS:
+
+Create a highly interactive, animated, modular, scalable store navigation visualization system.
+
+FEATURE REQUIREMENTS:
+
+1. STORE MAP RENDER ENGINE
+
+* Render store grid using canvas or SVG
+* Support zoom + pan
+* Smooth inertia scrolling
+* Zone highlighting animation
+* Dynamic shelf rendering
+* Product cluster visualization
+
+2. ZONE GRAPH MODEL
+   Create a full navigation graph system:
+
+* Zones as nodes
+* Paths as edges
+* Support weighted edges
+* Config-driven store layout
+* Dynamic graph loading from IndexedDB
+
+3. CUSTOMER POSITION SIMULATION ENGINE
+
+* Simulated real-time location updates
+* Smooth interpolation movement
+* Animated avatar marker
+* Zone entry detection hooks
+* Movement prediction
+
+4. PATH VISUALIZATION SYSTEM
+
+* Smart animated path drawing
+* Direction arrows animation
+* Multi-stop shopping route visualization
+* Path recalculation engine
+
+5. PERFORMANCE OPTIMIZATION
+
+* Virtualized map rendering
+* Memoized spatial calculations
+* GPU accelerated animations
+* Web worker spatial engine
+
+6. MAP CONFIG SYSTEM
+   Create:
+
+storeLayout.json
+
+Including:
+
+* zones
+* shelves
+* racks
+* entrances
+* billing counters
+* offers areas
+
+7. ADVANCED UX FEATURES
+
+* Mini map
+* Compass indicator
+* "You are here" pulse animation
+* Focus mode
+* Accessibility mode
+* Night shopping theme
+
+8. HOOKS TO IMPLEMENT
+
+* useStoreGraph()
+* useNavigationPath()
+* useCustomerPosition()
+* useZoneDetection()
+* useMapCamera()
+
+9. STATE MANAGEMENT
+   Integrate with Zustand global store.
+
+10. ANIMATION SYSTEM
+    Use Framer Motion for:
+
+* avatar motion
+* path transitions
+* zone glow effects
+
+11. OFFLINE FIRST
+    All map data must load from IndexedDB.
+
+12. ARCHITECTURE
+    Create modules under:
+
+src/navigation/
+src/core/map-engine/
+src/core/spatial/
+
+13. DEMO PAGE
+    Create:
+
+/map-demo
+
+This must look like a funded startup product.
+
+UI must feel like:
+Uber + Google Maps + Apple Store navigation
+
+14. BONUS (VERY IMPORTANT)
+    Add debug overlay:
+
+* Current zone
+* Graph nodes
+* RSSI simulated data
+* FPS monitor
+
+15. OUTPUT
+    Provide FULL code with:
+
+* engine architecture
+* hooks
+* components
+* sample store layout
+* demo usage
+
+This must be EXTREMELY advanced and hackathon-winning.
+
+DO NOT SIMPLIFY.
+This is a spatial interaction system, not a simple map.
+
+Output FULL production-ready code.

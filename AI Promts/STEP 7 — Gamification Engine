@@ -1,0 +1,161 @@
+You are a senior game systems designer, behavioral psychology engineer, and advanced React experience architect.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL Gamification Engine that transforms indoor store navigation into an engaging, rewarding, and interactive experience.
+
+GOALS:
+
+Create a modular engagement system that increases user motivation, exploration, and interaction with the store environment.
+
+This must feel like a real retail engagement platform.
+
+ARCHITECTURE REQUIREMENTS:
+
+1. GAMIFICATION CORE SYSTEM
+
+Create:
+
+src/gamification/
+engine/
+rewards/
+missions/
+progression/
+psychology/
+visualization/
+social/
+events/
+
+2. PLAYER PROFILE MODEL
+
+Implement:
+
+* Experience points (XP)
+* Levels
+* Shopper persona
+* Visit streak
+* Zone mastery
+* Shopping efficiency score
+
+All stored offline using IndexedDB.
+
+3. MISSION SYSTEM
+
+Create dynamic missions:
+
+* Find product challenges
+* Explore zone quests
+* Time-based shopping missions
+* AI-recommended tasks
+* Treasure hunt mode
+
+Missions must integrate with:
+
+Navigation
+BLE detection
+AI recommendation
+
+4. REWARD SYSTEM
+
+Implement:
+
+* Points
+* Badges
+* Unlockable UI themes
+* Discount coupon simulation
+* Mystery rewards
+
+5. PROGRESSION ENGINE
+
+Create:
+
+* Level progression curve
+* Skill tree visualization
+* Shopper evolution model
+* Habit formation signals
+
+6. BEHAVIORAL PSYCHOLOGY LAYER
+
+Integrate:
+
+* Dopamine reward timing
+* Variable reward schedules
+* Progress feedback loops
+* Exploration incentives
+
+7. LIVE EVENT SYSTEM
+
+Simulate:
+
+* Flash sales
+* Limited-time missions
+* Zone activation events
+* Crowd challenge mode
+
+8. SOCIAL SIMULATION (OFFLINE)
+
+Create mock features:
+
+* Leaderboard simulation
+* Friend ghost paths
+* Community challenges
+
+9. REAL-TIME GAME UI
+
+Implement:
+
+* XP animations
+* Achievement popups
+* Mission tracker overlay
+* Zone unlock effects
+* Reward chest animation
+
+10. HOOKS
+
+useGameEngine()
+useMissionSystem()
+useRewards()
+useProgression()
+useLiveEvents()
+
+11. GAME ANALYTICS INTEGRATION
+
+Gamification must feed data into analytics system.
+
+12. UI PAGE
+
+Create:
+
+/game-lab
+
+Must look like:
+
+Apple Fitness + Mobile Game + Retail Experience.
+
+13. OFFLINE FIRST
+
+Everything must work offline.
+
+14. ADVANCED TOUCH
+
+Add:
+
+"Motivation energy bar"
+that reacts to engagement level.
+
+15. OUTPUT
+
+Provide FULL:
+
+* game architecture
+* reward logic
+* mission engine
+* UI components
+* animations
+* data models
+
+This must look like a funded retail engagement startup platform.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.

@@ -1,0 +1,140 @@
+You are a senior algorithms engineer, spatial optimization expert, and advanced React systems architect.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL Smart Path Optimization Engine for indoor store navigation.
+
+GOALS:
+
+Create an intelligent shopping route optimization system that calculates the best path across multiple store zones while adapting in real time to customer movement.
+
+FEATURE REQUIREMENTS:
+
+1. NAVIGATION GRAPH ENGINE
+
+Extend existing store graph to support:
+
+* Weighted pathfinding
+* Dynamic edge weights
+* Congestion modeling
+* Restricted zones
+* Time-based traversal costs
+
+Implement:
+
+Dijkstra
+A*
+Multi-destination routing
+Heuristic cost modeling
+
+Create module:
+
+src/navigation/path-engine/
+
+2. MULTI-STOP SHOPPING ROUTE OPTIMIZER
+
+Implement:
+
+* Route optimization across product list
+* Traveling Salesman approximation
+* Zone grouping optimization
+* Entry → Items → Billing path planning
+* Smart reorder logic
+
+3. REAL-TIME PATH ADAPTATION
+
+System must:
+
+* Recalculate path when user deviates
+* Adjust route based on zone entry
+* Handle skipped items
+* Provide next best destination
+
+4. VISUAL PATH EXPERIENCE
+
+Create:
+
+* Animated path drawing
+* Direction arrows motion
+* Destination pulsing effect
+* Item pickup confirmation animation
+* Breadcrumb trail system
+
+5. CUSTOMER INTENT MODEL
+
+Create lightweight AI logic:
+
+* Predict next product search
+* Suggest path shortcuts
+* Detect hesitation zones
+* Adaptive guidance hints
+
+6. SHOPPING MODE STATES
+
+Implement modes:
+
+* Quick Buy Mode
+* Exploration Mode
+* Accessibility Mode
+* Rush Hour Mode
+* Gamified Treasure Mode
+
+7. ROUTE PERFORMANCE ENGINE
+
+Optimize:
+
+* Precomputed zone matrices
+* Memoized path calculations
+* Graph caching in IndexedDB
+
+8. HOOKS TO CREATE
+
+useSmartRoute()
+useRouteOptimizer()
+useNextDestination()
+useRouteDeviation()
+useShoppingMode()
+
+9. DEBUG PANEL
+
+Create visualization:
+
+* Route cost graph
+* Node exploration animation
+* Algorithm step playback
+* Heuristic heatmap
+
+10. UI PAGE
+
+Create:
+
+/route-lab
+
+Must look like a logistics AI control center.
+
+11. OFFLINE FIRST
+
+All routing must function without network.
+
+12. ADVANCED TOUCH
+
+Add:
+
+"AI thinking animation"
+when computing route.
+
+13. OUTPUT
+
+Provide FULL:
+
+* algorithms
+* architecture
+* hooks
+* visualization components
+* demo integration
+
+This must look like a startup-grade spatial optimization engine.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.

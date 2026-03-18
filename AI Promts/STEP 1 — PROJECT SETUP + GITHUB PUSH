@@ -1,0 +1,102 @@
+You are a senior React architect, DevOps engineer, and hackathon product engineer.
+
+Create a FULL production-ready React project using:
+
+* React 18
+* Vite
+* TypeScript
+* Tailwind CSS
+* Zustand
+* React Router
+* PWA support (offline first)
+* Framer Motion
+* IndexedDB storage
+* Chart.js
+* Service Worker
+* Enterprise scalable architecture
+
+PROJECT NAME:
+Offline Smart Store Navigator
+
+CORE IDEA:
+A fully offline indoor store navigation system that helps customers locate products using BLE zone detection simulation.
+
+REQUIREMENTS:
+
+1. Create full enterprise folder structure
+2. Setup PWA manifest
+3. Setup service worker
+4. Create base layout system
+5. Setup global state store
+6. Setup offline database abstraction layer
+7. Setup routing skeleton
+8. Setup theme system (dark/light)
+9. Mobile-first responsive design
+10. Loading skeleton system
+
+FOLDER STRUCTURE:
+
+src/
+core/
+features/
+pages/
+components/
+store/
+hooks/
+services/
+utils/
+assets/
+pwa/
+analytics/
+ai/
+navigation/
+gamification/
+
+OUTPUT MUST INCLUDE:
+
+* package.json
+* vite config
+* tsconfig
+* full Tailwind config
+* PWA config
+* service worker
+* base layout
+* App.tsx starter
+* example pages
+* Zustand store setup
+* IndexedDB wrapper
+
+Make architecture EXTREMELY scalable.
+This project must look like a funded startup codebase.
+
+---
+
+NOW ALSO ADD DEVOPS STEP:
+
+After generating project:
+
+Provide exact TERMINAL COMMANDS to:
+
+1. Initialize git
+2. Create new branch:
+
+hackathon-offline-navigation-v1
+
+3. Add all files
+4. Create professional commit:
+
+feat: initial architecture for offline smart store navigator PWA
+
+5. Add remote:
+
+https://github.com/aditya-copilot/offline-case-study-prototype
+
+6. Push branch to origin
+
+7. Create next commit structure guideline
+
+---
+
+This must be professional startup-level repo setup.
+
+Output FULL code + git commands.

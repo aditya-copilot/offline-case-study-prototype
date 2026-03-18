@@ -1,0 +1,169 @@
+You are a senior IoT systems architect, BLE protocol expert, and advanced React real-time systems engineer.
+
+Extend the existing "Offline Smart Store Navigator" React PWA project.
+
+Build a FULL BLE Detection Engine that supports:
+
+* Real BLE scanning (Web Bluetooth ready architecture)
+* RSSI signal processing
+* Indoor zone estimation
+* Multi-beacon fusion
+* Simulation mode for hackathon demo
+
+GOALS:
+
+Create a modular BLE spatial intelligence engine that feels like a real indoor positioning system.
+
+FEATURE REQUIREMENTS:
+
+1. BLE SCAN ENGINE ARCHITECTURE
+
+Create:
+
+src/ble/
+scanner/
+filters/
+triangulation/
+simulation/
+visualization/
+adapters/
+
+Support:
+
+* Beacon discovery
+* Continuous scanning loop
+* RSSI streaming pipeline
+* Signal history buffering
+
+2. BEACON MODEL
+
+Create config-driven beacon system:
+
+beacons.json
+
+Structure:
+
+* beaconId
+* zoneId
+* position (x,y)
+* calibrationRSSI
+* txPower
+* environmentFactor
+
+3. RSSI FILTERING AI SYSTEM
+
+Implement:
+
+* Kalman Filter
+* Moving Average
+* Signal smoothing
+* Outlier rejection
+* Temporal decay modeling
+
+Create reusable signal processing pipeline.
+
+4. ZONE DETECTION ENGINE
+
+Implement logic:
+
+* Strongest beacon detection
+* Weighted multi-beacon scoring
+* Confidence index calculation
+* Zone transition detection
+* Dwell time tracking
+
+Expose hooks:
+
+useBLEScanner()
+useZoneEstimator()
+useSignalStrength()
+useBeaconStream()
+
+5. POSITION ESTIMATION (SIMPLIFIED)
+
+Implement:
+
+* RSSI distance estimation
+* Trilateration (approx)
+* Zone-based snapping
+* Movement smoothing
+
+6. SIMULATION MODE (VERY IMPORTANT)
+
+Hackathon demo must work without real BLE.
+
+Create:
+
+* Virtual beacon signal generator
+* Configurable noise model
+* Walking path simulator
+* Random signal fluctuation engine
+* Demo control panel
+
+7. REAL BLE ADAPTER (FUTURE READY)
+
+Create abstraction layer:
+
+WebBluetoothAdapter
+NativeAdapterPlaceholder
+
+Even if browser blocks scanning, architecture must be ready.
+
+8. VISUAL DEBUG TOOLS
+
+Create real-time panels:
+
+* Signal graph (Chart.js)
+* Beacon heatmap overlay
+* Zone confidence bars
+* RSSI timeline
+* Raw BLE packet viewer (mock)
+
+9. PERFORMANCE
+
+* Use Web Workers for signal processing
+* Streaming architecture
+* Event-driven signal bus
+
+10. STATE MANAGEMENT
+
+Integrate with global Zustand store:
+
+* currentZone
+* beaconSignals
+* signalConfidence
+* scanStatus
+
+11. UI DEMO PAGE
+
+Create:
+
+/ble-lab
+
+This page must look like a futuristic indoor positioning research dashboard.
+
+12. OFFLINE FIRST
+
+All beacon configs + signal simulation must work offline.
+
+13. ADVANCED TOUCH
+
+Add "signal instability animation"
+to visually show RSSI fluctuation.
+
+14. OUTPUT
+
+Provide FULL:
+
+* architecture
+* hooks
+* signal processing code
+* simulation engine
+* demo UI
+* config files
+
+This must look like a funded deep-tech startup indoor positioning system.
+
+DO NOT SIMPLIFY.
+
+Output FULL production-ready code.
